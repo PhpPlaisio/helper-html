@@ -5,7 +5,7 @@ class TestElement extends \SetBased\Abc\HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   public function generateElement()
   {
-    return \SetBased\Abc\Helper\Html::generateElement('test', $this->myAttributes);  
+    return \SetBased\Abc\Helper\Html::generateElement('test', $this->attributes);
   }
   
   //--------------------------------------------------------------------------------------------------------------------

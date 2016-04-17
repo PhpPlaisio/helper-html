@@ -29,30 +29,30 @@ class HtmlElement
    *
    * @var array
    */
-  protected $myAttributes = [];
+  protected $attributes = [];
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns the value of an attribute.
    *
-   * @param string $theAttributeName The name of the attribute.
+   * @param string $attributeName The name of the attribute.
    *
    * @return mixed
    */
-  public function getAttribute($theAttributeName)
+  public function getAttribute($attributeName)
   {
-    return (isset($this->myAttributes[$theAttributeName])) ? $this->myAttributes[$theAttributeName] : null;
+    return (isset($this->attributes[$attributeName])) ? $this->attributes[$attributeName] : null;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [accesskey](http://www.w3schools.com/tags/att_global_accesskey.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrAccessKey($theValue)
+  public function setAttrAccessKey($value)
   {
-    $this->myAttributes['accesskey'] = $theValue;
+    $this->attributes['accesskey'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -64,24 +64,24 @@ class HtmlElement
    * Setting the value to null, false or '' will unset the class attribute.
    *
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrClass($theValue)
+  public function setAttrClass($value)
   {
-    if ($theValue===null || $theValue===false || $theValue==='')
+    if ($value===null || $value===false || $value==='')
     {
-      unset($this->myAttributes['class']);
+      unset($this->attributes['class']);
     }
     else
     {
-      if (isset($this->myAttributes['class']))
+      if (isset($this->attributes['class']))
       {
-        $this->myAttributes['class'] .= ' ';
-        $this->myAttributes['class'] .= $theValue;
+        $this->attributes['class'] .= ' ';
+        $this->attributes['class'] .= $value;
       }
       else
       {
-        $this->myAttributes['class'] = $theValue;
+        $this->attributes['class'] = $value;
       }
     }
   }
@@ -94,34 +94,34 @@ class HtmlElement
    * * Null will unset the attribute.
    *
    *
-   * @param mixed $theValue The attribute value.
+   * @param mixed $value The attribute value.
    */
-  public function setAttrContentEditable($theValue)
+  public function setAttrContentEditable($value)
   {
-    $this->myAttributes['contenteditable'] = $theValue;
+    $this->attributes['contenteditable'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [contextmenu](http://www.w3schools.com/tags/att_global_contextmenu.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrContextMenu($theValue)
+  public function setAttrContextMenu($value)
   {
-    $this->myAttributes['contextmenu'] = $theValue;
+    $this->attributes['contextmenu'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets a [data](http://www.w3schools.com/tags/att_global_data.asp) attribute.
    *
-   * @param string $theName  The name of the attribute (without 'data-').
-   * @param string $theValue The attribute value.
+   * @param string $name  The name of the attribute (without 'data-').
+   * @param string $value The attribute value.
    */
-  public function setAttrData($theName, $theValue)
+  public function setAttrData($name, $value)
   {
-    $this->myAttributes['data-'.$theName] = $theValue;
+    $this->attributes['data-'.$name] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -131,11 +131,11 @@ class HtmlElement
    * * rtl
    * * auto
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrDir($theValue)
+  public function setAttrDir($value)
   {
-    $this->myAttributes['dir'] = $theValue;
+    $this->attributes['dir'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -145,22 +145,22 @@ class HtmlElement
    * * false
    * * auto
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrDraggable($theValue)
+  public function setAttrDraggable($value)
   {
-    $this->myAttributes['draggable'] = $theValue;
+    $this->attributes['draggable'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [dropzone](http://www.w3schools.com/tags/att_global_dropzone.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrDropZone($theValue)
+  public function setAttrDropZone($value)
   {
-    $this->myAttributes['dropzone'] = $theValue;
+    $this->attributes['dropzone'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -169,33 +169,33 @@ class HtmlElement
    * This is a boolean attribute. Any none [empty](http://php.net/manual/function.empty.php) value will set the
    * attribute to 'hidden'. Any other value will unset the attribute.
    *
-   * @param mixed $theValue The attribute value.
+   * @param mixed $value The attribute value.
    */
-  public function setAttrHidden($theValue)
+  public function setAttrHidden($value)
   {
-    $this->myAttributes['hidden'] = $theValue;
+    $this->attributes['hidden'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [id](http://www.w3schools.com/tags/att_global_id.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrId($theValue)
+  public function setAttrId($value)
   {
-    $this->myAttributes['id'] = $theValue;
+    $this->attributes['id'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [lang](http://www.w3schools.com/tags/att_global_lang.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrLang($theValue)
+  public function setAttrLang($value)
   {
-    $this->myAttributes['lang'] = $theValue;
+    $this->attributes['lang'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -205,44 +205,44 @@ class HtmlElement
    * * Any value that evaluates to false will set the attribute to 'false'.
    * * Null will unset the attribute.
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrSpellCheck($theValue)
+  public function setAttrSpellCheck($value)
   {
-    $this->myAttributes['spellcheck'] = $theValue;
+    $this->attributes['spellcheck'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [style](http://www.w3schools.com/tags/att_global_style.asp)
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrStyle($theValue)
+  public function setAttrStyle($value)
   {
-    $this->myAttributes['style'] = $theValue;
+    $this->attributes['style'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [tabindex](http://www.w3schools.com/tags/att_global_tabindex.asp).
    *
-   * @param int $theValue The attribute value.
+   * @param int $value The attribute value.
    */
-  public function setAttrTabIndex($theValue)
+  public function setAttrTabIndex($value)
   {
-    $this->myAttributes['tabindex'] = $theValue;
+    $this->attributes['tabindex'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [title](http://www.w3schools.com/tags/att_global_title.asp).
    *
-   * @param string $theValue The attribute value.
+   * @param string $value The attribute value.
    */
-  public function setAttrTitle($theValue)
+  public function setAttrTitle($value)
   {
-    $this->myAttributes['title'] = $theValue;
+    $this->attributes['title'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -252,11 +252,11 @@ class HtmlElement
    * * Any value that evaluates to false will set the attribute to 'no'.
    * * Null will unset the attribute.
    *
-   * @param mixed $theValue The attribute value.
+   * @param mixed $value The attribute value.
    */
-  public function setAttrTranslate($theValue)
+  public function setAttrTranslate($value)
   {
-    $this->myAttributes['translate'] = $theValue;
+    $this->attributes['translate'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -264,17 +264,17 @@ class HtmlElement
    * Sets a fake attribute. A fake attribute has a name that starts with an underscore. Fake attributes will not be
    * included in the generated HTML code.
    *
-   * @param string $theName  The name of the fake attribute.
-   * @param mixed  $theValue The value of the fake attribute.
+   * @param string $name  The name of the fake attribute.
+   * @param mixed  $value The value of the fake attribute.
    */
-  public function setFakeAttribute($theName, $theValue)
+  public function setFakeAttribute($name, $value)
   {
-    if (strpos($theName, '_')!==0)
+    if (strpos($name, '_')!==0)
     {
-      throw new LogicException("Attribute '%s' is not a valid fake attribute.", $theName);
+      throw new LogicException("Attribute '%s' is not a valid fake attribute.", $name);
     }
 
-    $this->myAttributes[$theName] = $theValue;
+    $this->attributes[$name] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
