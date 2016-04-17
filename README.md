@@ -1,13 +1,38 @@
 # ABC-Framework: HTML
 
-[![Gitter](https://badges.gitter.im/SetBased/php-abc.svg)](https://gitter.im/SetBased/php-abc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![License](https://poser.pugx.org/setbased/abc-html/license)](https://packagist.org/packages/setbased/abc-html)
-[![Latest Stable Version](https://poser.pugx.org/setbased/abc-html/v/stable)](https://packagist.org/packages/setbased/abc-html)
-[![Dependency Status](https://www.versioneye.com/user/projects/57138819fcd19a0039f173c6/badge.svg?style=flat)](https://www.versioneye.com/user/projects/57138819fcd19a0039f173c6)
-[![Build Status](https://travis-ci.org/SetBased/php-abc-html.svg?branch=master)](https://travis-ci.org/SetBased/php-abc-html)
-[![Code Coverage](https://scrutinizer-ci.com/g/SetBased/php-abc-html/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/SetBased/php-abc-html/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SetBased/php-abc-html/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SetBased/php-abc-html/?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/df3851f650f8427a972ace955497ef21)](https://www.codacy.com/app/p-r-water/php-abc-html)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/SetBased/php-abc-html/badge.svg)](https://travis-ci.org/SetBased/php-abc-html)
+<table>
+<thead>
+<tr>
+<th>Social</th>
+<th>Legal</th>
+<th>Release</th>
+<th>Tests</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://gitter.im/SetBased/php-abc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/SetBased/php-abc.svg" alt="Gitter"/></a>
+</td>
+<td>
+<a href="https://packagist.org/packages/setbased/abc-html"><img src="https://poser.pugx.org/setbased/abc-html/license" alt="License"/></a>
+</td>
+<td>
+<a href="https://packagist.org/packages/setbased/abc-html"><img src="https://poser.pugx.org/setbased/abc-html/v/stable" alt="Latest Stable Version"/></a><br/>
+<a href="https://www.versioneye.com/user/projects/57138819fcd19a0039f173c6"><img src="https://www.versioneye.com/user/projects/57138819fcd19a0039f173c6/badge.svg?style=flat" alt="Dependency Status"/></a>
+</td>
+<td>
+<a href="https://travis-ci.org/SetBased/php-abc-html"><img src="https://travis-ci.org/SetBased/php-abc-html.svg?branch=master" alt="Build Status"/></a><br/>
+<a href="https://scrutinizer-ci.com/g/SetBased/php-abc-html/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
+</td>
+<td>
+<a href="https://scrutinizer-ci.com/g/SetBased/php-abc-html/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a><br/>
+<a href="https://www.codacy.com/app/p-r-water/php-abc-html"><img src="https://api.codacy.com/project/badge/grade/df3851f650f8427a972ace955497ef21" alt="Codacy Badge"/></a><br/>
+<a href="https://travis-ci.org/SetBased/php-abc-html"><img src="http://php7ready.timesplinter.ch/SetBased/php-abc-html/badge.svg" alt="PHP 7 ready"/></a>
+</td>
+</tr>
+</tbody>
+</table>
 
 This package contains helper and utility classes for generating HTML code. 
