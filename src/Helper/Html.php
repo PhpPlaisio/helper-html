@@ -4,7 +4,7 @@ namespace SetBased\Abc\Helper;
 
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Static class with helper functions for generating HTML code.
+ * A utility class for generating HTML elements, tags, and attributes.
  */
 class Html
 {
@@ -14,31 +14,31 @@ class Html
    *
    * @var string
    */
-  public static $ourEncoding = 'UTF-8';
+  public static $encoding = 'UTF-8';
 
   /**
    * Counter for generating unique element IDs.
    *
    * @var int
    */
-  private static $ourAutoId = 0;
+  private static $autoId = 0;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns a string proper conversion of special characters to HTML entities of an attribute of a HTML tag.
+   * Returns a string with proper conversion of special characters to HTML entities of an attribute of a HTML tag.
    *
    * Boolean attributes (e.g. checked, disabled and draggable, autocomplete also) are set when the value is none empty.
    *
-   * @param string $theName  The name of the attribute.
-   * @param mixed  $theValue The value of the attribute.
+   * @param string $name  The name of the attribute.
+   * @param mixed  $value The value of the attribute.
    *
    * @return string
    */
-  public static function generateAttribute($theName, $theValue)
+  public static function generateAttribute($name, $value)
   {
     $html = '';
 
-    switch ($theName)
+    switch ($name)
     {
       // Boolean attributes.
       case 'autofocus':
@@ -52,12 +52,12 @@ class Html
       case 'required':
       case 'selected':
       case 'spellcheck':
-        if (!empty($theValue))
+        if (!empty($value))
         {
           $html = ' ';
-          $html .= $theName;
+          $html .= $name;
           $html .= '="';
-          $html .= $theName;
+          $html .= $name;
           $html .= '"';
         }
         break;
@@ -65,39 +65,39 @@ class Html
       // Annoying boolean attribute exceptions.
       case 'draggable':
       case 'contenteditable':
-        if (isset($theValue))
+        if (isset($value))
         {
           $html = ' ';
-          $html .= $theName;
-          $html .= ($theValue) ? '="true"' : '="false"';
+          $html .= $name;
+          $html .= ($value) ? '="true"' : '="false"';
         }
         break;
 
       case 'autocomplete':
-        if (isset($theValue))
+        if (isset($value))
         {
           $html = ' ';
-          $html .= $theName;
-          $html .= ($theValue) ? '="on"' : '="off"';
+          $html .= $name;
+          $html .= ($value) ? '="on"' : '="off"';
         }
         break;
 
       case 'translate':
-        if (isset($theValue))
+        if (isset($value))
         {
           $html = ' ';
-          $html .= $theName;
-          $html .= ($theValue) ? '="yes"' : '="no"';
+          $html .= $name;
+          $html .= ($value) ? '="yes"' : '="no"';
         }
         break;
 
       default:
-        if ($theValue!==null && $theValue!==false && $theValue!=='')
+        if ($value!==null && $value!==false && $value!=='')
         {
           $html = ' ';
-          $html .= htmlspecialchars($theName, ENT_QUOTES, self::$ourEncoding);
+          $html .= htmlspecialchars($name, ENT_QUOTES, self::$encoding);
           $html .= '="';
-          $html .= htmlspecialchars($theValue, ENT_QUOTES, self::$ourEncoding);
+          $html .= htmlspecialchars($value, ENT_QUOTES, self::$encoding);
           $html .= '"';
         }
         break;
@@ -112,21 +112,21 @@ class Html
    *
    * Note: tags for void elements such as '<br/>' are not supported.
    *
-   * @param string $theTagName    The name of the tag, e.g. a, form.
-   * @param array  $theAttributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                              HTML entities.
-   * @param string $theInnerText  The inner text of the tag.
-   * @param bool   $theIsHtmlFag  If set the inner text is a HTML snippet, otherwise special characters in the inner
-   *                              text will be replaced with HTML entities.
+   * @param string $tagName    The name of the tag, e.g. a, form.
+   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
+   *                           HTML entities.
+   * @param string $innerText  The inner text of the tag.
+   * @param bool   $isHtml     If set the inner text is a HTML snippet, otherwise special characters in the inner
+   *                           text will be replaced with HTML entities.
    *
    * @return string
    */
-  public static function generateElement($theTagName, $theAttributes = [], $theInnerText = '', $theIsHtmlFag = false)
+  public static function generateElement($tagName, $attributes = [], $innerText = '', $isHtml = false)
   {
-    $html = self::generateTag($theTagName, $theAttributes);
-    $html .= ($theIsHtmlFag) ? $theInnerText : self::txt2Html($theInnerText);
+    $html = self::generateTag($tagName, $attributes);
+    $html .= ($isHtml) ? $innerText : self::txt2Html($innerText);
     $html .= '</';
-    $html .= $theTagName;
+    $html .= $tagName;
     $html .= '>';
 
     return $html;
@@ -136,17 +136,17 @@ class Html
   /**
    * Generates HTML code for a start tag of an element.
    *
-   * @param string $theTagName    The name of the tag, e.g. a, form.
-   * @param array  $theAttributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                              HTML entities.
+   * @param string $tagName    The name of the tag, e.g. a, form.
+   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
+   *                           HTML entities.
    *
    * @return string
    */
-  public static function generateTag($theTagName, $theAttributes = [])
+  public static function generateTag($tagName, $attributes = [])
   {
     $html = '<';
-    $html .= $theTagName;
-    foreach ($theAttributes as $name => $value)
+    $html .= $tagName;
+    foreach ($attributes as $name => $value)
     {
       // Ignore attributes with leading underscore.
       if (strpos($name, '_')!==0) $html .= self::generateAttribute($name, $value);
@@ -163,17 +163,17 @@ class Html
    * Void elements are: area, base, br, col, embed, hr, img, input, keygen, link, menuitem, meta, param, source, track,
    * wbr. See <http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements>
    *
-   * @param string $theTagName    The name of the tag, e.g. img, link.
-   * @param array  $theAttributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                              HTML entities.
+   * @param string $tagName    The name of the tag, e.g. img, link.
+   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
+   *                           HTML entities.
    *
    * @return string
    */
-  public static function generateVoidElement($theTagName, $theAttributes = [])
+  public static function generateVoidElement($tagName, $attributes = [])
   {
     $html = '<';
-    $html .= $theTagName;
-    foreach ($theAttributes as $name => $value)
+    $html .= $tagName;
+    foreach ($attributes as $name => $value)
     {
       // Ignore attributes with leading underscore.
       if (strpos($name, '_')!==0) $html .= self::generateAttribute($name, $value);
@@ -192,9 +192,9 @@ class Html
    */
   public static function getAutoId()
   {
-    self::$ourAutoId++;
+    self::$autoId++;
 
-    return 'abc_'.self::$ourAutoId;
+    return 'abc_'.self::$autoId;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -202,13 +202,13 @@ class Html
    * Returns a string with special characters converted to HTML entities.
    * This method is a wrapper around [htmlspecialchars](http://php.net/manual/en/function.htmlspecialchars.php).
    *
-   * @param string $theString The string with optionally special characters.
+   * @param string $string The string with optionally special characters.
    *
    * @return string
    */
-  public static function txt2Html($theString)
+  public static function txt2Html($string)
   {
-    return htmlspecialchars($theString, ENT_QUOTES, self::$ourEncoding);
+    return htmlspecialchars($string, ENT_QUOTES, self::$encoding);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

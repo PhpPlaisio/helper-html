@@ -1,12 +1,12 @@
 <?php
 //----------------------------------------------------------------------------------------------------------------------
-namespace SetBased\Abc\Misc;
+namespace SetBased\Abc;
 
 use SetBased\Exception\LogicException;
 
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Abstract parent class for HTML elements.
+ * Parent class for HTML elements.
  *
  * This class should be used for generation "heavy" HTML elements only. For light weight elements use methods of
  * {@link \SetBased\Abc\Helper\Html}.
