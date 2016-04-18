@@ -50,31 +50,39 @@ class HtmlElementTest extends PHPUnit_Framework_TestCase
   {
     $element = new TestElement();
 
-    $uuid1 = uniqid();
-    $element->setAttrClass($uuid1);
+     $element->addClass('hello');
     $html = $element->generateElement();
 
     $doc = new DOMDocument();
     $doc->loadXML($html);
     $xpath = new DOMXpath($doc);
-    $list = $xpath->query("/test[@class='$uuid1']");
+    $list = $xpath->query("/test[@class='hello']");
     $this->assertEquals(1, $list->length, "assert 1");
 
-    // Calling setAttrClass adds another class.
-    $uuid2 = uniqid();
-    $element->setAttrClass($uuid2);
+    // Calling addClass adds another class.
+    $element->addClass('world');
     $html = $element->generateElement();
 
     $doc = new DOMDocument();
     $doc->loadXML($html);
     $xpath = new DOMXpath($doc);
-    $list = $xpath->query("/test[@class='$uuid1 $uuid2']");
+    $list = $xpath->query("/test[@class='hello world']");
     $this->assertEquals(1, $list->length, "assert 2");
 
-    // Call setAttrClass with null resets the class.
-    $element->setAttrClass(null);
+    // Remove a class.
+    $element->removeClass('hello');
     $html = $element->generateElement();
-    $this->assertNotContains('class', $html, "assert 3");
+
+    $doc = new DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new DOMXpath($doc);
+    $list = $xpath->query("/test[@class='world']");
+    $this->assertEquals(1, $list->length, "assert 3");
+
+    // Call unsetClass resets class.
+    $element->unsetClass();
+    $html = $element->generateElement();
+    $this->assertNotContains('class', $html, "assert 4");
   }
 
   //--------------------------------------------------------------------------------------------------------------------

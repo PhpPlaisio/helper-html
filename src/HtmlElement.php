@@ -18,8 +18,7 @@ use SetBased\Exception\LogicException;
  * Unless stated otherwise setting an attribute to null, false, or '' will unset the attribute.
  *
  * #### Event Attributes
- * This class does not defines methods for getting and setting event attributes. Events handles be setting at the load
- * event (with JavaScript).
+ * This class does not define methods for setting event attributes. Events handlers must be set with JavaScript.
  */
 class HtmlElement
 {
@@ -30,6 +29,28 @@ class HtmlElement
    * @var array
    */
   protected $attributes = [];
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Adds a class to the list of classes.
+   *
+   * @param string $class The class.
+   */
+  public function addClass($class)
+  {
+    // If class is empty return immediately.
+    if ($class=='') return;
+
+    if (isset($this->attributes['class']))
+    {
+      $this->attributes['class'] .= ' ';
+      $this->attributes['class'] .= $class;
+    }
+    else
+    {
+      $this->attributes['class'] = $class;
+    }
+  }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -46,6 +67,21 @@ class HtmlElement
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Removes a class from the list of classes.
+   *
+   * @param string $class The class to be removed.
+   */
+  public function removeClass($class)
+  {
+    // If class is empty or no classes are set return immediately.
+    if ($class=='' || !isset($this->attributes['class'])) return;
+
+    // Remove the class from the list of classes.
+    $this->attributes['class'] = implode(' ', array_diff(explode(' ', $this->attributes['class']), [$class]));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Sets the attribute [accesskey](http://www.w3schools.com/tags/att_global_accesskey.asp).
    *
    * @param string $value The attribute value.
@@ -53,37 +89,6 @@ class HtmlElement
   public function setAttrAccessKey($value)
   {
     $this->attributes['accesskey'] = $value;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Sets or appends to the attribute [class](http://www.w3schools.com/tags/att_global_class.asp).
-   *
-   * If the class attribute is already set the value is appended (separated by a space) to the class attribute.
-   *
-   * Setting the value to null, false or '' will unset the class attribute.
-   *
-   *
-   * @param string $value The attribute value.
-   */
-  public function setAttrClass($value)
-  {
-    if ($value===null || $value===false || $value==='')
-    {
-      unset($this->attributes['class']);
-    }
-    else
-    {
-      if (isset($this->attributes['class']))
-      {
-        $this->attributes['class'] .= ' ';
-        $this->attributes['class'] .= $value;
-      }
-      else
-      {
-        $this->attributes['class'] = $value;
-      }
-    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -275,6 +280,15 @@ class HtmlElement
     }
 
     $this->attributes[$name] = $value;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Removes all classes for the list of classes.
+   */
+  public function unsetClass()
+  {
+    unset($this->attributes['class']);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
