@@ -13,6 +13,9 @@ class Html
    * The encoding of the generated HTML code.
    *
    * @var string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static $encoding = 'UTF-8';
 
@@ -33,6 +36,9 @@ class Html
    * @param mixed  $value The value of the attribute.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function generateAttribute($name, $value)
   {
@@ -120,6 +126,9 @@ class Html
    *                           text will be replaced with HTML entities.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function generateElement($tagName, $attributes = [], $innerText = '', $isHtml = false)
   {
@@ -141,6 +150,9 @@ class Html
    *                           HTML entities.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function generateTag($tagName, $attributes = [])
   {
@@ -168,6 +180,9 @@ class Html
    *                           HTML entities.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function generateVoidElement($tagName, $attributes = [])
   {
@@ -189,6 +204,9 @@ class Html
    * incremented with each call of this method.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function getAutoId()
   {
@@ -205,6 +223,9 @@ class Html
    * @param string $string The string with optionally special characters.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function txt2Html($string)
   {

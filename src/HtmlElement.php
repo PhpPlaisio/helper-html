@@ -27,6 +27,9 @@ class HtmlElement
    * The attributes of this HTML element.
    *
    * @var array
+   *
+   * @since 1.0.0
+   * @api
    */
   protected $attributes = [];
 
@@ -35,6 +38,9 @@ class HtmlElement
    * Adds a class to the list of classes.
    *
    * @param string $class The class.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function addClass($class)
   {
@@ -59,6 +65,9 @@ class HtmlElement
    * @param string $attributeName The name of the attribute.
    *
    * @return mixed
+   *
+   * @since 1.0.0
+   * @api
    */
   public function getAttribute($attributeName)
   {
@@ -70,6 +79,9 @@ class HtmlElement
    * Removes a class from the list of classes.
    *
    * @param string $class The class to be removed.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function removeClass($class)
   {
@@ -85,6 +97,9 @@ class HtmlElement
    * Sets the attribute [accesskey](http://www.w3schools.com/tags/att_global_accesskey.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrAccessKey($value)
   {
@@ -94,12 +109,16 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [contenteditable](http://www.w3schools.com/tags/att_global_contenteditable.asp).
-   * * Any value that evaluates to true will set the attribute to 'true'.
-   * * Any value that evaluates to false will set the attribute to 'false'.
-   * * Null will unset the attribute.
-   *
+   * <ul>
+   * <li> Any value that evaluates to true will set the attribute to 'true'.
+   * <li> Any value that evaluates to false will set the attribute to 'false'.
+   * <li> Null will unset the attribute.
+   * </ul>
    *
    * @param mixed $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrContentEditable($value)
   {
@@ -111,6 +130,9 @@ class HtmlElement
    * Sets the attribute [contextmenu](http://www.w3schools.com/tags/att_global_contextmenu.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrContextMenu($value)
   {
@@ -123,6 +145,9 @@ class HtmlElement
    *
    * @param string $name  The name of the attribute (without 'data-').
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrData($name, $value)
   {
@@ -132,11 +157,16 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [dir](http://www.w3schools.com/tags/att_global_dir.asp). Possible values:
-   * * ltr
-   * * rtl
-   * * auto
+   * <ul>
+   * <li> ltr
+   * <li> rtl
+   * <li> auto
+   * </ul>
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrDir($value)
   {
@@ -146,11 +176,16 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [draggable](http://www.w3schools.com/tags/att_global_draggable.asp). Possible values:
-   * * true
-   * * false
-   * * auto
+   * <ul>
+   * <li> true
+   * <li> false
+   * <li> auto
+   * </ul>
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrDraggable($value)
   {
@@ -162,6 +197,9 @@ class HtmlElement
    * Sets the attribute [dropzone](http://www.w3schools.com/tags/att_global_dropzone.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrDropZone($value)
   {
@@ -175,6 +213,9 @@ class HtmlElement
    * attribute to 'hidden'. Any other value will unset the attribute.
    *
    * @param mixed $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrHidden($value)
   {
@@ -186,6 +227,9 @@ class HtmlElement
    * Sets the attribute [id](http://www.w3schools.com/tags/att_global_id.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrId($value)
   {
@@ -197,6 +241,9 @@ class HtmlElement
    * Sets the attribute [lang](http://www.w3schools.com/tags/att_global_lang.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrLang($value)
   {
@@ -206,11 +253,16 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [spellcheck](http://www.w3schools.com/tags/att_global_spellcheck.asp).
-   * * Any value that evaluates to true will set the attribute to 'true'.
-   * * Any value that evaluates to false will set the attribute to 'false'.
-   * * Null will unset the attribute.
+   * <ul>
+   * <li> Any value that evaluates to true will set the attribute to 'true'.
+   * <li> Any value that evaluates to false will set the attribute to 'false'.
+   * <li> Null will unset the attribute.
+   * <ul>
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrSpellCheck($value)
   {
@@ -222,6 +274,9 @@ class HtmlElement
    * Sets the attribute [style](http://www.w3schools.com/tags/att_global_style.asp)
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrStyle($value)
   {
@@ -233,6 +288,9 @@ class HtmlElement
    * Sets the attribute [tabindex](http://www.w3schools.com/tags/att_global_tabindex.asp).
    *
    * @param int $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrTabIndex($value)
   {
@@ -244,6 +302,9 @@ class HtmlElement
    * Sets the attribute [title](http://www.w3schools.com/tags/att_global_title.asp).
    *
    * @param string $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrTitle($value)
   {
@@ -253,11 +314,16 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [translate](http://www.w3schools.com/tags/att_global_translate.asp).
-   * * Any value that evaluates to true will set the attribute to 'yes'.
-   * * Any value that evaluates to false will set the attribute to 'no'.
-   * * Null will unset the attribute.
+   * <ul>
+   * <li> Any value that evaluates to true will set the attribute to 'yes'.
+   * <li> Any value that evaluates to false will set the attribute to 'no'.
+   * <li> Null will unset the attribute.
+   * </ul>
    *
    * @param mixed $value The attribute value.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setAttrTranslate($value)
   {
@@ -271,6 +337,9 @@ class HtmlElement
    *
    * @param string $name  The name of the fake attribute.
    * @param mixed  $value The value of the fake attribute.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function setFakeAttribute($name, $value)
   {
@@ -285,6 +354,9 @@ class HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Removes all classes for the list of classes.
+   *
+   * @since 1.0.0
+   * @api
    */
   public function unsetClass()
   {
