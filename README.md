@@ -28,7 +28,6 @@
 </td>
 <td>
 <a href="https://scrutinizer-ci.com/g/SetBased/php-abc-html/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-abc-html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a><br/>
-<a href="https://www.codacy.com/app/p-r-water/php-abc-html"><img src="https://api.codacy.com/project/badge/grade/df3851f650f8427a972ace955497ef21" alt="Codacy Badge"/></a><br/>
 <a href="https://travis-ci.org/SetBased/php-abc-html"><img src="http://php7ready.timesplinter.ch/SetBased/php-abc-html/badge.svg" alt="PHP 7 ready"/></a>
 </td>
 </tr>
