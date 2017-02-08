@@ -1,10 +1,101 @@
 <?php
-
 //----------------------------------------------------------------------------------------------------------------------
+use PHPUnit\Framework\TestCase;
 use SetBased\Exception\LogicException;
 
-class HtmlElementTest extends PHPUnit_Framework_TestCase
+//----------------------------------------------------------------------------------------------------------------------
+class HtmlElementTest extends TestCase
 {
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test fake attributes.
+   */
+  public function testFakeAttribute1()
+  {
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setFakeAttribute('_fake', $uuid);
+
+    // Fake attributes must not end up in generated HTML code.
+    $html = $element->generateElement();
+    $this->assertNotContains('_fake', $html);
+
+    // But attribute must be set.
+    $this->assertSame($uuid, $element->getAttribute('_fake'));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test fake attributes.
+   *
+   * @expectedException LogicException
+   */
+  public function testFakeAttribute2()
+  {
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setFakeAttribute('not_fake', $uuid);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrClass()
+  {
+    $element = new TestElement();
+
+    $element->addClass('hello');
+    $html = $element->generateElement();
+
+    $doc = new DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='hello']");
+    $this->assertEquals(1, $list->length, "assert 1");
+
+    // Calling addClass adds another class.
+    $element->addClass('world');
+    $html = $element->generateElement();
+
+    $doc = new DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='hello world']");
+    $this->assertEquals(1, $list->length, "assert 2");
+
+    // Remove a class.
+    $element->removeClass('hello');
+    $html = $element->generateElement();
+
+    $doc = new DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='world']");
+    $this->assertEquals(1, $list->length, "assert 3");
+
+    // Call unsetClass resets class.
+    $element->unsetClass();
+    $html = $element->generateElement();
+    $this->assertNotContains('class', $html, "assert 4");
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrData()
+  {
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setAttrData('test', $uuid);
+    $html = $element->generateElement();
+
+    $doc = new DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new DOMXpath($doc);
+
+    // Test attribute is present.
+    $list = $xpath->query("/test[@data-test='$uuid']");
+    $this->assertEquals(1, $list->length, 'html');
+
+    $this->assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
+  }
+
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test all setAttr* methods.
@@ -43,96 +134,6 @@ class HtmlElementTest extends PHPUnit_Framework_TestCase
 
       $this->assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
     }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrClass()
-  {
-    $element = new TestElement();
-
-     $element->addClass('hello');
-    $html = $element->generateElement();
-
-    $doc = new DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
-    $list = $xpath->query("/test[@class='hello']");
-    $this->assertEquals(1, $list->length, "assert 1");
-
-    // Calling addClass adds another class.
-    $element->addClass('world');
-    $html = $element->generateElement();
-
-    $doc = new DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
-    $list = $xpath->query("/test[@class='hello world']");
-    $this->assertEquals(1, $list->length, "assert 2");
-
-    // Remove a class.
-    $element->removeClass('hello');
-    $html = $element->generateElement();
-
-    $doc = new DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
-    $list = $xpath->query("/test[@class='world']");
-    $this->assertEquals(1, $list->length, "assert 3");
-
-    // Call unsetClass resets class.
-    $element->unsetClass();
-    $html = $element->generateElement();
-    $this->assertNotContains('class', $html, "assert 4");
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrData()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setAttrData('test', $uuid);
-    $html = $element->generateElement();
-
-    $doc = new DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
-
-    // Test attribute is present.
-    $list = $xpath->query("/test[@data-test='$uuid']");
-    $this->assertEquals(1, $list->length, 'html');
-
-    $this->assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   */
-  public function testFakeAttribute1()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setFakeAttribute('_fake', $uuid);
-
-    // Fake attributes must not end up in generated HTML code.
-    $html = $element->generateElement();
-    $this->assertNotContains('_fake', $html);
-
-    // But attribute must be set.
-    $this->assertSame($uuid, $element->getAttribute('_fake'));
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   *
-   * @expectedException LogicException
-   */
-  public function testFakeAttribute2()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setFakeAttribute('not_fake', $uuid);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
