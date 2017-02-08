@@ -286,6 +286,55 @@ class HtmlTest extends PHPUnit_Framework_TestCase
   }
 
   //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test cases for txt2Slug.
+   *
+   * Test cases copied from [Matteo Spinelli's Cubiq.org](http://cubiq.org/the-perfect-php-clean-url-generator) and
+   * from <http://stackoverflow.com>.
+   */
+  public function testTxt2Slug()
+  {
+    // Test for null.
+    $part = Html::txt2Slug(null);
+    $this->assertSame('', $part);
+
+    // Test for empty string.
+    $part = Html::txt2Slug('');
+    $this->assertSame('', $part);
+
+    // Test for spaces.
+    $part = Html::txt2Slug('  ');
+    $this->assertSame('', $part);
+
+    // Test for normal string.
+    $part = Html::txt2Slug('bar');
+    $this->assertEquals('bar', $part);
+
+    $cases["Mess'd up --text-- just (to) stress /test/ ?our! `little` clean url fun.ction!?-->"] = 'mess-d-up-text-just-to-stress-test-our-little-clean-url-fun-ction';
+    $cases['Perché l\'erba è verde?']                                                            = 'perche-l-erba-e-verde';
+    $cases['Peux-tu m\'aider s\'il te plaît?']                                                   = 'peux-tu-m-aider-s-il-te-plait';
+    $cases['Tänk efter nu – förr\'n vi föser dig bort']                                          = 'tank-efter-nu-forr-n-vi-foser-dig-bort';
+    $cases['ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöùúûüýÿ']                         = 'aaaaaaaeceeeeiiiienooooouuuuyszaaaaaaaeceeeeiiiienooooouuuuyy';
+    $cases['Custom`delimiter*example']                                                           = 'custom-delimiter-example';
+    $cases['My+Last_Crazy|delimiter/example']                                                    = 'my-last-crazy-delimiter-example';
+    $cases['Perché l’erba è verde?']                                                             = 'perche-l-erba-e-verde';
+    $cases['test é another for à and why not ô ?']                                               = 'test-e-another-for-a-and-why-not-o';
+    $cases['I just say no! #$%^&*']                                                              = 'i-just-say-no';
+    $cases['əƏ']                                                                                 = '';
+    $cases['Æther']                                                                              = 'aether';
+    $cases['one kožušček']                                                                       = 'one-kozuscek';
+    $cases['Компьютер']                                                                          = 'kompiuter';
+    $cases['My custom хелло ворлд']                                                              = 'my-custom-khello-vorld';
+    $cases['Mørdag']                                                                             = 'mordag';
+
+    foreach ($cases as $case => $expected)
+    {
+      $part = Html::txt2Slug($case);
+      $this->assertEquals($expected, $part, $case);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
 }
 
 //----------------------------------------------------------------------------------------------------------------------

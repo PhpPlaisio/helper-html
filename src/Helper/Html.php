@@ -26,6 +26,82 @@ class Html
    */
   private static $autoId = 0;
 
+  /**
+   * Map from (some) unicode characters to ASCII characters.
+   *
+   * @var array
+   */
+  private static $trans = ['ß' => 'sz',
+                           'à' => 'a',
+                           'á' => 'a',
+                           'â' => 'a',
+                           'ã' => 'a',
+                           'ä' => 'a',
+                           'å' => 'a',
+                           'æ' => 'ae',
+                           'ç' => 'c',
+                           'è' => 'e',
+                           'é' => 'e',
+                           'ê' => 'e',
+                           'ë' => 'e',
+                           'ì' => 'i',
+                           'í' => 'i',
+                           'î' => 'i',
+                           'ï' => 'i',
+                           'ð' => 'e',
+                           'ñ' => 'n',
+                           'ò' => 'o',
+                           'ó' => 'o',
+                           'ô' => 'o',
+                           'õ' => 'o',
+                           'ö' => 'o',
+                           '÷' => 'x',
+                           'ø' => 'o',
+                           'ù' => 'u',
+                           'ú' => 'u',
+                           'û' => 'u',
+                           'ü' => 'u',
+                           'ý' => 'y',
+                           'þ' => 'b',
+                           'ÿ' => 'y',
+                           'č' => 'c',
+                           'ł' => 'l',
+                           'š' => 's',
+                           'ž' => 'z',
+                           'а' => 'a',
+                           'б' => 'b',
+                           'в' => 'v',
+                           'г' => 'g',
+                           'д' => 'd',
+                           'е' => 'e',
+                           'ж' => 'zh',
+                           'з' => 'z',
+                           'и' => 'i',
+                           'й' => 'i',
+                           'к' => 'k',
+                           'л' => 'l',
+                           'м' => 'm',
+                           'н' => 'n',
+                           'о' => 'o',
+                           'п' => 'p',
+                           'р' => 'r',
+                           'с' => 's',
+                           'т' => 't',
+                           'у' => 'u',
+                           'ф' => 'f',
+                           'х' => 'kh',
+                           'ц' => 'ts',
+                           'ч' => 'ch',
+                           'ш' => 'sh',
+                           'щ' => 'shch',
+                           'ъ' => '',
+                           'ы' => 'y',
+                           'ь' => '',
+                           'э' => 'e',
+                           'ю' => 'iu',
+                           'я' => 'ia',
+                           'ё' => 'e'];
+
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns a string with proper conversion of special characters to HTML entities of an attribute of a HTML tag.
@@ -230,6 +306,19 @@ class Html
   public static function txt2Html($string)
   {
     return htmlspecialchars($string, ENT_QUOTES, self::$encoding);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the slug of a string that can be safely used in an URL.
+   *
+   * @param string $string The string.
+   *
+   * @return string
+   */
+  public static function txt2Slug($string)
+  {
+    return trim(preg_replace('/[^0-9a-z]+/', '-', strtr(mb_strtolower($string), self::$trans)), '-');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
