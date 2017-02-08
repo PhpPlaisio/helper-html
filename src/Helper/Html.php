@@ -315,6 +315,9 @@ class Html
    * @param string $string The string.
    *
    * @return string
+   *
+   * @since 1.0.0
+   * @api
    */
   public static function txt2Slug($string)
   {
