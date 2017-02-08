@@ -316,7 +316,7 @@ class Html
    *
    * @return string
    *
-   * @since 1.0.0
+   * @since 1.1.0
    * @api
    */
   public static function txt2Slug($string)
