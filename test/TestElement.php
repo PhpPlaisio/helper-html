@@ -1,11 +1,17 @@
 <?php
 //----------------------------------------------------------------------------------------------------------------------
-class TestElement extends \SetBased\Abc\HtmlElement
+namespace SetBased\Abc\Test;
+
+use SetBased\Abc\Helper\Html;
+use SetBased\Abc\HtmlElement;
+
+//----------------------------------------------------------------------------------------------------------------------
+class TestElement extends HtmlElement
 {
   //--------------------------------------------------------------------------------------------------------------------
   public function generateElement()
   {
-    return \SetBased\Abc\Helper\Html::generateElement('test', $this->attributes);
+    return Html::generateElement('test', $this->attributes);
   }
   
   //--------------------------------------------------------------------------------------------------------------------

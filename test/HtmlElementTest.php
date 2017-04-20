@@ -1,9 +1,12 @@
 <?php
 //----------------------------------------------------------------------------------------------------------------------
+namespace SetBased\Abc\Test;
+
+use PHPUnit\Framework\TestCase;
 use SetBased\Exception\LogicException;
 
 //----------------------------------------------------------------------------------------------------------------------
-class HtmlElementTest extends \PHPUnit_Framework_TestCase
+class HtmlElementTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -33,9 +36,9 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
       $element->$method($uuid);
       $html = $element->generateElement();
 
-      $doc = new DOMDocument();
+      $doc = new \DOMDocument();
       $doc->loadXML($html);
-      $xpath = new DOMXpath($doc);
+      $xpath = new \DOMXpath($doc);
 
       // Test attribute is present.
       $list = $xpath->query("/test[@$attribute='$uuid' or @$attribute='true'or @$attribute='yes'or @$attribute='$attribute']");
@@ -53,9 +56,9 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
      $element->addClass('hello');
     $html = $element->generateElement();
 
-    $doc = new DOMDocument();
+    $doc = new \DOMDocument();
     $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
+    $xpath = new \DOMXpath($doc);
     $list = $xpath->query("/test[@class='hello']");
     $this->assertEquals(1, $list->length, "assert 1");
 
@@ -63,9 +66,9 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
     $element->addClass('world');
     $html = $element->generateElement();
 
-    $doc = new DOMDocument();
+    $doc = new \DOMDocument();
     $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
+    $xpath = new \DOMXpath($doc);
     $list = $xpath->query("/test[@class='hello world']");
     $this->assertEquals(1, $list->length, "assert 2");
 
@@ -73,9 +76,9 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
     $element->removeClass('hello');
     $html = $element->generateElement();
 
-    $doc = new DOMDocument();
+    $doc = new \DOMDocument();
     $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
+    $xpath = new \DOMXpath($doc);
     $list = $xpath->query("/test[@class='world']");
     $this->assertEquals(1, $list->length, "assert 3");
 
@@ -93,9 +96,9 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
     $element->setAttrData('test', $uuid);
     $html = $element->generateElement();
 
-    $doc = new DOMDocument();
+    $doc = new \DOMDocument();
     $doc->loadXML($html);
-    $xpath = new DOMXpath($doc);
+    $xpath = new \DOMXpath($doc);
 
     // Test attribute is present.
     $list = $xpath->query("/test[@data-test='$uuid']");

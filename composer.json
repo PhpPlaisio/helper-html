@@ -19,6 +19,11 @@
       "SetBased\\Abc\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "SetBased\\Abc\\Test\\": "test"
+    }
+  },
   "config": {
     "bin-dir": "bin"
   }
