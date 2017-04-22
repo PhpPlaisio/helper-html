@@ -108,6 +108,21 @@ class HtmlElement
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Sets a [aria](http://w3c.github.io/html/infrastructure.html#element-attrdef-aria-aria) attribute.
+   *
+   * @param string $name  The name of the attribute (without 'aria-').
+   * @param string $value The attribute value.
+   *
+   * @since 1.3.0
+   * @api
+   */
+  public function setAttrAria($name, $value)
+  {
+    $this->attributes['aria-'.$name] = $value;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Sets the attribute [contenteditable](http://www.w3schools.com/tags/att_global_contenteditable.asp).
    * <ul>
    * <li> Any value that evaluates to true will set the attribute to 'true'.
@@ -248,6 +263,20 @@ class HtmlElement
   public function setAttrLang($value)
   {
     $this->attributes['lang'] = $value;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sets the attribute [role](http://w3c.github.io/html/infrastructure.html#element-attrdef-aria-role).
+   *
+   * @param string $value The attribute value.
+   *
+   * @since 1.3.0
+   * @api
+   */
+  public function setAttrRole($value)
+  {
+    $this->attributes['role'] = $value;
   }
 
   //--------------------------------------------------------------------------------------------------------------------

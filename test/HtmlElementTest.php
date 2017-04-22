@@ -23,6 +23,7 @@ class HtmlElementTest extends TestCase
                 'setAttrHidden'          => 'hidden',
                 'setAttrId'              => 'id',
                 'setAttrLang'            => 'lang',
+                'setAttrRole'            => 'role',
                 'setAttrSpellCheck'      => 'spellcheck',
                 'setAttrStyle'           => 'style',
                 'setAttrTabIndex'        => 'tabindex',
@@ -105,6 +106,24 @@ class HtmlElementTest extends TestCase
     $this->assertEquals(1, $list->length, 'html');
 
     $this->assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrAria()
+  {
+    $element = new TestElement();
+    $element->setAttrAria('rowspan', 5);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    // Test attribute is present.
+    $list = $xpath->query("/test[@aria-rowspan='5']");
+    $this->assertEquals(1, $list->length, 'html');
+
+    $this->assertSame(5, $element->getAttribute('aria-rowspan'), 'getAttribute');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
