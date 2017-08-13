@@ -2,7 +2,8 @@
   "name": "setbased/abc-html",
   "description": "ABC-Framework: HTML",
   "keywords": [
-    "Framework"
+    "ABC-Framework",
+    "HTML"
   ],
   "type": "library",
   "license": "MIT",
