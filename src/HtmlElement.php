@@ -123,6 +123,20 @@ class HtmlElement
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Sets the attribute [class](https://www.w3schools.com/tags/att_global_class.asp).
+   *
+   * @param string $value The class or classes. Any value set by {@link addClass} will be overwritten.
+   *
+   * @since 1.4.0
+   * @api
+   */
+  public function setAttrClass($value)
+  {
+    $this->attributes['class'] = $value;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Sets the attribute [contenteditable](http://www.w3schools.com/tags/att_global_contenteditable.asp).
    * <ul>
    * <li> Any value that evaluates to true will set the attribute to 'true'.

@@ -54,7 +54,7 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-     $element->addClass('hello');
+    $element->addClass('hello');
     $html = $element->generateElement();
 
     $doc = new \DOMDocument();
@@ -87,6 +87,14 @@ class HtmlElementTest extends TestCase
     $element->unsetClass();
     $html = $element->generateElement();
     $this->assertNotContains('class', $html, "assert 4");
+
+    // setClass must override previous set classes.
+    $element->addClass('class1');
+    $element->setAttrClass('class2');
+    $html = $element->generateElement();
+    $this->assertNotContains('class1', $html, "assert 5");
+    $html = $element->generateElement();
+    $this->assertContains('class2', $html, "assert 6");
   }
 
   //--------------------------------------------------------------------------------------------------------------------
