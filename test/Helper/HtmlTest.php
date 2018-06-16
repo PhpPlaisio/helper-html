@@ -252,7 +252,7 @@ class HtmlTest extends TestCase
   /**
    * Test generateElement.
    */
-  public function testGenerateTag1()
+  public function testGenerateElement1()
   {
     $tag = Html::generateElement('a', ['href' => 'https://www.setbased.nl'], 'SetBased');
     $this->assertEquals('<a href="https://www.setbased.nl">SetBased</a>', $tag);
@@ -262,7 +262,7 @@ class HtmlTest extends TestCase
   /**
    * Test attributes with leading underscores are ignored.
    */
-  public function testGenerateTag2()
+  public function testGenerateElement2()
   {
     $tag = Html::generateElement('a', ['href' => 'https://www.setbased.nl', '_ignore' => 'ignored'], 'SetBased');
     $this->assertEquals('<a href="https://www.setbased.nl">SetBased</a>', $tag);
@@ -270,9 +270,22 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test attributes with empty innerText.
+   */
+  public function testGenerateElement3()
+  {
+    $tag = Html::generateElement('span', ['class' => 'null'], '');
+    $this->assertEquals('<span class="null"></span>', $tag);
+
+    $tag = Html::generateElement('span', ['class' => 'null'], null);
+    $this->assertEquals('<span class="null"></span>', $tag);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test generateVoidElement.
    */
-  public function testGenerateVoidTag1()
+  public function testGenerateVoidElement1()
   {
     $tag = Html::generateVoidElement('img', ['src' => '/images/logo.png', 'alt' => 'logo']);
     $this->assertEquals('<img src="/images/logo.png" alt="logo"/>', $tag);
@@ -282,7 +295,7 @@ class HtmlTest extends TestCase
   /**
    * Test attributes with leading underscores are ignored.
    */
-  public function testGenerateVoidTag2()
+  public function testGenerateVoidElement2()
   {
     $tag = Html::generateVoidElement('img', ['src' => '/images/logo.png', 'alt' => 'logo', '_ignore' => 'ignored']);
     $this->assertEquals('<img src="/images/logo.png" alt="logo"/>', $tag);

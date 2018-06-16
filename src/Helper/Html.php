@@ -195,12 +195,12 @@ class Html
    *
    * Note: tags for void elements such as '<br/>' are not supported.
    *
-   * @param string $tagName    The name of the tag, e.g. a, form.
-   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                           HTML entities.
-   * @param string $innerText  The inner text of the tag.
-   * @param bool   $isHtml     If set the inner text is a HTML snippet, otherwise special characters in the inner
-   *                           text will be replaced with HTML entities.
+   * @param string      $tagName    The name of the tag, e.g. a, form.
+   * @param array       $attributes The attributes of the tag. Special characters in the attributes will be replaced
+   *                                with HTML entities.
+   * @param string|null $innerText  The inner text of the tag.
+   * @param bool        $isHtml     If set the inner text is a HTML snippet, otherwise special characters in the inner
+   *                                text will be replaced with HTML entities.
    *
    * @return string
    *
@@ -209,7 +209,7 @@ class Html
    */
   public static function generateElement(string $tagName,
                                          array $attributes = [],
-                                         string $innerText = '',
+                                         ?string $innerText = '',
                                          bool $isHtml = false): string
   {
     $html = self::generateTag($tagName, $attributes);
