@@ -5,6 +5,7 @@ namespace SetBased\Abc;
 use SetBased\Exception\LogicException;
 
 //----------------------------------------------------------------------------------------------------------------------
+
 /**
  * Parent class for HTML elements.
  *
@@ -34,15 +35,16 @@ class HtmlElement
   protected $attributes = [];
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Adds a class to the list of classes.
    *
-   * @param string $class The class.
+   * @param string|null $class The class.
    *
    * @since 1.0.0
    * @api
    */
-  public function addClass($class)
+  public function addClass(?string $class): void
   {
     // If class is empty return immediately.
     if ($class=='') return;
@@ -69,21 +71,21 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function getAttribute($attributeName)
+  public function getAttribute(string $attributeName)
   {
-    return (isset($this->attributes[$attributeName])) ? $this->attributes[$attributeName] : null;
+    return $this->attributes[$attributeName] ?? null;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Removes a class from the list of classes.
    *
-   * @param string $class The class to be removed.
+   * @param string|null $class The class to be removed.
    *
    * @since 1.0.0
    * @api
    */
-  public function removeClass($class)
+  public function removeClass(?string $class): void
   {
     // If class is empty or no classes are set return immediately.
     if ($class=='' || !isset($this->attributes['class'])) return;
@@ -96,12 +98,12 @@ class HtmlElement
   /**
    * Sets the attribute [accesskey](http://www.w3schools.com/tags/att_global_accesskey.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrAccessKey($value)
+  public function setAttrAccessKey(?string $value): void
   {
     $this->attributes['accesskey'] = $value;
   }
@@ -110,13 +112,13 @@ class HtmlElement
   /**
    * Sets a [aria](http://w3c.github.io/html/infrastructure.html#element-attrdef-aria-aria) attribute.
    *
-   * @param string $name  The name of the attribute (without 'aria-').
-   * @param string $value The attribute value.
+   * @param string      $name  The name of the attribute (without 'aria-').
+   * @param string|null $value The attribute value.
    *
    * @since 1.3.0
    * @api
    */
-  public function setAttrAria($name, $value)
+  public function setAttrAria(string $name, ?string $value): void
   {
     $this->attributes['aria-'.$name] = $value;
   }
@@ -125,12 +127,12 @@ class HtmlElement
   /**
    * Sets the attribute [class](https://www.w3schools.com/tags/att_global_class.asp).
    *
-   * @param string $value The class or classes. Any value set by {@link addClass} will be overwritten.
+   * @param string|null $value The class or classes. Any value set by {@link addClass} will be overwritten.
    *
    * @since 1.4.0
    * @api
    */
-  public function setAttrClass($value)
+  public function setAttrClass(?string $value): void
   {
     $this->attributes['class'] = $value;
   }
@@ -149,7 +151,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrContentEditable($value)
+  public function setAttrContentEditable(?string $value): void
   {
     $this->attributes['contenteditable'] = $value;
   }
@@ -158,12 +160,12 @@ class HtmlElement
   /**
    * Sets the attribute [contextmenu](http://www.w3schools.com/tags/att_global_contextmenu.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrContextMenu($value)
+  public function setAttrContextMenu(?string $value): void
   {
     $this->attributes['contextmenu'] = $value;
   }
@@ -172,13 +174,13 @@ class HtmlElement
   /**
    * Sets a [data](http://www.w3schools.com/tags/att_global_data.asp) attribute.
    *
-   * @param string $name  The name of the attribute (without 'data-').
-   * @param string $value The attribute value.
+   * @param string      $name  The name of the attribute (without 'data-').
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrData($name, $value)
+  public function setAttrData(string $name, ?string $value): void
   {
     $this->attributes['data-'.$name] = $value;
   }
@@ -192,12 +194,12 @@ class HtmlElement
    * <li> auto
    * </ul>
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrDir($value)
+  public function setAttrDir(?string $value): void
   {
     $this->attributes['dir'] = $value;
   }
@@ -211,12 +213,12 @@ class HtmlElement
    * <li> auto
    * </ul>
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrDraggable($value)
+  public function setAttrDraggable(?string $value): void
   {
     $this->attributes['draggable'] = $value;
   }
@@ -225,12 +227,12 @@ class HtmlElement
   /**
    * Sets the attribute [dropzone](http://www.w3schools.com/tags/att_global_dropzone.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrDropZone($value)
+  public function setAttrDropZone(?string $value): void
   {
     $this->attributes['dropzone'] = $value;
   }
@@ -246,7 +248,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrHidden($value)
+  public function setAttrHidden(?string $value): void
   {
     $this->attributes['hidden'] = $value;
   }
@@ -255,12 +257,12 @@ class HtmlElement
   /**
    * Sets the attribute [id](http://www.w3schools.com/tags/att_global_id.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrId($value)
+  public function setAttrId(?string $value): void
   {
     $this->attributes['id'] = $value;
   }
@@ -269,12 +271,12 @@ class HtmlElement
   /**
    * Sets the attribute [lang](http://www.w3schools.com/tags/att_global_lang.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrLang($value)
+  public function setAttrLang(?string $value): void
   {
     $this->attributes['lang'] = $value;
   }
@@ -283,12 +285,12 @@ class HtmlElement
   /**
    * Sets the attribute [role](http://w3c.github.io/html/infrastructure.html#element-attrdef-aria-role).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.3.0
    * @api
    */
-  public function setAttrRole($value)
+  public function setAttrRole(?string $value): void
   {
     $this->attributes['role'] = $value;
   }
@@ -302,12 +304,12 @@ class HtmlElement
    * <li> Null will unset the attribute.
    * <ul>
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrSpellCheck($value)
+  public function setAttrSpellCheck(?string $value): void
   {
     $this->attributes['spellcheck'] = $value;
   }
@@ -316,12 +318,12 @@ class HtmlElement
   /**
    * Sets the attribute [style](http://www.w3schools.com/tags/att_global_style.asp)
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrStyle($value)
+  public function setAttrStyle(?string $value): void
   {
     $this->attributes['style'] = $value;
   }
@@ -330,12 +332,12 @@ class HtmlElement
   /**
    * Sets the attribute [tabindex](http://www.w3schools.com/tags/att_global_tabindex.asp).
    *
-   * @param int $value The attribute value.
+   * @param int|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrTabIndex($value)
+  public function setAttrTabIndex(?int $value): void
   {
     $this->attributes['tabindex'] = $value;
   }
@@ -344,12 +346,12 @@ class HtmlElement
   /**
    * Sets the attribute [title](http://www.w3schools.com/tags/att_global_title.asp).
    *
-   * @param string $value The attribute value.
+   * @param string|null $value The attribute value.
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrTitle($value)
+  public function setAttrTitle(?string $value): void
   {
     $this->attributes['title'] = $value;
   }
@@ -368,7 +370,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrTranslate($value)
+  public function setAttrTranslate(?string $value): void
   {
     $this->attributes['translate'] = $value;
   }
@@ -384,7 +386,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setFakeAttribute($name, $value)
+  public function setFakeAttribute(string $name, $value): void
   {
     if (strpos($name, '_')!==0)
     {
@@ -401,7 +403,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function unsetClass()
+  public function unsetClass(): void
   {
     unset($this->attributes['class']);
   }

@@ -1,8 +1,7 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace SetBased\Abc\Helper;
 
-//----------------------------------------------------------------------------------------------------------------------
 /**
  * A utility class for generating HTML elements, tags, and attributes.
  */
@@ -104,6 +103,7 @@ class Html
                            'ё' => 'e'];
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Returns a string with proper conversion of special characters to HTML entities of an attribute of a HTML tag.
    *
@@ -117,7 +117,7 @@ class Html
    * @since 1.0.0
    * @api
    */
-  public static function generateAttribute($name, $value)
+  public static function generateAttribute(string $name, $value): string
   {
     $html = '';
 
@@ -152,7 +152,7 @@ class Html
         {
           $html = ' ';
           $html .= $name;
-          $html .= ($value) ? '="true"' : '="false"';
+          $html .= (!empty($value)) ? '="true"' : '="false"';
         }
         break;
 
@@ -161,7 +161,7 @@ class Html
         {
           $html = ' ';
           $html .= $name;
-          $html .= ($value) ? '="on"' : '="off"';
+          $html .= (!empty($value)) ? '="on"' : '="off"';
         }
         break;
 
@@ -170,7 +170,7 @@ class Html
         {
           $html = ' ';
           $html .= $name;
-          $html .= ($value) ? '="yes"' : '="no"';
+          $html .= (!empty($value)) ? '="yes"' : '="no"';
         }
         break;
 
@@ -207,7 +207,10 @@ class Html
    * @since 1.0.0
    * @api
    */
-  public static function generateElement($tagName, $attributes = [], $innerText = '', $isHtml = false)
+  public static function generateElement(string $tagName,
+                                         array $attributes = [],
+                                         string $innerText = '',
+                                         bool $isHtml = false): string
   {
     $html = self::generateTag($tagName, $attributes);
     $html .= ($isHtml) ? $innerText : self::txt2Html($innerText);
@@ -231,7 +234,7 @@ class Html
    * @since 1.0.0
    * @api
    */
-  public static function generateTag($tagName, $attributes = [])
+  public static function generateTag(string $tagName, array $attributes = []): string
   {
     $html = '<';
     $html .= $tagName;
@@ -261,7 +264,7 @@ class Html
    * @since 1.0.0
    * @api
    */
-  public static function generateVoidElement($tagName, $attributes = [])
+  public static function generateVoidElement(string $tagName, array $attributes = []): string
   {
     $html = '<';
     $html .= $tagName;
@@ -285,7 +288,7 @@ class Html
    * @since 1.0.0
    * @api
    */
-  public static function getAutoId()
+  public static function getAutoId(): string
   {
     self::$autoId++;
 
@@ -297,14 +300,14 @@ class Html
    * Returns a string with special characters converted to HTML entities.
    * This method is a wrapper around [htmlspecialchars](http://php.net/manual/en/function.htmlspecialchars.php).
    *
-   * @param string $string The string with optionally special characters.
+   * @param string|null $string The string with optionally special characters.
    *
    * @return string
    *
    * @since 1.0.0
    * @api
    */
-  public static function txt2Html($string)
+  public static function txt2Html(?string $string): string
   {
     return htmlspecialchars($string, ENT_QUOTES, self::$encoding);
   }
@@ -313,14 +316,14 @@ class Html
   /**
    * Returns the slug of a string that can be safely used in an URL.
    *
-   * @param string $string The string.
+   * @param string|null $string The string.
    *
    * @return string
    *
    * @since 1.1.0
    * @api
    */
-  public static function txt2Slug($string)
+  public static function txt2Slug(?string $string): string
   {
     return trim(preg_replace('/[^0-9a-z]+/', '-', strtr(mb_strtolower($string), self::$trans)), '-');
   }

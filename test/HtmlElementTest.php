@@ -33,7 +33,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     foreach ($methods as $method => $attribute)
     {
-      $uuid = uniqid();
+      $uuid = ($attribute!='tabindex') ? uniqid() : rand(1, 123);
       $element->$method($uuid);
       $html = $element->generateElement();
 
@@ -131,7 +131,7 @@ class HtmlElementTest extends TestCase
     $list = $xpath->query("/test[@aria-rowspan='5']");
     $this->assertEquals(1, $list->length, 'html');
 
-    $this->assertSame(5, $element->getAttribute('aria-rowspan'), 'getAttribute');
+    $this->assertSame('5', $element->getAttribute('aria-rowspan'), 'getAttribute');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
