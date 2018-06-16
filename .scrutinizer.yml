@@ -4,7 +4,13 @@ build:
             tests:
                 override: 
                     - php-scrutinizer-run
+
+        tests:
+            tests:
+                override:
+                    -
                         command: './bin/phing unit'
+                        idle_timeout: 500
                         coverage:
                             file: 'test/coverage.xml'
                             format: 'php-clover'
