@@ -1,18 +1,137 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+declare(strict_types=1);
+
 namespace SetBased\Abc\Test;
 
 use PHPUnit\Framework\TestCase;
 use SetBased\Exception\LogicException;
 
-//----------------------------------------------------------------------------------------------------------------------
+/**
+ * Test cases for class HtmlElement.
+ */
 class HtmlElementTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test fake attributes.
+   */
+  public function testFakeAttribute1(): void
+  {
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setFakeAttribute('_fake', $uuid);
+
+    // Fake attributes must not end up in generated HTML code.
+    $html = $element->generateElement();
+    self::assertStringNotContainsString('_fake', $html);
+
+    // But attribute must be set.
+    self::assertSame($uuid, $element->getAttribute('_fake'));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test fake attributes.
+   */
+  public function testFakeAttribute2(): void
+  {
+    $this->expectException(LogicException::class);
+
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setFakeAttribute('not_fake', $uuid);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrAria(): void
+  {
+    $element = new TestElement();
+    $element->setAttrAria('rowspan', '5');
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    // Test attribute is present.
+    $list = $xpath->query("/test[@aria-rowspan='5']");
+    self::assertEquals(1, $list->length, 'html');
+
+    self::assertSame('5', $element->getAttribute('aria-rowspan'), 'getAttribute');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrClass(): void
+  {
+    $element = new TestElement();
+
+    $element->addClass('hello');
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='hello']");
+    self::assertEquals(1, $list->length, "assert 1");
+
+    // Calling addClass adds another class.
+    $element->addClass('world');
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='hello world']");
+    self::assertEquals(1, $list->length, "assert 2");
+
+    // Remove a class.
+    $element->removeClass('hello');
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='world']");
+    self::assertEquals(1, $list->length, "assert 3");
+
+    // Call unsetClass resets class.
+    $element->unsetClass();
+    $html = $element->generateElement();
+    self::assertStringNotContainsString('class', $html, "assert 4");
+
+    // setClass must override previous set classes.
+    $element->addClass('class1');
+    $element->setAttrClass('class2');
+    $html = $element->generateElement();
+    self::assertStringNotContainsString('class1', $html, "assert 5");
+    $html = $element->generateElement();
+    self::assertStringContainsString('class2', $html, "assert 6");
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  public function testSetAttrData(): void
+  {
+    $element = new TestElement();
+    $uuid    = uniqid();
+    $element->setAttrData('test', $uuid);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    // Test attribute is present.
+    $list = $xpath->query("/test[@data-test='$uuid']");
+    self::assertEquals(1, $list->length, 'html');
+
+    self::assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test all setAttr* methods.
    */
-  public function testSetAttribute()
+  public function testSetAttribute(): void
   {
     $methods = ['setAttrAccessKey'       => 'accesskey',
                 'setAttrContentEditable' => 'contenteditable',
@@ -43,126 +162,10 @@ class HtmlElementTest extends TestCase
 
       // Test attribute is present.
       $list = $xpath->query("/test[@$attribute='$uuid' or @$attribute='true'or @$attribute='yes'or @$attribute='$attribute']");
-      $this->assertEquals(1, $list->length, "Method: $method");
+      self::assertEquals(1, $list->length, "Method: $method");
 
-      $this->assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
+      self::assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
     }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrClass()
-  {
-    $element = new TestElement();
-
-    $element->addClass('hello');
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-    $list = $xpath->query("/test[@class='hello']");
-    $this->assertEquals(1, $list->length, "assert 1");
-
-    // Calling addClass adds another class.
-    $element->addClass('world');
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-    $list = $xpath->query("/test[@class='hello world']");
-    $this->assertEquals(1, $list->length, "assert 2");
-
-    // Remove a class.
-    $element->removeClass('hello');
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-    $list = $xpath->query("/test[@class='world']");
-    $this->assertEquals(1, $list->length, "assert 3");
-
-    // Call unsetClass resets class.
-    $element->unsetClass();
-    $html = $element->generateElement();
-    $this->assertNotContains('class', $html, "assert 4");
-
-    // setClass must override previous set classes.
-    $element->addClass('class1');
-    $element->setAttrClass('class2');
-    $html = $element->generateElement();
-    $this->assertNotContains('class1', $html, "assert 5");
-    $html = $element->generateElement();
-    $this->assertContains('class2', $html, "assert 6");
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrData()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setAttrData('test', $uuid);
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-
-    // Test attribute is present.
-    $list = $xpath->query("/test[@data-test='$uuid']");
-    $this->assertEquals(1, $list->length, 'html');
-
-    $this->assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrAria()
-  {
-    $element = new TestElement();
-    $element->setAttrAria('rowspan', 5);
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-
-    // Test attribute is present.
-    $list = $xpath->query("/test[@aria-rowspan='5']");
-    $this->assertEquals(1, $list->length, 'html');
-
-    $this->assertSame('5', $element->getAttribute('aria-rowspan'), 'getAttribute');
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   */
-  public function testFakeAttribute1()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setFakeAttribute('_fake', $uuid);
-
-    // Fake attributes must not end up in generated HTML code.
-    $html = $element->generateElement();
-    $this->assertNotContains('_fake', $html);
-
-    // But attribute must be set.
-    $this->assertSame($uuid, $element->getAttribute('_fake'));
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   *
-   * @expectedException LogicException
-   */
-  public function testFakeAttribute2()
-  {
-    $element = new TestElement();
-    $uuid = uniqid();
-    $element->setFakeAttribute('not_fake', $uuid);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

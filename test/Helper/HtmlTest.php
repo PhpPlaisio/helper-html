@@ -6,6 +6,9 @@ namespace SetBased\Abc\Test\Helper;
 use PHPUnit\Framework\TestCase;
 use SetBased\Abc\Helper\Html;
 
+/**
+ * Test cases fro class Html.
+ */
 class HtmlTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
