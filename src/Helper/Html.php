@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace SetBased\Abc\Helper;
 
@@ -103,7 +104,6 @@ class Html
                            'ё' => 'e'];
 
   //--------------------------------------------------------------------------------------------------------------------
-
   /**
    * Returns a string with proper conversion of special characters to HTML entities of an attribute of a HTML tag.
    *
@@ -175,12 +175,12 @@ class Html
         break;
 
       default:
-        if ($value!==null && $value!==false && $value!=='')
+        if ($value!==null && $value!=='')
         {
           $html = ' ';
           $html .= htmlspecialchars($name, ENT_QUOTES, self::$encoding);
           $html .= '="';
-          $html .= htmlspecialchars($value, ENT_QUOTES, self::$encoding);
+          $html .= htmlspecialchars(Cast::toManString($value), ENT_QUOTES, self::$encoding);
           $html .= '"';
         }
         break;
@@ -309,6 +309,8 @@ class Html
    */
   public static function txt2Html(?string $string): string
   {
+    if ($string===null) return '';
+
     return htmlspecialchars($string, ENT_QUOTES, self::$encoding);
   }
 
@@ -325,6 +327,8 @@ class Html
    */
   public static function txt2Slug(?string $string): string
   {
+    if ($string===null) return '';
+
     return trim(preg_replace('/[^0-9a-z]+/', '-', strtr(mb_strtolower($string), self::$trans)), '-');
   }
 
