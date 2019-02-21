@@ -45,7 +45,7 @@ class HtmlElement
   public function addClass(?string $class): void
   {
     // If class is empty return immediately.
-    if ($class=='') return;
+    if ($class===null || $class==='') return;
 
     if (isset($this->attributes['class']))
     {
@@ -86,7 +86,7 @@ class HtmlElement
   public function removeClass(?string $class): void
   {
     // If class is empty or no classes are set return immediately.
-    if ($class=='' || !isset($this->attributes['class'])) return;
+    if ($class===null || $class==='' || !isset($this->attributes['class'])) return;
 
     // Remove the class from the list of classes.
     $this->attributes['class'] = implode(' ', array_diff(explode(' ', $this->attributes['class']), [$class]));
