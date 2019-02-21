@@ -148,7 +148,7 @@ class Html
       // Annoying boolean attribute exceptions.
       case 'draggable':
       case 'contenteditable':
-        if (isset($value))
+        if ($value!==null)
         {
           $html = ' ';
           $html .= $name;
@@ -157,7 +157,7 @@ class Html
         break;
 
       case 'autocomplete':
-        if (isset($value))
+        if ($value!==null)
         {
           $html = ' ';
           $html .= $name;
@@ -166,7 +166,7 @@ class Html
         break;
 
       case 'translate':
-        if (isset($value))
+        if ($value!==null)
         {
           $html = ' ';
           $html .= $name;
