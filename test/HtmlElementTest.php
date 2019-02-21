@@ -109,6 +109,70 @@ class HtmlElementTest extends TestCase
   }
 
   //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests methods addClass and removeClass with zeros.
+   *
+   * @param string $class The class.
+   *
+   * @dataProvider zeros
+   */
+  public function testSetAttrClassWithZeros(string $class): void
+  {
+    $element = new TestElement();
+
+    // Add the class.
+    $element->addClass($class);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[@class='$class']");
+    self::assertSame(1, $list->length);
+
+    // Remove the class.
+    $element->removeClass($class);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[not(@class)]");
+    self::assertSame(1, $list->length);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests methods addClass and removeClass with null.
+   *
+   * @dataProvider zeros
+   */
+  public function testSetAttrClassWithNull(): void
+  {
+    $element = new TestElement();
+
+    // Add the class.
+    $element->addClass(null);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[not(@class)]");
+    self::assertSame(1, $list->length);
+
+    // Remove the class.
+    $element->removeClass(null);
+    $html = $element->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[not(@class)]");
+    self::assertSame(1, $list->length);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
   public function testSetAttrData(): void
   {
     $element = new TestElement();
@@ -166,6 +230,22 @@ class HtmlElementTest extends TestCase
 
       self::assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns non-empty string the are equal to empty string.
+   *
+   * @return array
+   */
+  public function zeros(): array
+  {
+    $cases = [];
+
+    $cases[] = ['class' => '0'];
+    $cases[] = ['class' => '0.0'];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
