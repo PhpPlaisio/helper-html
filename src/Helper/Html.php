@@ -174,6 +174,16 @@ class Html
         }
         break;
 
+      case 'class' and is_array($value):
+        $classes = implode(' ', self::cleanClasses($value));
+        if ($classes!=='')
+        {
+          $html = ' class="';
+          $html .= htmlspecialchars($classes, ENT_QUOTES, self::$encoding);
+          $html .= '"';
+        }
+        break;
+
       default:
         if ($value!==null && $value!=='')
         {
@@ -330,6 +340,27 @@ class Html
     if ($string===null) return '';
 
     return trim(preg_replace('/[^0-9a-z]+/', '-', strtr(mb_strtolower($string), self::$trans)), '-');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Removes empty and duplicate classes from an array with classes.
+   *
+   * @param array $classes The classes.
+   *
+   * @return array
+   */
+  private static function cleanClasses(array $classes): array
+  {
+    $ret = [];
+
+    foreach ($classes as $class)
+    {
+      $tmp = Cast::toManString($class, '');
+      if ($tmp!=='') $ret[] = $tmp;
+    }
+
+    return array_unique($ret);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

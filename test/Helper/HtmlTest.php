@@ -13,6 +13,56 @@ class HtmlTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns test cases for class attribute.
+   *
+   * @return array
+   */
+  public function casesClassAttribute(): array
+  {
+    $cases = [];
+
+    // Empty class.
+    $cases[] = ['value'    => '',
+                'expected' => ''];
+
+    $cases[] = ['value'    => null,
+                'expected' => ''];
+
+    // False must be casted to '0'.
+    $cases[] = ['value'    => false,
+                'expected' => ' class="0"'];
+
+    // Classes as array.
+    $cases[] = ['value'    => [],
+                'expected' => ''];
+
+    $cases[] = ['value'    => ['hello', 'world'],
+                'expected' => ' class="hello world"'];
+
+    // Classes as array with duplicate and empty values.
+    $cases[] = ['value'    => ['hello', 'hello', '', null, 'world', false],
+                'expected' => ' class="hello world 0"'];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests for generation attribute class.
+   *
+   * @param mixed  $value    The value for the class attribute.
+   * @param string $expected The expected generated HTML code.
+   *
+   * @dataProvider casesClassAttribute
+   */
+  public function testAttributeClass($value, string $expected)
+  {
+    $html = Html::generateAttribute('class', $value);
+    $this->assertSame($expected, $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test normal attributes set.
    */
   public function testAttributes1(): void
