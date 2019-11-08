@@ -5,12 +5,11 @@
     "ABC-Framework",
     "HTML"
   ],
-  "type": "library",
   "license": "MIT",
   "require": {
     "php": ">=7.1.0",
     "ext-mbstring": "*",
-    "setbased/exception": "^1.0.0",
+    "setbased/exception": "^2.0.0",
     "setbased/helper-cast": "^1.0.0"
   },
   "require-dev": {
