@@ -22,11 +22,11 @@
 <a href="https://packagist.org/packages/plaisio/html"><img src="https://poser.pugx.org/plaisio/html/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
-<a href="https://travis-ci.org/setbased-abc-framework/html"><img src="https://api.travis-ci.org/setbased-abc-framework/html.svg?branch=master" alt="Build Status"/></a><br/>
-<a href="https://scrutinizer-ci.com/g/setbased-abc-framework/html/?branch=master"><img src="https://scrutinizer-ci.com/g/setbased-abc-framework/html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
+<a href="https://travis-ci.org/PhpPlaisio/html"><img src="https://api.travis-ci.org/PhpPlaisio/html.svg?branch=master" alt="Build Status"/></a><br/>
+<a href="https://scrutinizer-ci.com/g/PhpPlaisio/html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
 </td>
 <td>
-<a href="https://scrutinizer-ci.com/g/setbased-abc-framework/html/?branch=master"><img src="https://scrutinizer-ci.com/g/setbased-abc-framework/html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
+<a href="https://scrutinizer-ci.com/g/PhpPlaisio/html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
 </td>
 </tr>
 </tbody>
