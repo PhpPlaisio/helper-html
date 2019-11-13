@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Helper;
+namespace Plaisio\Helper;
+
+use SetBased\Abc\Helper\Cast;
 
 /**
  * A utility class for generating HTML elements, tags, and attributes.

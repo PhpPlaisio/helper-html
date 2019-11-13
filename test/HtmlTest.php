@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Test\Helper;
+namespace Plaisio\Helper\Test\Helper;
 
 use PHPUnit\Framework\TestCase;
-use SetBased\Abc\Helper\Html;
+use Plaisio\Helper\Html;
 
 /**
  * Test cases fro class Html.

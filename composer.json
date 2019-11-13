@@ -1,8 +1,8 @@
 {
-  "name": "setbased/abc-html",
-  "description": "SetBased ABC-Framework: HTML",
+  "name": "plaisio/html",
+  "description": "Plaisio: HTML",
   "keywords": [
-    "SetBased ABC-Framework",
+    "Plaisio",
     "HTML"
   ],
   "license": "MIT",
@@ -19,12 +19,12 @@
   },
   "autoload": {
     "psr-4": {
-      "SetBased\\Abc\\": "src/"
+      "Plaisio\\Helper\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SetBased\\Abc\\Test\\": "test/"
+      "Plaisio\\Helper\\Test\\": "test/"
     }
   },
   "config": {

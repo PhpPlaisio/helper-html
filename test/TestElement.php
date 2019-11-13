@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Test;
+namespace Plaisio\Helper\Test;
 
-use SetBased\Abc\Helper\Html;
-use SetBased\Abc\HtmlElement;
+use Plaisio\Helper\Html;
+use Plaisio\Helper\HtmlElement;
 
 class TestElement extends HtmlElement
 {

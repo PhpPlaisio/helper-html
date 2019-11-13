@@ -1,4 +1,4 @@
-# SetBased ABC-Framework: HTML
+# Plaisio: HTML
 
 <table>
 <thead>
@@ -13,13 +13,13 @@
 <tbody>
 <tr>
 <td>
-<a href="https://gitter.im/setbased-abc-framework/abc"><img src="https://badges.gitter.im/setbased-abc-framework/abc.svg" alt="Gitter"/></a>
+<a href="https://gitter.im/PhpPlaisio/Plaisio"><img src="https://badges.gitter.im/PhpPlaisio/Plaisio.svg" alt="Gitter"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/setbased/abc-html"><img src="https://poser.pugx.org/setbased/abc-html/license" alt="License"/></a>
+<a href="https://packagist.org/packages/plaisio/html"><img src="https://poser.pugx.org/plaisio/html/license" alt="License"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/setbased/abc-html"><img src="https://poser.pugx.org/setbased/abc-html/v/stable" alt="Latest Stable Version"/></a><br/>
+<a href="https://packagist.org/packages/plaisio/html"><img src="https://poser.pugx.org/plaisio/html/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
 <a href="https://travis-ci.org/setbased-abc-framework/html"><img src="https://api.travis-ci.org/setbased-abc-framework/html.svg?branch=master" alt="Build Status"/></a><br/>
@@ -33,3 +33,7 @@
 </table>
 
 This package contains helper and utility classes for generating HTML code. 
+
+# License
+
+This project is licensed under the MIT license.
