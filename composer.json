@@ -1,8 +1,8 @@
 {
   "name": "plaisio/html",
-  "description": "Plaisio: HTML",
+  "description": "PhpPlaisio: HTML",
   "keywords": [
-    "Plaisio",
+    "PhpPlaisio",
     "HTML"
   ],
   "license": "MIT",

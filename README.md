@@ -1,4 +1,4 @@
-# Plaisio: HTML
+# PhpPlaisio: HTML
 
 <table>
 <thead>

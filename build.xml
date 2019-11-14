@@ -1,4 +1,4 @@
-<project name="Plaisio" default="build" basedir=".">
+<project name="PhpPlaisio" default="build" basedir=".">
     <!-- Run composer update and executes various other updates -->
     <target name="update">
         <exec command="composer update" checkreturn="true" passthru="true"/>
