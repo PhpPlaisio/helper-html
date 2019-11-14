@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Plaisio\Helper;
 
-use SetBased\Abc\Helper\Cast;
+use SetBased\Helper\Cast;
 
 /**
  * A utility class for generating HTML elements, tags, and attributes.
