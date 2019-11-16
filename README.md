@@ -16,17 +16,17 @@
 <a href="https://gitter.im/PhpPlaisio/PhpPlaisio"><img src="https://badges.gitter.im/PhpPlaisio/PhpPlaisio.svg" alt="Gitter"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/plaisio/html"><img src="https://poser.pugx.org/plaisio/html/license" alt="License"/></a>
+<a href="https://packagist.org/packages/plaisio/helper-html"><img src="https://poser.pugx.org/plaisio/helper-html/license" alt="License"/></a>
 </td>
 <td>
-<a href="https://packagist.org/packages/plaisio/html"><img src="https://poser.pugx.org/plaisio/html/v/stable" alt="Latest Stable Version"/></a><br/>
+<a href="https://packagist.org/packages/plaisio/helper-html"><img src="https://poser.pugx.org/plaisio/helper-html/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
-<a href="https://travis-ci.org/PhpPlaisio/html"><img src="https://api.travis-ci.org/PhpPlaisio/html.svg?branch=master" alt="Build Status"/></a><br/>
-<a href="https://scrutinizer-ci.com/g/PhpPlaisio/html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
+<a href="https://travis-ci.org/PhpPlaisio/helper-html"><img src="https://api.travis-ci.org/PhpPlaisio/helper-html.svg?branch=master" alt="Build Status"/></a><br/>
+<a href="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
 </td>
 <td>
-<a href="https://scrutinizer-ci.com/g/PhpPlaisio/html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
+<a href="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
 </td>
 </tr>
 </tbody>
