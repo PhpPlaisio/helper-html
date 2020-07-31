@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Plaisio\Helper;
 
+use SetBased\Exception\FallenException;
 use SetBased\Helper\Cast;
 
 /**
  * A utility class for generating HTML elements, tags, and attributes.
  */
-class Html
+final class Html
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -192,7 +193,7 @@ class Html
           $html = ' ';
           $html .= htmlspecialchars($name, ENT_QUOTES, self::$encoding);
           $html .= '="';
-          $html .= htmlspecialchars(Cast::toManString($value), ENT_QUOTES, self::$encoding);
+          $html .= self::txt2Html($value);
           $html .= '"';
         }
         break;
@@ -207,12 +208,12 @@ class Html
    *
    * Note: tags for void elements such as '<br/>' are not supported.
    *
-   * @param string      $tagName    The name of the tag, e.g. a, form.
-   * @param array       $attributes The attributes of the tag. Special characters in the attributes will be replaced
-   *                                with HTML entities.
-   * @param string|null $innerText  The inner text of the tag.
-   * @param bool        $isHtml     If set the inner text is a HTML snippet, otherwise special characters in the inner
-   *                                text will be replaced with HTML entities.
+   * @param string                     $tagName    The name of the tag, e.g. a, form.
+   * @param array                      $attributes The attributes of the tag. Special characters in the attributes will
+   *                                               be replaced with HTML entities.
+   * @param bool|int|float|string|null $innerText  The inner text of the tag.
+   * @param bool                       $isHtml     If set the inner text is a HTML snippet, otherwise special
+   *                                               characters in the inner text will be replaced with HTML entities.
    *
    * @return string
    *
@@ -221,7 +222,7 @@ class Html
    */
   public static function generateElement(string $tagName,
                                          array $attributes = [],
-                                         ?string $innerText = '',
+                                         $innerText = '',
                                          bool $isHtml = false): string
   {
     $html = self::generateTag($tagName, $attributes);
@@ -304,7 +305,7 @@ class Html
   {
     self::$autoId++;
 
-    return 'abc_'.self::$autoId;
+    return 'plaisio-id-'.self::$autoId;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -312,18 +313,34 @@ class Html
    * Returns a string with special characters converted to HTML entities.
    * This method is a wrapper around [htmlspecialchars](http://php.net/manual/en/function.htmlspecialchars.php).
    *
-   * @param string|null $string The string with optionally special characters.
+   * @param bool|int|float|string|null $value The string with optionally special characters.
    *
    * @return string
    *
    * @since 1.0.0
    * @api
    */
-  public static function txt2Html(?string $string): string
+  public static function txt2Html($value): string
   {
-    if ($string===null) return '';
+    switch (true)
+    {
+      case is_string($value):
+        return htmlspecialchars($value, ENT_QUOTES, self::$encoding);
 
-    return htmlspecialchars($string, ENT_QUOTES, self::$encoding);
+      case is_int($value):
+      case is_float($value):
+      case $value===null:
+        return (string)$value;
+
+      case $value===true:
+        return '1';
+
+      case $value===false:
+        return '0';
+
+      default:
+        throw new FallenException('type', is_object($value) ? get_class($value) : gettype($value));
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------

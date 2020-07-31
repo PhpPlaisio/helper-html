@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Plaisio\Helper\Test\Helper;
+namespace Plaisio\Helper\Test;
 
 use PHPUnit\Framework\TestCase;
 use Plaisio\Helper\Html;
+use SetBased\Exception\FallenException;
 
 /**
  * Test cases fro class Html.
@@ -42,6 +43,54 @@ class HtmlTest extends TestCase
     // Classes as array with duplicate and empty values.
     $cases[] = ['value'    => ['hello', 'hello', '', null, 'world', false],
                 'expected' => ' class="hello world 0"'];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns invalid test cases for method txt2html
+   *
+   * @return array
+   */
+  public function casesInvalidTxt2Html(): array
+  {
+    $cases = [];
+
+    $cases[] = ['value' => []];
+
+    $cases[] = ['value' => $this];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns valid test cases for method txt2html
+   *
+   * @return array
+   */
+  public function casesValidTxt2Html(): array
+  {
+    $cases = [];
+
+    $cases[] = ['value'    => '',
+                'expected' => ''];
+
+    $cases[] = ['value'    => null,
+                'expected' => ''];
+
+    $cases[] = ['value'    => false,
+                'expected' => '0'];
+
+    $cases[] = ['value'    => true,
+                'expected' => '1'];
+
+    $cases[] = ['value'    => '123',
+                'expected' => '123'];
+
+    $cases[] = ['value'    => M_PI,
+                'expected' => (string)M_PI];
 
     return $cases;
   }
@@ -356,6 +405,20 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Invalid tests for method txt2html.
+   *
+   * @param mixed $value The value.
+   *
+   * @dataProvider casesInvalidTxt2Html
+   */
+  public function testInvalidTxt2Html($value)
+  {
+    $this->expectException(FallenException::class);
+    Html::txt2Html($value);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test cases for txt2Slug.
    *
    * Test cases copied from [Matteo Spinelli's Cubiq.org](http://cubiq.org/the-perfect-php-clean-url-generator) and
@@ -401,6 +464,21 @@ class HtmlTest extends TestCase
       $part = Html::txt2Slug($case);
       $this->assertEquals($expected, $part, $case);
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Valid tests for method txt2html.
+   *
+   * @param mixed  $value    The value.
+   * @param string $expected The expected generated HTML code.
+   *
+   * @dataProvider casesValidTxt2Html
+   */
+  public function testValidTxt2Html($value, string $expected)
+  {
+    $html = Html::txt2Html($value);
+    $this->assertSame($expected, $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
