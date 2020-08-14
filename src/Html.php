@@ -236,6 +236,22 @@ final class Html
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns the HTML code of nested elements.
+   *
+   * @param array $structure The structure of the nested elements.
+   *
+   * @return string
+   */
+  public static function generateNested(array $structure): string
+  {
+    $html = '';
+    self::generateNestedHelper($structure, $html);
+
+    return $html;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Generates HTML code for a start tag of an element.
    *
    * @param string $tagName    The name of the tag, e.g. a, form.
@@ -380,6 +396,59 @@ final class Html
     }
 
     return array_unique($ret);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Helper method for method generateNested().
+   *
+   * @param array  $structure The (nested) structure of the HTML code.
+   * @param string $html      The generated HTML code.
+   */
+  private static function generateNestedHelper(array $structure, string &$html): void
+  {
+    $key = array_key_first($structure);
+
+    if (is_int($key))
+    {
+      // Structure is a list of elements.
+      foreach ($structure as $element)
+      {
+        self::generateNestedHelper($element, $html);
+      }
+    }
+    elseif ($key!==null)
+    {
+      // Structure is an associative array.
+      if (array_key_exists('inner', $structure))
+      {
+        // Element with content.
+        $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
+        if (is_array($structure['inner']))
+        {
+          self::generateNestedHelper($structure['inner'], $html);
+        }
+        else
+        {
+          if ($structure['html'] ?? false)
+          {
+            $html .= $structure['inner'];
+          }
+          else
+          {
+            $html .= self::txt2Html(Cast::toOptString($structure['inner']));
+          }
+        }
+        $html .= '</';
+        $html .= $structure['tag'];
+        $html .= '>';
+      }
+      else
+      {
+        // Void element.
+        $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
+      }
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------

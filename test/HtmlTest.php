@@ -385,6 +385,112 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test generateNested with void element.
+   */
+  public function testGenerateNested01(): void
+  {
+    $html = Html::generateNested(['tag' => 'br']);
+    self::assertSame('<br/>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with element.
+   */
+  public function testGenerateNested02(): void
+  {
+    $html = Html::generateNested(['tag'   => 'a',
+                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'inner' => 'helper & html']);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with element with integer value.
+   */
+  public function testGenerateNested03(): void
+  {
+    $html = Html::generateNested(['tag'   => 'a',
+                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'inner' => 123]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with element with HTML value.
+   */
+  public function testGenerateNested04(): void
+  {
+    $html = Html::generateNested(['tag'   => 'a',
+                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'inner' => '<b>helper-html</b>',
+                                  'html'  => true]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with nested elements.
+   */
+  public function testGenerateNested05(): void
+  {
+    $html = Html::generateNested(['tag'   => 'a',
+                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'inner' => ['tag'   => 'b',
+                                              'inner' => 'helper-html']]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with list of elements.
+   */
+  public function testGenerateNested06(): void
+  {
+    $html = Html::generateNested([['tag'   => 'a',
+                                   'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                   'inner' => ['tag'   => 'b',
+                                               'inner' => 'helper-html']
+                                  ],
+                                  ['tag' => 'br']
+                                 ]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with list of elements.
+   */
+  public function testGenerateNested10(): void
+  {
+    $html = Html::generateNested(['tag'   => 'table',
+                                  'attr'  => ['class' => 'test'],
+                                  'inner' => [['tag'   => 'tr',
+                                               'attr'  => ['id' => 'first-row'],
+                                               'inner' => [['tag'   => 'td',
+                                                            'inner' => 'hello'],
+                                                           ['tag'   => 'td',
+                                                            'inner' => '<b>world</b>',
+                                                            'html'  => true]]],
+                                              ['tag'   => 'tr',
+                                               'inner' => [['tag'   => 'td',
+                                                            'inner' => 'foo'],
+                                                           ['tag'   => 'td',
+                                                            'inner' => 'bar']]],
+                                              ['tag'   => 'tr',
+                                               'attr'  => ['id' => 'last-row'],
+                                               'inner' => [['tag'   => 'td',
+                                                            'inner' => 'foo'],
+                                                           ['tag'   => 'td',
+                                                            'inner' => 'bar']]]]]);
+
+    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test generateVoidElement.
    */
   public function testGenerateVoidElement1(): void
@@ -465,7 +571,6 @@ class HtmlTest extends TestCase
       $this->assertEquals($expected, $part, $case);
     }
   }
-
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Valid tests for method txt2html.
