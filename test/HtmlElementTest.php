@@ -17,12 +17,12 @@ class HtmlElementTest extends TestCase
    */
   public function testFakeAttribute1(): void
   {
-    $element = new TestElement();
     $uuid    = uniqid();
-    $element->setFakeAttribute('_fake', $uuid);
+    $element = new TestElement();
+    $html    = $element->setFakeAttribute('_fake', $uuid)
+                       ->generateElement();
 
     // Fake attributes must not end up in generated HTML code.
-    $html = $element->generateElement();
     self::assertStringNotContainsString('_fake', $html);
 
     // But attribute must be set.
@@ -65,8 +65,8 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $element->addClass('hello');
-    $html = $element->generateElement();
+    $html = $element->addClass('hello')
+                    ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -75,8 +75,8 @@ class HtmlElementTest extends TestCase
     self::assertEquals(1, $list->length, "assert 1");
 
     // Calling addClass adds another class.
-    $element->addClass('world');
-    $html = $element->generateElement();
+    $html = $element->addClass('world')
+                    ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -85,8 +85,8 @@ class HtmlElementTest extends TestCase
     self::assertEquals(1, $list->length, "assert 2");
 
     // Remove a class.
-    $element->removeClass('hello');
-    $html = $element->generateElement();
+    $html = $element->removeClass('hello')
+                    ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -95,17 +95,48 @@ class HtmlElementTest extends TestCase
     self::assertEquals(1, $list->length, "assert 3");
 
     // Call unsetClass resets class.
-    $element->unsetClass();
-    $html = $element->generateElement();
+    $html = $element->unsetClass()
+                    ->generateElement();
     self::assertStringNotContainsString('class', $html, "assert 4");
 
     // setClass must override previous set classes.
-    $element->addClass('class1');
-    $element->setAttrClass('class2');
-    $html = $element->generateElement();
+    $html = $element->addClass('class1')
+                    ->setAttrClass('class2')
+                    ->generateElement();
     self::assertStringNotContainsString('class1', $html, "assert 5");
     $html = $element->generateElement();
     self::assertStringContainsString('class2', $html, "assert 6");
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests methods addClass and removeClass with null.
+   *
+   * @dataProvider zeros
+   */
+  public function testSetAttrClassWithNull(): void
+  {
+    $element = new TestElement();
+
+    // Add the class.
+    $html = $element->addClass(null)
+                    ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[not(@class)]");
+    self::assertSame(1, $list->length);
+
+    // Remove the class.
+    $html = $element->removeClass(null)
+                    ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+    $list  = $xpath->query("/test[not(@class)]");
+    self::assertSame(1, $list->length);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -121,8 +152,8 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
 
     // Add the class.
-    $element->addClass($class);
-    $html = $element->generateElement();
+    $html = $element->addClass($class)
+                    ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -131,39 +162,8 @@ class HtmlElementTest extends TestCase
     self::assertSame(1, $list->length);
 
     // Remove the class.
-    $element->removeClass($class);
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-    $list  = $xpath->query("/test[not(@class)]");
-    self::assertSame(1, $list->length);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Tests methods addClass and removeClass with null.
-   *
-   * @dataProvider zeros
-   */
-  public function testSetAttrClassWithNull(): void
-  {
-    $element = new TestElement();
-
-    // Add the class.
-    $element->addClass(null);
-    $html = $element->generateElement();
-
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
-    $list  = $xpath->query("/test[not(@class)]");
-    self::assertSame(1, $list->length);
-
-    // Remove the class.
-    $element->removeClass(null);
-    $html = $element->generateElement();
+    $html = $element->removeClass($class)
+                    ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -175,10 +175,10 @@ class HtmlElementTest extends TestCase
   //--------------------------------------------------------------------------------------------------------------------
   public function testSetAttrData(): void
   {
-    $element = new TestElement();
     $uuid    = uniqid();
-    $element->setAttrData('test', $uuid);
-    $html = $element->generateElement();
+    $element = new TestElement();
+    $html    = $element->setAttrData('test', $uuid)
+                       ->generateElement();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -217,8 +217,8 @@ class HtmlElementTest extends TestCase
     foreach ($methods as $method => $attribute)
     {
       $uuid = ($attribute!='tabindex') ? uniqid() : rand(1, 123);
-      $element->$method($uuid);
-      $html = $element->generateElement();
+      $html = $element->$method($uuid)
+                      ->generateElement();
 
       $doc = new \DOMDocument();
       $doc->loadXML($html);
@@ -240,12 +240,8 @@ class HtmlElementTest extends TestCase
    */
   public function zeros(): array
   {
-    $cases = [];
-
-    $cases[] = ['class' => '0'];
-    $cases[] = ['class' => '0.0'];
-
-    return $cases;
+    return [['class' => '0'],
+            ['class' => '0.0']];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
