@@ -43,6 +43,22 @@ class HtmlElementTest extends TestCase
   }
 
   //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for method getId().
+   */
+  public function testGetId(): void
+  {
+    $element1 = new TestElement();
+    $id       = $element1->getId();
+    self::assertIsString($id);
+
+    $element2 = new TestElement();
+    $element2->setAttrId('is-me');
+    $id = $element2->getId();
+    self::assertSame($id, 'is-me');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
   public function testSetAttrAria(): void
   {
     $element = new TestElement();
