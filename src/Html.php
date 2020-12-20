@@ -238,6 +238,31 @@ final class Html
   /**
    * Returns the HTML code of nested elements.
    *
+   * Example:
+   *
+   * $html = Html::generateNested([['tag'   => 'table',
+   *                                'attr'  => ['class' => 'test'],
+   *                                'inner' => [['tag'   => 'tr',
+   *                                             'attr'  => ['id' => 'first-row'],
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'hello'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'attr' => ['class' => 'bold'],
+   *                                                          'html' => '<b>world</b>']]],
+   *                                            ['tag'   => 'tr',
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'foo'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'text' => 'bar']]],
+   *                                            ['tag'   => 'tr',
+   *                                             'attr'  => ['id' => 'last-row'],
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'foo'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'text' => 'bar']]]]],
+   *                               ['text' => 'The End'],
+   *                               ['html' => '!']]);
+   *
    * @param array $structure The structure of the nested elements.
    *
    * @return string
@@ -420,33 +445,41 @@ final class Html
     elseif ($key!==null)
     {
       // Structure is an associative array.
-      if (array_key_exists('inner', $structure))
+      if (isset($structure['tag']))
       {
         // Element with content.
-        $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
-        if (is_array($structure['inner']))
+        if (array_key_exists('inner', $structure))
         {
+          $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
           self::generateNestedHelper($structure['inner'], $html);
+          $html .= '</';
+          $html .= $structure['tag'];
+          $html .= '>';
+        }
+        elseif (array_key_exists('text', $structure))
+        {
+          $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['text']);
+        }
+        elseif (array_key_exists('html', $structure))
+        {
+          $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['html'], true);
         }
         else
         {
-          if ($structure['html'] ?? false)
-          {
-            $html .= $structure['inner'];
-          }
-          else
-          {
-            $html .= self::txt2Html(Cast::toOptString($structure['inner']));
-          }
+          $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
         }
-        $html .= '</';
-        $html .= $structure['tag'];
-        $html .= '>';
+      }
+      elseif (array_key_exists('text', $structure))
+      {
+        $html .= self::txt2Html(Cast::toOptString($structure['text']));
+      }
+      elseif (array_key_exists('html', $structure))
+      {
+        $html .= $structure['html'];
       }
       else
       {
-        // Void element.
-        $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
+        throw new \LogicException("Expected key 'tag', 'text', or 'html'");
       }
     }
   }

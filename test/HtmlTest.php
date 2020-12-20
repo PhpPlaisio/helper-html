@@ -399,9 +399,9 @@ class HtmlTest extends TestCase
    */
   public function testGenerateNested02(): void
   {
-    $html = Html::generateNested(['tag'   => 'a',
-                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'inner' => 'helper & html']);
+    $html = Html::generateNested(['tag'  => 'a',
+                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'text' => 'helper & html']);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', $html);
   }
 
@@ -411,9 +411,9 @@ class HtmlTest extends TestCase
    */
   public function testGenerateNested03(): void
   {
-    $html = Html::generateNested(['tag'   => 'a',
-                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'inner' => 123]);
+    $html = Html::generateNested(['tag'  => 'a',
+                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'text' => 123]);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', $html);
   }
 
@@ -423,10 +423,9 @@ class HtmlTest extends TestCase
    */
   public function testGenerateNested04(): void
   {
-    $html = Html::generateNested(['tag'   => 'a',
-                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'inner' => '<b>helper-html</b>',
-                                  'html'  => true]);
+    $html = Html::generateNested(['tag'  => 'a',
+                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                                  'html' => '<b>helper-html</b>']);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
   }
 
@@ -438,8 +437,8 @@ class HtmlTest extends TestCase
   {
     $html = Html::generateNested(['tag'   => 'a',
                                   'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'inner' => ['tag'   => 'b',
-                                              'inner' => 'helper-html']]);
+                                  'inner' => ['tag'  => 'b',
+                                              'text' => 'helper-html']]);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
   }
 
@@ -451,12 +450,21 @@ class HtmlTest extends TestCase
   {
     $html = Html::generateNested([['tag'   => 'a',
                                    'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                   'inner' => ['tag'   => 'b',
-                                               'inner' => 'helper-html']
+                                   'inner' => ['tag'  => 'b',
+                                               'text' => 'helper-html']
                                   ],
-                                  ['tag' => 'br']
-                                 ]);
+                                  ['tag' => 'br']]);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with list of elements.
+   */
+  public function testGenerateNested07(): void
+  {
+    $this->expectException(\LogicException::class);
+    Html::generateNested(['xhtml' => 'xml-html']);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -465,28 +473,30 @@ class HtmlTest extends TestCase
    */
   public function testGenerateNested10(): void
   {
-    $html = Html::generateNested(['tag'   => 'table',
-                                  'attr'  => ['class' => 'test'],
-                                  'inner' => [['tag'   => 'tr',
-                                               'attr'  => ['id' => 'first-row'],
-                                               'inner' => [['tag'   => 'td',
-                                                            'inner' => 'hello'],
-                                                           ['tag'   => 'td',
-                                                            'inner' => '<b>world</b>',
-                                                            'html'  => true]]],
-                                              ['tag'   => 'tr',
-                                               'inner' => [['tag'   => 'td',
-                                                            'inner' => 'foo'],
-                                                           ['tag'   => 'td',
-                                                            'inner' => 'bar']]],
-                                              ['tag'   => 'tr',
-                                               'attr'  => ['id' => 'last-row'],
-                                               'inner' => [['tag'   => 'td',
-                                                            'inner' => 'foo'],
-                                                           ['tag'   => 'td',
-                                                            'inner' => 'bar']]]]]);
+    $html = Html::generateNested([['tag'   => 'table',
+                                   'attr'  => ['class' => 'test'],
+                                   'inner' => [['tag'   => 'tr',
+                                                'attr'  => ['id' => 'first-row'],
+                                                'inner' => [['tag'  => 'td',
+                                                             'text' => 'hello'],
+                                                            ['tag'  => 'td',
+                                                             'attr' => ['class' => 'bold'],
+                                                             'html' => '<b>world</b>']]],
+                                               ['tag'   => 'tr',
+                                                'inner' => [['tag'  => 'td',
+                                                             'text' => 'foo'],
+                                                            ['tag'  => 'td',
+                                                             'text' => 'bar']]],
+                                               ['tag'   => 'tr',
+                                                'attr'  => ['id' => 'last-row'],
+                                                'inner' => [['tag'  => 'td',
+                                                             'text' => 'foo'],
+                                                            ['tag'  => 'td',
+                                                             'text' => 'bar']]]]],
+                                  ['text' => 'The End'],
+                                  ['html' => '!']]);
 
-    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>', $html);
+    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
