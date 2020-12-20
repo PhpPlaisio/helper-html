@@ -31,7 +31,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  protected $attributes = [];
+  protected array $attributes = [];
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -44,7 +44,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function addClass(?string $class)
+  public function addClass(?string $class): self
   {
     // If class is empty return immediately.
     if ($class===null || $class==='') return $this;
@@ -90,10 +90,7 @@ class HtmlElement
    */
   public function getId(): string
   {
-    if (!isset($this->attributes['id']))
-    {
-      $this->attributes['id'] = Html::getAutoId();
-    }
+     $this->attributes['id'] ??= Html::getAutoId();
 
     return $this->attributes['id'];
   }
@@ -109,7 +106,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function removeClass(?string $class)
+  public function removeClass(?string $class): self
   {
     // If class is empty or no classes are set return immediately.
     if ($class===null || $class==='' || !isset($this->attributes['class'])) return $this;
@@ -131,7 +128,7 @@ class HtmlElement
    * @api
    * @since 1.0.0
    */
-  public function setAttrAccessKey(?string $value)
+  public function setAttrAccessKey(?string $value): self
   {
     $this->attributes['accesskey'] = $value;
 
@@ -150,7 +147,7 @@ class HtmlElement
    * @since 1.3.0
    * @api
    */
-  public function setAttrAria(string $name, ?string $value)
+  public function setAttrAria(string $name, ?string $value): self
   {
     $this->attributes['aria-'.$name] = $value;
 
@@ -168,7 +165,7 @@ class HtmlElement
    * @since 1.4.0
    * @api
    */
-  public function setAttrClass(?string $value)
+  public function setAttrClass(?string $value): self
   {
     $this->attributes['class'] = $value;
 
@@ -191,7 +188,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrContentEditable(?string $value)
+  public function setAttrContentEditable(?string $value): self
   {
     $this->attributes['contenteditable'] = $value;
 
@@ -209,7 +206,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrContextMenu(?string $value)
+  public function setAttrContextMenu(?string $value): self
   {
     $this->attributes['contextmenu'] = $value;
 
@@ -228,7 +225,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrData(string $name, ?string $value)
+  public function setAttrData(string $name, ?string $value): self
   {
     $this->attributes['data-'.$name] = $value;
 
@@ -251,7 +248,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrDir(?string $value)
+  public function setAttrDir(?string $value): self
   {
     $this->attributes['dir'] = $value;
 
@@ -274,7 +271,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrDraggable(?string $value)
+  public function setAttrDraggable(?string $value): self
   {
     $this->attributes['draggable'] = $value;
 
@@ -292,7 +289,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrDropZone(?string $value)
+  public function setAttrDropZone(?string $value): self
   {
     $this->attributes['dropzone'] = $value;
 
@@ -312,7 +309,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrHidden(?string $value)
+  public function setAttrHidden(?string $value): self
   {
     $this->attributes['hidden'] = $value;
 
@@ -330,7 +327,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrId(?string $value)
+  public function setAttrId(?string $value): self
   {
     $this->attributes['id'] = $value;
 
@@ -348,7 +345,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrLang(?string $value)
+  public function setAttrLang(?string $value): self
   {
     $this->attributes['lang'] = $value;
 
@@ -366,7 +363,7 @@ class HtmlElement
    * @since 1.3.0
    * @api
    */
-  public function setAttrRole(?string $value)
+  public function setAttrRole(?string $value): self
   {
     $this->attributes['role'] = $value;
 
@@ -389,7 +386,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrSpellCheck(?string $value)
+  public function setAttrSpellCheck(?string $value): self
   {
     $this->attributes['spellcheck'] = $value;
 
@@ -407,7 +404,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrStyle(?string $value)
+  public function setAttrStyle(?string $value): self
   {
     $this->attributes['style'] = $value;
 
@@ -425,7 +422,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrTabIndex(?int $value)
+  public function setAttrTabIndex(?int $value): self
   {
     $this->attributes['tabindex'] = $value;
 
@@ -443,7 +440,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrTitle(?string $value)
+  public function setAttrTitle(?string $value): self
   {
     $this->attributes['title'] = $value;
 
@@ -466,7 +463,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setAttrTranslate(?string $value)
+  public function setAttrTranslate(?string $value): self
   {
     $this->attributes['translate'] = $value;
 
@@ -486,7 +483,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function setFakeAttribute(string $name, $value)
+  public function setFakeAttribute(string $name, $value): self
   {
     if (strpos($name, '_')!==0)
     {
@@ -507,7 +504,7 @@ class HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function unsetClass()
+  public function unsetClass(): self
   {
     unset($this->attributes['class']);
 

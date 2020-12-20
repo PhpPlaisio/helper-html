@@ -7,15 +7,15 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.4",
     "ext-mbstring": "*",
-    "setbased/exception": "^2.1",
-    "setbased/helper-cast": "^2.1"
+    "setbased/exception": "^2.1.2",
+    "setbased/helper-cast": "^2.1.1"
   },
   "require-dev": {
     "ext-dom": "*",
-    "phing/phing": "^2.0",
-    "phpunit/phpunit": "^9.0"
+    "phing/phing": "^2.16.3",
+    "phpunit/phpunit": "^9.1.4"
   },
   "autoload": {
     "psr-4": {
