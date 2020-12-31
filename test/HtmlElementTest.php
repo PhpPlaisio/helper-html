@@ -13,6 +13,105 @@ class HtmlElementTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   *  Works when class is a string.
+   */
+  public function testAddClass1(): void
+  {
+    $element = new TestElement();
+    $html    = $element->setAttribute('class', 'string')
+                       ->addClass('my-class')
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('my-class string', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for method addClasses().
+   */
+  public function testAddClasses1(): void
+  {
+    $element = new TestElement();
+    $html    = $element->addClasses(['first', 'last'])
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('first last', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for method addClasses(). Array keys are ignored.
+   */
+  public function testAddClasses2(): void
+  {
+    $element = new TestElement();
+    $html    = $element->addClasses(['one' => 'first', 'two' => 'last'])
+                       ->addClasses(['one' => 'one', 'two' => 'two'])
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('first last one two', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for method addClasses(). Classes are sorted.
+   */
+  public function testAddClasses3(): void
+  {
+    $element = new TestElement();
+    $html    = $element->addClasses(['z', 'a'])
+                       ->addClass('k')
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('a k z', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test for method addClasses(). Works when class is a string.
+   */
+  public function testAddClasses4(): void
+  {
+    $element = new TestElement();
+    $html    = $element->setAttribute('class', 'string')
+                       ->addClasses(['my-class'])
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('my-class string', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test fake attributes.
    */
   public function testFakeAttribute1(): void
@@ -122,6 +221,64 @@ class HtmlElementTest extends TestCase
     self::assertStringNotContainsString('class1', $html, "assert 5");
     $html = $element->generateElement();
     self::assertStringContainsString('class2', $html, "assert 6");
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sets class.
+   */
+  public function testSetAttrClass1(): void
+  {
+    $element = new TestElement();
+    $html    = $element->setAttrClass('my-class')
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('my-class', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sets class and overwrites the value.
+   */
+  public function testSetAttrClass2(): void
+  {
+    $element = new TestElement();
+    $html    = $element->setAttrClass('old-class')
+                       ->setAttrClass('new-class')
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    $list = $xpath->query("/test[1]/@class");
+    self::assertSame(1, $list->length);
+    self::assertSame('new-class', $list->item(0)->nodeValue);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sets class and overwrites the value.
+   */
+  public function testSetAttrClass3(): void
+  {
+    $element = new TestElement();
+    $element->setAttrClass('class')
+            ->setAttrClass(null);
+
+    self::assertArrayNotHasKey('class', $element->attributes);
+
+    $element = new TestElement();
+    $element->setAttrClass('class')
+            ->setAttrClass('');
+
+    self::assertArrayNotHasKey('class', $element->attributes);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

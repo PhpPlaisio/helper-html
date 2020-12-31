@@ -46,17 +46,50 @@ class HtmlElement
    */
   public function addClass(?string $class): self
   {
-    // If class is empty return immediately.
-    if ($class===null || $class==='') return $this;
-
-    if (isset($this->attributes['class']))
+    if ($class===null || $class==='')
     {
-      $this->attributes['class'] .= ' ';
-      $this->attributes['class'] .= $class;
+      return $this;
     }
-    else
+
+    if (empty($this->attributes['class']))
     {
-      $this->attributes['class'] = $class;
+      $this->attributes['class'] = [];
+    }
+    elseif (is_string($this->attributes['class']))
+    {
+      $this->attributes['class'] = explode(' ', $this->attributes['class']);
+    }
+
+    $this->attributes['class'][] = $class;
+
+    return $this;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Adds classes to the list of classes.
+   *
+   * @param array $classes The classes.
+   *
+   * @return $this
+   *
+   * @since 1.5.0
+   * @api
+   */
+  public function addClasses(array $classes): self
+  {
+    if (empty($this->attributes['class']))
+    {
+      $this->attributes['class'] = [];
+    }
+    elseif (is_string($this->attributes['class']))
+    {
+      $this->attributes['class'] = explode(' ', $this->attributes['class']);
+    }
+
+    foreach ($classes as $class)
+    {
+      $this->attributes['class'][] = $class;
     }
 
     return $this;
@@ -90,7 +123,7 @@ class HtmlElement
    */
   public function getId(): string
   {
-     $this->attributes['id'] ??= Html::getAutoId();
+    $this->attributes['id'] ??= Html::getAutoId();
 
     return $this->attributes['id'];
   }
@@ -111,8 +144,12 @@ class HtmlElement
     // If class is empty or no classes are set return immediately.
     if ($class===null || $class==='' || !isset($this->attributes['class'])) return $this;
 
-    // Remove the class from the list of classes.
-    $this->attributes['class'] = implode(' ', array_diff(explode(' ', $this->attributes['class']), [$class]));
+    $this->attributes['class'] = array_unique($this->attributes['class']);
+    $key                       = array_search($class, $this->attributes['class']);
+    if ($key!==false)
+    {
+      unset($this->attributes['class'][$key]);
+    }
 
     return $this;
   }
@@ -167,7 +204,14 @@ class HtmlElement
    */
   public function setAttrClass(?string $value): self
   {
-    $this->attributes['class'] = $value;
+    if ($value===null || $value==='')
+    {
+      unset($this->attributes['class']);
+    }
+    else
+    {
+      $this->attributes['class'] = [$value];
+    }
 
     return $this;
   }

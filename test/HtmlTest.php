@@ -42,7 +42,7 @@ class HtmlTest extends TestCase
 
     // Classes as array with duplicate and empty values.
     $cases[] = ['value'    => ['hello', 'hello', '', null, 'world', false],
-                'expected' => ' class="hello world 0"'];
+                'expected' => ' class="0 hello world"'];
 
     return $cases;
   }

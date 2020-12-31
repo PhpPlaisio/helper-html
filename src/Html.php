@@ -420,7 +420,10 @@ final class Html
       if ($tmp!=='') $ret[] = $tmp;
     }
 
-    return array_unique($ret);
+    $ret = array_unique($ret, SORT_STRING);
+    sort($ret);
+
+    return $ret;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
