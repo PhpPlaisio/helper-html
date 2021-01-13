@@ -240,13 +240,13 @@ class HtmlElementTest extends TestCase
     $element->setAttrClass('class')
             ->setAttrClass(null);
 
-    self::assertArrayNotHasKey('class', $element->attributes);
+    self::assertArrayNotHasKey('class', $element->getAttributes());
 
     $element = new TestElement();
     $element->setAttrClass('class')
             ->setAttrClass('');
 
-    self::assertArrayNotHasKey('class', $element->attributes);
+    self::assertArrayNotHasKey('class', $element->getAttributes());
   }
 
   //--------------------------------------------------------------------------------------------------------------------

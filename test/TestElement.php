@@ -9,15 +9,10 @@ use Plaisio\Helper\HtmlElement;
 /**
  * Element for testing purposes.
  */
-class TestElement extends HtmlElement
+class TestElement
 {
   //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Make the attributes public.
-   *
-   * @var array
-   */
-  public array $attributes = [];
+  use HtmlElement;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**

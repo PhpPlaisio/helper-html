@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Plaisio\Helper;
 
 /**
- * Parent class for HTML elements.
+ * Trait for HTML elements.
  *
  * This class should be used for generation "heavy" HTML elements only. For light weight elements use methods of
  * {@link \Plaisio\Helper\Html}.
@@ -18,7 +18,7 @@ namespace Plaisio\Helper;
  * #### Event Attributes
  * This class does not define methods for setting event attributes. Events handlers must be set with JavaScript.
  */
-class HtmlElement
+trait HtmlElement
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -107,6 +107,17 @@ class HtmlElement
   public function getAttribute(string $attributeName)
   {
     return $this->attributes[$attributeName] ?? null;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the attributes of this HTML element.
+   *
+   * @return array
+   */
+  public function getAttributes(): array
+  {
+    return $this->attributes;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
