@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Plaisio\Helper;
 
-use SetBased\Exception\LogicException;
-
 /**
  * Parent class for HTML elements.
  *
@@ -510,31 +508,6 @@ class HtmlElement
   public function setAttrTranslate(?string $value): self
   {
     $this->attributes['translate'] = $value;
-
-    return $this;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Sets a fake attribute. A fake attribute has a name that starts with an underscore. Fake attributes will not be
-   * included in the generated HTML code.
-   *
-   * @param string $name  The name of the fake attribute.
-   * @param mixed  $value The value of the fake attribute.
-   *
-   * @return $this
-   *
-   * @since 1.0.0
-   * @api
-   */
-  public function setFakeAttribute(string $name, $value): self
-  {
-    if (strpos($name, '_')!==0)
-    {
-      throw new LogicException("Attribute '%s' is not a valid fake attribute.", $name);
-    }
-
-    $this->attributes[$name] = $value;
 
     return $this;
   }

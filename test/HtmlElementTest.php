@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Plaisio\Helper\Test;
 
 use PHPUnit\Framework\TestCase;
-use SetBased\Exception\LogicException;
 
 /**
  * Test cases for class HtmlElement.
@@ -108,37 +107,6 @@ class HtmlElementTest extends TestCase
     $list = $xpath->query("/test[1]/@class");
     self::assertSame(1, $list->length);
     self::assertSame('my-class string', $list->item(0)->nodeValue);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   */
-  public function testFakeAttribute1(): void
-  {
-    $uuid    = uniqid();
-    $element = new TestElement();
-    $html    = $element->setFakeAttribute('_fake', $uuid)
-                       ->generateElement();
-
-    // Fake attributes must not end up in generated HTML code.
-    self::assertStringNotContainsString('_fake', $html);
-
-    // But attribute must be set.
-    self::assertSame($uuid, $element->getAttribute('_fake'));
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test fake attributes.
-   */
-  public function testFakeAttribute2(): void
-  {
-    $this->expectException(LogicException::class);
-
-    $element = new TestElement();
-    $uuid    = uniqid();
-    $element->setFakeAttribute('not_fake', $uuid);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

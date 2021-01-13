@@ -362,16 +362,6 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test attributes with leading underscores are ignored.
-   */
-  public function testGenerateElement2(): void
-  {
-    $tag = Html::generateElement('a', ['href' => 'https://www.setbased.nl', '_ignore' => 'ignored'], 'SetBased');
-    $this->assertEquals('<a href="https://www.setbased.nl">SetBased</a>', $tag);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Test attributes with empty innerText.
    */
   public function testGenerateElement3(): void
