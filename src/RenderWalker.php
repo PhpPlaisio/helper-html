@@ -15,33 +15,33 @@ class RenderWalker
   /**
    * Object constructor.
    *
-   * @param string      $moduleClass    The CSS module class.
-   * @param string|null $subModuleClass The CSS sub-module class.
+   * @param string      $cssModuleClass    The CSS module class.
+   * @param string|null $cssSubModuleClass The CSS sub-module class.
    */
-  public function __construct(string $moduleClass, ?string $subModuleClass = null)
+  public function __construct(string $cssModuleClass, ?string $cssSubModuleClass = null)
   {
-    $this->moduleClass    = $moduleClass;
-    $this->subModuleClass = $subModuleClass;
+    $this->moduleClass    = $cssModuleClass;
+    $this->subModuleClass = $cssSubModuleClass;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns the module, sub-module and sub-classes for an HTML element.
    *
-   * @param string|null $subClass The CSS sub-class with the CSS module class.
+   * @param string|null $cssSubClass The CSS sub-class with the CSS module class.
    *
    * @return string[]
    */
-  public function getClasses(?string $subClass = null): array
+  public function getClasses(?string $cssSubClass = null): array
   {
     $classes = [$this->moduleClass];
     if ($this->subModuleClass!==null)
     {
-      $classes[] = $this->subModuleClass;
+      $classes[] = $this->cssSubModuleClass;
     }
-    if ($subClass!==null)
+    if ($cssSubClass!==null)
     {
-      $classes[] = $this->moduleClass.'-'.$subClass;
+      $classes[] = $this->moduleClass.'-'.$cssSubClass;
     }
 
     return $classes;
