@@ -9,19 +9,7 @@ namespace Plaisio\Helper;
 class RenderWalker
 {
   //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * The CSS module class.
-   *
-   * @var string
-   */
-  private string $moduleClass;
-
-  /**
-   * The CSS sub-module class.
-   *
-   * @var string|null
-   */
-  private ?string $subModuleClass;
+  use CssModule;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -57,58 +45,6 @@ class RenderWalker
     }
 
     return $classes;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the CSS module class.
-   *
-   * @return string
-   */
-  public function getModuleClass(): string
-  {
-    return $this->moduleClass;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the CSS sub-module class.
-   *
-   * @return string|null
-   */
-  public function getSubModuleClass(): ?string
-  {
-    return $this->subModuleClass;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Sets CSS module class.
-   *
-   * @param string $moduleClass The CSS module class.
-   *
-   * @return $this
-   */
-  public function setModuleClass(string $moduleClass): self
-  {
-    $this->moduleClass = $moduleClass;
-
-    return $this;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Sets CSS sub-module class.
-   *
-   * @param string|null $subModuleClass The CSS sub-module class.
-   *
-   * @return RenderWalker
-   */
-  public function setSubModuleClass(?string $subModuleClass): RenderWalker
-  {
-    $this->subModuleClass = $subModuleClass;
-
-    return $this;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
