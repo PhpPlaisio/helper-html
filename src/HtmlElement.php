@@ -229,19 +229,19 @@ trait HtmlElement
   /**
    * Sets the attribute [contenteditable](http://www.w3schools.com/tags/att_global_contenteditable.asp).
    * <ul>
-   * <li> Any value that evaluates to true will set the attribute to 'true'.
-   * <li> Any value that evaluates to false will set the attribute to 'false'.
+   * <li> True will set the attribute to 'true'.
+   * <li> False will set the attribute to 'false'.
    * <li> Null will unset the attribute.
    * </ul>
    *
-   * @param mixed $value The attribute value.
+   * @param bool|null $value The attribute value.
    *
    * @return $this
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrContentEditable(?string $value): self
+  public function setAttrContentEditable(?bool $value): self
   {
     $this->attributes['contenteditable'] = $value;
 
@@ -352,17 +352,15 @@ trait HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [hidden](http://www.w3schools.com/tags/att_global_hidden.asp).
-   * This is a boolean attribute. Any none [empty](http://php.net/manual/function.empty.php) value will set the
-   * attribute to 'hidden'. Any other value will unset the attribute.
    *
-   * @param mixed $value The attribute value.
+   * @param ?bool $value The attribute value.
    *
    * @return $this
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrHidden(?string $value): self
+  public function setAttrHidden(?bool $value): self
   {
     $this->attributes['hidden'] = $value;
 
@@ -426,20 +424,15 @@ trait HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Sets the attribute [spellcheck](http://www.w3schools.com/tags/att_global_spellcheck.asp).
-   * <ul>
-   * <li> Any value that evaluates to true will set the attribute to 'true'.
-   * <li> Any value that evaluates to false will set the attribute to 'false'.
-   * <li> Null will unset the attribute.
-   * <ul>
    *
-   * @param string|null $value The attribute value.
+   * @param bool|null $value The attribute value.
    *
    * @return $this
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrSpellCheck(?string $value): self
+  public function setAttrSpellCheck(?bool $value): self
   {
     $this->attributes['spellcheck'] = $value;
 
@@ -504,19 +497,19 @@ trait HtmlElement
   /**
    * Sets the attribute [translate](http://www.w3schools.com/tags/att_global_translate.asp).
    * <ul>
-   * <li> Any value that evaluates to true will set the attribute to 'yes'.
-   * <li> Any value that evaluates to false will set the attribute to 'no'.
+   * <li> True will set the attribute to 'yes'.
+   * <li> False will set the attribute to 'no'.
    * <li> Null will unset the attribute.
    * </ul>
    *
-   * @param mixed $value The attribute value.
+   * @param bool|null $value The attribute value.
    *
    * @return $this
    *
    * @since 1.0.0
    * @api
    */
-  public function setAttrTranslate(?string $value): self
+  public function setAttrTranslate(?bool $value): self
   {
     $this->attributes['translate'] = $value;
 

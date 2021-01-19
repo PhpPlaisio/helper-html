@@ -12,6 +12,28 @@ class HtmlElementTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test method setAttrContentEditable().
+   */
+  public function setAttrData(): void
+  {
+    $uuid    = uniqid();
+    $element = new TestElement();
+    $html    = $element->setAttrData('test', $uuid)
+                       ->generateElement();
+
+    $doc = new \DOMDocument();
+    $doc->loadXML($html);
+    $xpath = new \DOMXpath($doc);
+
+    // Test attribute is present.
+    $list = $xpath->query("/test[@data-test='$uuid']");
+    self::assertEquals(1, $list->length, 'html');
+
+    self::assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    *  Works when class is a string.
    */
   public function testAddClass1(): void
@@ -314,22 +336,93 @@ class HtmlElementTest extends TestCase
   }
 
   //--------------------------------------------------------------------------------------------------------------------
-  public function testSetAttrData(): void
+  /**
+   * Test method setAttrContentEditable().
+   */
+  public function testSetAttrContentEditable(): void
   {
-    $uuid    = uniqid();
     $element = new TestElement();
-    $html    = $element->setAttrData('test', $uuid)
-                       ->generateElement();
 
-    $doc = new \DOMDocument();
-    $doc->loadXML($html);
-    $xpath = new \DOMXpath($doc);
+    $html = $element->setAttrContentEditable(false)->generateElement();
+    self::assertEquals('<test contenteditable="false"></test>', $html);
 
-    // Test attribute is present.
-    $list = $xpath->query("/test[@data-test='$uuid']");
-    self::assertEquals(1, $list->length, 'html');
+    $html = $element->setAttrContentEditable(true)->generateElement();
+    self::assertEquals('<test contenteditable="true"></test>', $html);
 
-    self::assertSame($uuid, $element->getAttribute('data-test'), 'getAttribute');
+    $html = $element->setAttrContentEditable(null)->generateElement();
+    self::assertEquals('<test></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrDraggable().
+   */
+  public function testSetAttrDraggable(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrDraggable('true')->generateElement();
+    self::assertEquals('<test draggable="true"></test>', $html);
+
+    $html = $element->setAttrDraggable('false')->generateElement();
+    self::assertEquals('<test draggable="false"></test>', $html);
+
+    $html = $element->setAttrDraggable('auto')->generateElement();
+    self::assertEquals('<test draggable="auto"></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrHidden().
+   */
+  public function testSetAttrHidden(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrHidden(false)->generateElement();
+    self::assertEquals('<test></test>', $html);
+
+    $html = $element->setAttrHidden(true)->generateElement();
+    self::assertEquals('<test hidden="hidden"></test>', $html);
+
+    $html = $element->setAttrHidden(null)->generateElement();
+    self::assertEquals('<test></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrSpellCheck().
+   */
+  public function testSetAttrSpellCheck(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrSpellCheck(false)->generateElement();
+    self::assertEquals('<test></test>', $html);
+
+    $html = $element->setAttrSpellCheck(true)->generateElement();
+    self::assertEquals('<test spellcheck="spellcheck"></test>', $html);
+
+    $html = $element->setAttrSpellCheck(null)->generateElement();
+    self::assertEquals('<test></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrTranslate().
+   */
+  public function testSetAttrTranslate(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrTranslate(false)->generateElement();
+    self::assertEquals('<test translate="no"></test>', $html);
+
+    $html = $element->setAttrTranslate(true)->generateElement();
+    self::assertEquals('<test translate="yes"></test>', $html);
+
+    $html = $element->setAttrTranslate(null)->generateElement();
+    self::assertEquals('<test></test>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -338,40 +431,35 @@ class HtmlElementTest extends TestCase
    */
   public function testSetAttribute(): void
   {
-    $methods = ['setAttrAccessKey'       => 'accesskey',
-                'setAttrContentEditable' => 'contenteditable',
-                'setAttrContextMenu'     => 'contextmenu',
-                'setAttrDir'             => 'dir',
-                'setAttrDraggable'       => 'draggable',
-                'setAttrDropZone'        => 'dropzone',
-                'setAttrHidden'          => 'hidden',
-                'setAttrId'              => 'id',
-                'setAttrLang'            => 'lang',
-                'setAttrRole'            => 'role',
-                'setAttrSpellCheck'      => 'spellcheck',
-                'setAttrStyle'           => 'style',
-                'setAttrTabIndex'        => 'tabindex',
-                'setAttrTitle'           => 'title',
-                'setAttrTranslate'       => 'translate'];
+    $methods = ['setAttrAccessKey'   => 'accesskey',
+                'setAttrContextMenu' => 'contextmenu',
+                'setAttrDir'         => 'dir',
+                'setAttrDropZone'    => 'dropzone',
+                'setAttrId'          => 'id',
+                'setAttrLang'        => 'lang',
+                'setAttrRole'        => 'role',
+                'setAttrStyle'       => 'style',
+                'setAttrTabIndex'    => 'tabindex',
+                'setAttrTitle'       => 'title'];
 
     $element = new TestElement();
     foreach ($methods as $method => $attribute)
     {
-      $uuid = ($attribute!='tabindex') ? uniqid() : rand(1, 123);
-      $html = $element->$method($uuid)
-                      ->generateElement();
+      $uuid = ($attribute!=='tabindex') ? uniqid() : rand(1, 123);
+      $html = $element->$method($uuid)->generateElement();
 
       $doc = new \DOMDocument();
       $doc->loadXML($html);
       $xpath = new \DOMXpath($doc);
 
       // Test attribute is present.
-      $list = $xpath->query("/test[@$attribute='$uuid' or @$attribute='true'or @$attribute='yes'or @$attribute='$attribute']");
+      $list = $xpath->query("/test[@$attribute='$uuid']");
       self::assertEquals(1, $list->length, "Method: $method");
 
       self::assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
     }
   }
+
 
   //--------------------------------------------------------------------------------------------------------------------
   /**

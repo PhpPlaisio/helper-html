@@ -150,6 +150,23 @@ final class Html
 
       // Annoying boolean attribute exceptions.
       case 'draggable':
+        if ($value!==null)
+        {
+          if ($value==='auto')
+          {
+            $html = ' draggable="auto"';
+          }
+          elseif (empty($value) || $value==='false')
+          {
+            $html = ' draggable="false"';
+          }
+          else
+          {
+            $html = ' draggable="true"';
+          }
+        }
+        break;
+
       case 'contenteditable':
         if ($value!==null)
         {
