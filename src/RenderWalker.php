@@ -24,6 +24,7 @@ class RenderWalker
   private ?string $subModuleClass;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Object constructor.
    *
@@ -40,20 +41,57 @@ class RenderWalker
   /**
    * Returns the module, sub-module and sub-classes for an HTML element.
    *
-   * @param string|null $subClass The CSS sub-class with the CSS module class.
+   * @param string[]|string|null $subClasses      The CSS sub-classes with the CSS module class.
+   * @param string[]|string|null $additionClasses Additional CSS classes.
    *
    * @return string[]
    */
-  public function getClasses(?string $subClass = null): array
+  public function getClasses($subClasses = null, $additionClasses = null): array
   {
     $classes = [$this->moduleClass];
     if ($this->subModuleClass!==null)
     {
       $classes[] = $this->subModuleClass;
     }
-    if ($subClass!==null)
+
+    if ($subClasses!==null)
     {
-      $classes[] = $this->moduleClass.'-'.$subClass;
+      if (is_string($subClasses))
+      {
+        $classes[] = $this->moduleClass.'-'.$subClasses;
+      }
+      elseif (is_array($subClasses))
+      {
+        foreach ($subClasses as $subClass)
+        {
+          $classes[] = $this->moduleClass.'-'.$subClass;
+        }
+      }
+      else
+      {
+        throw new \InvalidArgumentException(sprintf('Argument $subClasses must be string[]|string|null, got %s',
+                                                    gettype($subClasses)));
+      }
+    }
+
+    if ($additionClasses!==null)
+    {
+      if (is_string($additionClasses))
+      {
+        $classes[] = $additionClasses;
+      }
+      elseif (is_array($additionClasses))
+      {
+        foreach ($additionClasses as $additionClass)
+        {
+          $classes[] = $additionClass;
+        }
+      }
+      else
+      {
+        throw new \InvalidArgumentException(sprintf('Argument $additionClasses must be string[]|string|null, got %s',
+                                                    gettype($additionClasses)));
+      }
     }
 
     return $classes;
