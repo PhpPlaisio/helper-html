@@ -280,11 +280,11 @@ final class Html
    *                               ['text' => 'The End'],
    *                               ['html' => '!']]);
    *
-   * @param array $structure The structure of the nested elements.
+   * @param array|null $structure The structure of the nested elements.
    *
    * @return string
    */
-  public static function generateNested(array $structure): string
+  public static function generateNested(?array $structure): string
   {
     $html = '';
     self::generateNestedHelper($structure, $html);
@@ -446,59 +446,61 @@ final class Html
   /**
    * Helper method for method generateNested().
    *
-   * @param array  $structure The (nested) structure of the HTML code.
-   * @param string $html      The generated HTML code.
+   * @param array|null $structure The (nested) structure of the HTML code.
+   * @param string     $html      The generated HTML code.
    */
-  private static function generateNestedHelper(array $structure, string &$html): void
+  private static function generateNestedHelper(?array $structure, string &$html): void
   {
-    $key = array_key_first($structure);
-
-    if (is_int($key))
+    if ($structure!==null)
     {
-      // Structure is a list of elements.
-      foreach ($structure as $element)
+      $key = array_key_first($structure);
+      if (is_int($key))
       {
-        self::generateNestedHelper($element, $html);
-      }
-    }
-    elseif ($key!==null)
-    {
-      // Structure is an associative array.
-      if (isset($structure['tag']))
-      {
-        // Element with content.
-        if (array_key_exists('inner', $structure))
+        // Structure is a list of elements.
+        foreach ($structure as $element)
         {
-          $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
-          self::generateNestedHelper($structure['inner'], $html);
-          $html .= '</';
-          $html .= $structure['tag'];
-          $html .= '>';
+          self::generateNestedHelper($element, $html);
+        }
+      }
+      elseif ($key!==null)
+      {
+        // Structure is an associative array.
+        if (isset($structure['tag']))
+        {
+          // Element with content.
+          if (array_key_exists('inner', $structure))
+          {
+            $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
+            self::generateNestedHelper($structure['inner'], $html);
+            $html .= '</';
+            $html .= $structure['tag'];
+            $html .= '>';
+          }
+          elseif (array_key_exists('text', $structure))
+          {
+            $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['text']);
+          }
+          elseif (array_key_exists('html', $structure))
+          {
+            $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['html'], true);
+          }
+          else
+          {
+            $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
+          }
         }
         elseif (array_key_exists('text', $structure))
         {
-          $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['text']);
+          $html .= self::txt2Html(Cast::toOptString($structure['text']));
         }
         elseif (array_key_exists('html', $structure))
         {
-          $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['html'], true);
+          $html .= $structure['html'];
         }
         else
         {
-          $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
+          throw new \LogicException("Expected key 'tag', 'text', or 'html'");
         }
-      }
-      elseif (array_key_exists('text', $structure))
-      {
-        $html .= self::txt2Html(Cast::toOptString($structure['text']));
-      }
-      elseif (array_key_exists('html', $structure))
-      {
-        $html .= $structure['html'];
-      }
-      else
-      {
-        throw new \LogicException("Expected key 'tag', 'text', or 'html'");
       }
     }
   }

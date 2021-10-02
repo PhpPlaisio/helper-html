@@ -459,9 +459,44 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test generateNested with list of elements.
+   * Test generateNested with null.
+   */
+  public function testGenerateNested08(): void
+  {
+    $html = Html::generateNested(null);
+
+    self::assertSame('', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with null element.
+   */
+  public function testGenerateNested09(): void
+  {
+    $html = Html::generateNested([null]);
+
+    self::assertSame('', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with list of elements with null inner.
    */
   public function testGenerateNested10(): void
+  {
+    $html = Html::generateNested(['tag'   => 'span',
+                                  'attr'  => ['class' => 'test'],
+                                  'inner' => null]);
+
+    self::assertSame('<span class="test"></span>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test generateNested with list of elements.
+   */
+  public function testGenerateNested11(): void
   {
     $html = Html::generateNested([['tag'   => 'table',
                                    'attr'  => ['class' => 'test'],
