@@ -6,7 +6,7 @@ namespace Plaisio\Helper;
 /**
  * Trait for HTML elements.
  *
- * This class should be used for generation "heavy" HTML elements only. For light weight elements use methods of
+ * This class should be used for generation "heavy" HTML elements only. For lightweight elements use methods of
  * {@link \Plaisio\Helper\Html}.
  *
  * #### Global Attributes

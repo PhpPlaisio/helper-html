@@ -221,7 +221,7 @@ final class Html
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Generates HTML code for an element.
+   * Generates the HTML code for an element.
    *
    * Note: tags for void elements such as '<br/>' are not supported.
    *
@@ -294,7 +294,7 @@ final class Html
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Generates HTML code for a start tag of an element.
+   * Generates the HTML code for a start tag of an element.
    *
    * @param string $tagName    The name of the tag, e.g. a, form.
    * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
