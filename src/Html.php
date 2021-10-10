@@ -340,8 +340,7 @@ final class Html
     $html .= $tagName;
     foreach ($attributes as $name => $value)
     {
-      // Ignore attributes with leading underscore.
-      if (strpos($name, '_')!==0) $html .= self::generateAttribute($name, $value);
+      $html .= self::generateAttribute($name, $value);
     }
     $html .= '/>';
 

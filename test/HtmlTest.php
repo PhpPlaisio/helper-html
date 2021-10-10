@@ -536,16 +536,6 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test attributes with leading underscores are ignored.
-   */
-  public function testGenerateVoidElement2(): void
-  {
-    $tag = Html::generateVoidElement('img', ['src' => '/images/logo.png', 'alt' => 'logo', '_ignore' => 'ignored']);
-    $this->assertEquals('<img src="/images/logo.png" alt="logo"/>', $tag);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Invalid tests for method txt2html.
    *
    * @param mixed $value The value.
