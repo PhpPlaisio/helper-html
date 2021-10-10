@@ -13,11 +13,29 @@ class RenderWalkerTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses without sub-module class.
+   * Test getClasses without sub-module class and without prevailing module classes.
    */
   public function testGetClasses1(): void
   {
     $walker = new RenderWalker('foo');
+
+    self::assertSame([], $walker->getClasses());
+    self::assertSame(['foo-eggs'], $walker->getClasses('eggs'));
+    self::assertSame(['foo-eggs', 'foo-spam'], $walker->getClasses(['eggs', 'spam']));
+    self::assertSame(['foo-eggs', 'is-test'], $walker->getClasses('eggs', 'is-test'));
+    self::assertSame(['foo-eggs', 'is-test', 'is-unit'], $walker->getClasses('eggs', ['is-test', 'is-unit']));
+    self::assertSame(['foo-eggs', 'foo-spam', 'is-test', 'is-unit'],
+                     $walker->getClasses(['eggs', 'spam'], ['is-test', 'is-unit']));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test getClasses without sub-module class and with prevailing module classes.
+   */
+  public function testGetClasses2(): void
+  {
+    $walker = new RenderWalker('foo');
+    $walker->setPrevailingModuleClasses(true);
 
     self::assertSame(['foo'], $walker->getClasses());
     self::assertSame(['foo', 'foo-eggs'], $walker->getClasses('eggs'));
@@ -30,20 +48,39 @@ class RenderWalkerTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses with sub-module class.
+   * Test getClasses with sub-module class and without prevailing module classes.
    */
-  public function testGetClasses2(): void
+  public function testGetClasses3(): void
   {
     $walker = new RenderWalker('foo', 'bar');
+
+    self::assertSame([], $walker->getClasses());
+    self::assertSame(['foo-eggs'], $walker->getClasses('eggs'));
+    self::assertSame(['foo-eggs', 'foo-spam'], $walker->getClasses(['eggs', 'spam']));
+    self::assertSame(['foo-eggs', 'is-test'], $walker->getClasses('eggs', 'is-test'));
+    self::assertSame(['foo-eggs', 'is-test', 'is-unit'], $walker->getClasses('eggs', ['is-test', 'is-unit']));
+    self::assertSame(['foo-eggs', 'foo-spam', 'is-test', 'is-unit'], $walker->getClasses(['eggs', 'spam'],
+                                                                                         ['is-test', 'is-unit']));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test getClasses with sub-module class and with prevailing module classes.
+   */
+  public function testGetClasses4(): void
+  {
+    $walker = new RenderWalker('foo', 'bar');
+    $walker->setPrevailingModuleClasses(true);
 
     self::assertSame(['foo', 'bar'], $walker->getClasses());
     self::assertSame(['foo', 'bar', 'foo-eggs'], $walker->getClasses('eggs'));
     self::assertSame(['foo', 'bar', 'foo-eggs', 'foo-spam'], $walker->getClasses(['eggs', 'spam']));
     self::assertSame(['foo', 'bar', 'foo-eggs', 'is-test'], $walker->getClasses('eggs', 'is-test'));
-    self::assertSame(['foo', 'bar', 'foo-eggs', 'is-test', 'is-unit'],
-                     $walker->getClasses('eggs', ['is-test', 'is-unit']));
-    self::assertSame(['foo', 'bar', 'foo-eggs', 'foo-spam', 'is-test', 'is-unit'],
-                     $walker->getClasses(['eggs', 'spam'], ['is-test', 'is-unit']));
+    self::assertSame(['foo', 'bar', 'foo-eggs', 'is-test', 'is-unit'], $walker->getClasses('eggs', ['is-test',
+                                                                                                    'is-unit']));
+    self::assertSame(['foo', 'bar', 'foo-eggs', 'foo-spam', 'is-test', 'is-unit'], $walker->getClasses(['eggs', 'spam'],
+                                                                                                       ['is-test',
+                                                                                                        'is-unit']));
   }
 
   //--------------------------------------------------------------------------------------------------------------------

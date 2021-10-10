@@ -17,6 +17,14 @@ class RenderWalker
   private string $moduleClass;
 
   /**
+   * Whether to always include the module and sub-module classes individually in the list of applicable classes for an
+   * HTMl element.
+   *
+   * @var bool
+   */
+  private bool $prevailingModuleClasses = false;
+
+  /**
    * The CSS sub-module class.
    *
    * @var string|null
@@ -38,7 +46,7 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns the module, sub-module and sub-classes for an HTML element.
+   * Returns all applicable classes for an HTML element.
    *
    * @param string[]|string|null $subClasses      The CSS sub-classes with the CSS module class.
    * @param string[]|string|null $additionClasses Additional CSS classes.
@@ -47,10 +55,17 @@ class RenderWalker
    */
   public function getClasses($subClasses = null, $additionClasses = null): array
   {
-    $classes = [$this->moduleClass];
-    if ($this->subModuleClass!==null)
+    if ($this->prevailingModuleClasses)
     {
-      $classes[] = $this->subModuleClass;
+      $classes = [$this->moduleClass];
+      if ($this->subModuleClass!==null)
+      {
+        $classes[] = $this->subModuleClass;
+      }
+    }
+    else
+    {
+      $classes = [];
     }
 
     if ($subClasses!==null)
@@ -135,11 +150,28 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Set whether to always include the module and sub-module classes individually in the list of applicable classes for
+   * an HTMl element.
+   *
+   * @param bool $prevailingModuleClasses Whether to always include the module and sub-module classes individually in
+   *                                      the list of applicable classes for an HTMl element.
+   *
+   * @return $this
+   */
+  public function setPrevailingModuleClasses(bool $prevailingModuleClasses): RenderWalker
+  {
+    $this->prevailingModuleClasses = $prevailingModuleClasses;
+
+    return $this;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Sets CSS sub-module class.
    *
    * @param string|null $subModuleClass The CSS sub-module class.
    *
-   * @return RenderWalker
+   * @return $this
    */
   public function setSubModuleClass(?string $subModuleClass): RenderWalker
   {
