@@ -10,19 +10,19 @@ class RenderWalker
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * The CSS module class.
-   *
-   * @var string
-   */
-  private string $moduleClass;
-
-  /**
    * Whether to always include the module and sub-module classes individually in the list of applicable classes for an
    * HTMl element.
    *
    * @var bool
    */
-  private bool $prevailingModuleClasses = false;
+  private bool $includeModuleClasses = false;
+
+  /**
+   * The CSS module class.
+   *
+   * @var string
+   */
+  private string $moduleClass;
 
   /**
    * The CSS sub-module class.
@@ -55,7 +55,7 @@ class RenderWalker
    */
   public function getClasses($subClasses = null, $additionClasses = null): array
   {
-    if ($this->prevailingModuleClasses)
+    if ($this->includeModuleClasses)
     {
       $classes = [$this->moduleClass];
       if ($this->subModuleClass!==null)
@@ -135,6 +135,23 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Set whether to always include the module and sub-module classes individually in the list of applicable classes for
+   * an HTMl element.
+   *
+   * @param bool $includeModuleClasses    Whether to always include the module and sub-module classes individually in
+   *                                      the list of applicable classes for an HTMl element.
+   *
+   * @return $this
+   */
+  public function setIncludeModuleClasses(bool $includeModuleClasses): RenderWalker
+  {
+    $this->includeModuleClasses = $includeModuleClasses;
+
+    return $this;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Sets CSS module class.
    *
    * @param string $moduleClass The CSS module class.
@@ -144,23 +161,6 @@ class RenderWalker
   public function setModuleClass(string $moduleClass): self
   {
     $this->moduleClass = $moduleClass;
-
-    return $this;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Set whether to always include the module and sub-module classes individually in the list of applicable classes for
-   * an HTMl element.
-   *
-   * @param bool $prevailingModuleClasses Whether to always include the module and sub-module classes individually in
-   *                                      the list of applicable classes for an HTMl element.
-   *
-   * @return $this
-   */
-  public function setPrevailingModuleClasses(bool $prevailingModuleClasses): RenderWalker
-  {
-    $this->prevailingModuleClasses = $prevailingModuleClasses;
 
     return $this;
   }

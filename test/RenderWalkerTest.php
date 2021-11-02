@@ -35,7 +35,7 @@ class RenderWalkerTest extends TestCase
   public function testGetClasses2(): void
   {
     $walker = new RenderWalker('foo');
-    $walker->setPrevailingModuleClasses(true);
+    $walker->setIncludeModuleClasses(true);
 
     self::assertSame(['foo'], $walker->getClasses());
     self::assertSame(['foo', 'foo-eggs'], $walker->getClasses('eggs'));
@@ -70,7 +70,7 @@ class RenderWalkerTest extends TestCase
   public function testGetClasses4(): void
   {
     $walker = new RenderWalker('foo', 'bar');
-    $walker->setPrevailingModuleClasses(true);
+    $walker->setIncludeModuleClasses(true);
 
     self::assertSame(['foo', 'bar'], $walker->getClasses());
     self::assertSame(['foo', 'bar', 'foo-eggs'], $walker->getClasses('eggs'));
