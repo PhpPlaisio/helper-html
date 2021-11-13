@@ -22,7 +22,7 @@
 <a href="https://packagist.org/packages/plaisio/helper-html"><img src="https://poser.pugx.org/plaisio/helper-html/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
 <td>
-<a href="https://travis-ci.com/PhpPlaisio/helper-html"><img src="https://api.travis-ci.com/PhpPlaisio/helper-html.svg?branch=master" alt="Build Status"/></a><br/>
+<a href="https://travis-ci.com/github/PhpPlaisio/helper-html"><img src="https://api.travis-ci.com/PhpPlaisio/helper-html.svg?branch=master" alt="Build Status"/></a><br/>
 <a href="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/?branch=master"><img src="https://scrutinizer-ci.com/g/PhpPlaisio/helper-html/badges/coverage.png?b=master" alt="Code Coverage"/></a>
 </td>
 <td>
