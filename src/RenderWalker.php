@@ -10,12 +10,11 @@ class RenderWalker
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Whether to always include the module and sub-module classes individually in the list of applicable classes for an
-   * HTMl element.
+   * Whether to always include the module class individually in the list of classes for an HTMl element.
    *
    * @var bool
    */
-  private bool $includeModuleClasses = false;
+  private bool $includeModuleClass = false;
 
   /**
    * The CSS module class.
@@ -55,17 +54,18 @@ class RenderWalker
    */
   public function getClasses($subClasses = null, $additionClasses = null): array
   {
-    if ($this->includeModuleClasses)
+    if ($this->includeModuleClass)
     {
       $classes = [$this->moduleClass];
-      if ($this->subModuleClass!==null)
-      {
-        $classes[] = $this->subModuleClass;
-      }
     }
     else
     {
       $classes = [];
+    }
+
+    if ($this->subModuleClass!==null)
+    {
+      $classes[] = $this->subModuleClass;
     }
 
     if ($subClasses!==null)
@@ -135,17 +135,17 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Set whether to always include the module and sub-module classes individually in the list of applicable classes for
-   * an HTMl element.
+   * Set whether to always include the module and sub-module class individually in the list of classes for an HTMl
+   * element.
    *
-   * @param bool $includeModuleClasses    Whether to always include the module and sub-module classes individually in
-   *                                      the list of applicable classes for an HTMl element.
+   * @param bool $includeModuleClass Whether to always include the module class individually in the list of  classes
+   *                                 for an HTMl element.
    *
    * @return $this
    */
-  public function setIncludeModuleClasses(bool $includeModuleClasses): RenderWalker
+  public function setIncludeModuleClass(bool $includeModuleClass): RenderWalker
   {
-    $this->includeModuleClasses = $includeModuleClasses;
+    $this->includeModuleClass = $includeModuleClass;
 
     return $this;
   }

@@ -35,7 +35,7 @@ class RenderWalkerTest extends TestCase
   public function testGetClasses2(): void
   {
     $walker = new RenderWalker('foo');
-    $walker->setIncludeModuleClasses(true);
+    $walker->setIncludeModuleClass(true);
 
     self::assertSame(['foo'], $walker->getClasses());
     self::assertSame(['foo', 'foo-eggs'], $walker->getClasses('eggs'));
@@ -54,13 +54,14 @@ class RenderWalkerTest extends TestCase
   {
     $walker = new RenderWalker('foo', 'bar');
 
-    self::assertSame([], $walker->getClasses());
-    self::assertSame(['foo-eggs'], $walker->getClasses('eggs'));
-    self::assertSame(['foo-eggs', 'foo-spam'], $walker->getClasses(['eggs', 'spam']));
-    self::assertSame(['foo-eggs', 'is-test'], $walker->getClasses('eggs', 'is-test'));
-    self::assertSame(['foo-eggs', 'is-test', 'is-unit'], $walker->getClasses('eggs', ['is-test', 'is-unit']));
-    self::assertSame(['foo-eggs', 'foo-spam', 'is-test', 'is-unit'], $walker->getClasses(['eggs', 'spam'],
-                                                                                         ['is-test', 'is-unit']));
+    self::assertSame(['bar'], $walker->getClasses());
+    self::assertSame(['bar', 'foo-eggs'], $walker->getClasses('eggs'));
+    self::assertSame(['bar', 'foo-eggs', 'foo-spam'], $walker->getClasses(['eggs', 'spam']));
+    self::assertSame(['bar', 'foo-eggs', 'is-test'], $walker->getClasses('eggs', 'is-test'));
+    self::assertSame(['bar', 'foo-eggs', 'is-test', 'is-unit'], $walker->getClasses('eggs', ['is-test', 'is-unit']));
+    self::assertSame(['bar', 'foo-eggs', 'foo-spam', 'is-test', 'is-unit'], $walker->getClasses(['eggs', 'spam'],
+                                                                                                ['is-test',
+                                                                                                 'is-unit']));
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ class RenderWalkerTest extends TestCase
   public function testGetClasses4(): void
   {
     $walker = new RenderWalker('foo', 'bar');
-    $walker->setIncludeModuleClasses(true);
+    $walker->setIncludeModuleClass(true);
 
     self::assertSame(['foo', 'bar'], $walker->getClasses());
     self::assertSame(['foo', 'bar', 'foo-eggs'], $walker->getClasses('eggs'));
