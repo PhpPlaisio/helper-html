@@ -8,7 +8,7 @@ use Plaisio\Helper\Html;
 use SetBased\Exception\FallenException;
 
 /**
- * Test cases fro class Html.
+ * Test cases for class Html.
  */
 class HtmlTest extends TestCase
 {
@@ -29,7 +29,7 @@ class HtmlTest extends TestCase
     $cases[] = ['value'    => null,
                 'expected' => ''];
 
-    // False must be casted to '0'.
+    // False must be cast to '0'.
     $cases[] = ['value'    => false,
                 'expected' => ' class="0"'];
 
@@ -49,7 +49,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns invalid test cases for method txt2html
+   * Returns invalid test cases for method txt2html.
    *
    * @return array
    */
@@ -66,7 +66,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns valid test cases for method txt2html
+   * Returns valid test cases for method txt2html.
    *
    * @return array
    */
@@ -352,6 +352,500 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Tests for generation attribute class.
+   *
+   * @param mixed  $value    The value for the class attribute.
+   * @param string $expected The expected generated HTML code.
+   *
+   * @dataProvider casesClassAttribute
+   */
+  public function testEchoAttributeClass($value, string $expected)
+  {
+    $struct = ['tag'  => 'div',
+               'attr' => ['class' => $value],
+               'html' => null];
+    ob_start();
+    Html::echoNested($struct);
+    $html = ob_get_clean();
+    $this->assertSame("<div$expected></div>", $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test normal attributes set.
+   */
+  public function testEchoAttributes1(): void
+  {
+    $values = ['0', 0, false];
+
+    foreach ($values as $value)
+    {
+      $struct = ['tag'  => 'div',
+                 'attr' => ['data-test' => $value],
+                 'html' => null];
+      ob_start();
+      Html::echoNested($struct);
+      $html = ob_get_clean();
+      $this->assertSame('<div data-test="0"></div>', $html);
+    }
+
+    $struct = ['tag'  => 'div',
+               'attr' => ['qwerty&?<' => "<a>&"],
+               'html' => null];
+    ob_start();
+    Html::echoNested($struct);
+    $html = ob_get_clean();
+    $this->assertSame('<div qwerty&amp;?&lt;="&lt;a&gt;&amp;"></div>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test attributes not set.
+   */
+  public function testEchoAttributes2(): void
+  {
+    $values = [null, ''];
+
+    foreach ($values as $value)
+    {
+      $struct = ['tag'  => 'div',
+                 'attr' => ['data-test' => $value],
+                 'html' => null];
+      ob_start();
+      Html::echoNested($struct);
+      $html = ob_get_clean();
+      $this->assertSame('<div></div>', $html);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes set.
+   */
+  public function testEchoBooleanAttributes1(): void
+  {
+    $attributes = ['autofocus',
+                   'checked',
+                   'disabled',
+                   'hidden',
+                   'ismap',
+                   'multiple',
+                   'novalidate',
+                   'readonly',
+                   'required',
+                   'selected',
+                   'spellcheck'];
+
+    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
+    $values[] = $values;
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"$attribute\"></div>", $html);
+      }
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes not set.
+   */
+  public function testEchoBooleanAttributes2(): void
+  {
+    $attributes = ['autofocus',
+                   'checked',
+                   'disabled',
+                   'hidden',
+                   'ismap',
+                   'multiple',
+                   'novalidate',
+                   'readonly',
+                   'required',
+                   'selected',
+                   'spellcheck'];
+
+    $values = ['0', 0, false, [], null, ''];
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div></div>", $html);
+      }
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes set.
+   */
+  public function testEchoBooleanAttributes3(): void
+  {
+    $attributes = ['draggable', 'contenteditable'];
+
+    $values   = ['1', 1, true, $this];
+    $values[] = $values;
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"true\"></div>", $html);
+      }
+    }
+
+    $struct = ['tag'  => 'div',
+               'attr' => ['draggable' => 'auto'],
+               'html' => null];
+    ob_start();
+    Html::echoNested($struct);
+    $html = ob_get_clean();
+    $this->assertSame("<div draggable=\"auto\"></div>", $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes not set.
+   */
+  public function testEchoBooleanAttributes4(): void
+  {
+    $attributes = ['draggable', 'contenteditable'];
+
+    $values = ['0', 0, false, [], ''];
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"false\"></div>", $html);
+      }
+
+      $struct = ['tag'  => 'div',
+                 'attr' => [$attribute => null],
+                 'html' => null];
+      ob_start();
+      Html::echoNested($struct);
+      $html = ob_get_clean();
+      $this->assertSame('<div></div>', $html);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes set.
+   */
+  public function testEchoBooleanAttributes5(): void
+  {
+    $attributes = ['autocomplete'];
+
+    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
+    $values[] = $values;
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"on\"></div>", $html);
+      }
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes not set.
+   */
+  public function testEchoBooleanAttributes6(): void
+  {
+    $attributes = ['autocomplete'];
+
+    $values = ['0', 0, false, [], ''];
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"off\"></div>", $html);
+      }
+
+      $struct = ['tag'  => 'div',
+                 'attr' => [$attribute => null],
+                 'html' => null];
+      ob_start();
+      Html::echoNested($struct);
+      $html = ob_get_clean();
+      $this->assertSame('<div></div>', $html);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes set.
+   */
+  public function testEchoBooleanAttributes7(): void
+  {
+    $attributes = ['translate'];
+
+    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
+    $values[] = $values;
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"yes\"></div>", $html);
+      }
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test boolean attributes not set.
+   */
+  public function testEchoBooleanAttributes8(): void
+  {
+    $attributes = ['translate'];
+
+    $values = ['0', 0, false, [], ''];
+
+    foreach ($attributes as $attribute)
+    {
+      foreach ($values as $value)
+      {
+        $struct = ['tag'  => 'div',
+                   'attr' => [$attribute => $value],
+                   'html' => null];
+        ob_start();
+        Html::echoNested($struct);
+        $html = ob_get_clean();
+        $this->assertSame("<div $attribute=\"no\"></div>", $html);
+      }
+
+      $struct = ['tag'  => 'div',
+                 'attr' => [$attribute => null],
+                 'html' => null];
+      ob_start();
+      Html::echoNested($struct);
+      $html = ob_get_clean();
+      $this->assertSame('<div></div>', $html);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with void element.
+   */
+  public function testEchoNested01(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag' => 'br']);
+    self::assertSame('<br/>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with element.
+   */
+  public function testEchoNested02(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag'  => 'a',
+                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                      'text' => 'helper & html']);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with element with integer value.
+   */
+  public function testEchoNested03(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag'  => 'a',
+                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                      'text' => 123]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with element with HTML value.
+   */
+  public function testEchoNested04(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag'  => 'a',
+                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                      'html' => '<b>helper-html</b>']);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with nested elements.
+   */
+  public function testEchoNested05(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag'   => 'a',
+                      'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                      'inner' => ['tag'  => 'b',
+                                  'text' => 'helper-html']]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with list of elements.
+   */
+  public function testEchoNested06(): void
+  {
+    ob_start();
+
+    Html::echoNested([['tag'   => 'a',
+                       'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                       'inner' => ['tag'  => 'b',
+                                   'text' => 'helper-html']],
+                      ['tag' => 'br']]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with list of elements.
+   */
+  public function testEchoNested07(): void
+  {
+    $this->expectException(\LogicException::class);
+    Html::echoNested(['xhtml' => 'xml-html']);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with null.
+   */
+  public function testEchoNested08(): void
+  {
+    ob_start();
+
+    Html::echoNested(null);
+
+    self::assertSame('', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with null element.
+   */
+  public function testEchoNested09(): void
+  {
+    ob_start();
+
+    Html::echoNested([null]);
+
+    self::assertSame('', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with list of elements with null inner.
+   */
+  public function testEchoNested10(): void
+  {
+    ob_start();
+
+    Html::echoNested(['tag'   => 'span',
+                      'attr'  => ['class' => 'test'],
+                      'inner' => null]);
+
+    self::assertSame('<span class="test"></span>', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test echoNested with list of elements.
+   */
+  public function testEchoNested11(): void
+  {
+    ob_start();
+
+    Html::echoNested([['tag'   => 'table',
+                       'attr'  => ['class' => 'test'],
+                       'inner' => [['tag'   => 'tr',
+                                    'attr'  => ['id' => 'first-row'],
+                                    'inner' => [['tag'  => 'td',
+                                                 'text' => 'hello'],
+                                                ['tag'  => 'td',
+                                                 'attr' => ['class' => 'bold'],
+                                                 'html' => '<b>world</b>']]],
+                                   ['tag'   => 'tr',
+                                    'inner' => [['tag'  => 'td',
+                                                 'text' => 'foo'],
+                                                ['tag'  => 'td',
+                                                 'text' => 'bar']]],
+                                   ['tag'   => 'tr',
+                                    'attr'  => ['id' => 'last-row'],
+                                    'inner' => [['tag'  => 'td',
+                                                 'text' => 'foo'],
+                                                ['tag'  => 'td',
+                                                 'text' => 'bar']]]]],
+                      ['text' => 'The End'],
+                      ['html' => '!']]);
+
+    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', ob_get_clean());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test generateElement.
    */
   public function testGenerateElement1(): void
@@ -441,8 +935,7 @@ class HtmlTest extends TestCase
     $html = Html::generateNested([['tag'   => 'a',
                                    'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
                                    'inner' => ['tag'  => 'b',
-                                               'text' => 'helper-html']
-                                  ],
+                                               'text' => 'helper-html']],
                                   ['tag' => 'br']]);
     self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', $html);
   }

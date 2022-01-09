@@ -16,6 +16,19 @@ class TestElement
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Echos the HTML code for this element.
+   */
+  public function echoElement(): void
+  {
+    $struct = ['tag'  => 'test',
+               'attr' => $this->attributes,
+               'html' => null];
+
+    Html::echoNested($struct);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Generates the HTML code for this element.
    *
    * @return string
