@@ -16,26 +16,17 @@ class TestElement
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Echos the HTML code for this element.
-   */
-  public function echoElement(): void
-  {
-    $struct = ['tag'  => 'test',
-               'attr' => $this->attributes,
-               'html' => null];
-
-    Html::echoNested($struct);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Generates the HTML code for this element.
+   * Returns the HTML code for this element.
    *
    * @return string
    */
-  public function generateElement(): string
+  public function html(): string
   {
-    return Html::generateElement('test', $this->attributes);
+    $struct = ['tag'  => 'test',
+              'attr' => $this->attributes,
+              'html' => null];
+
+    return Html::htmlNested($struct);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

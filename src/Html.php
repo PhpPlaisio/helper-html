@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Plaisio\Helper;
 
 use SetBased\Exception\FallenException;
-use SetBased\Helper\Cast;
 
 /**
  * A utility class for generating HTML elements, tags, and attributes.
@@ -108,343 +107,6 @@ final class Html
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Echos the HTML code of nested elements.
-   *
-   * Example:
-   *
-   * $html = Html::echoNested([['tag'   => 'table',
-   *                            'attr'  => ['class' => 'test'],
-   *                            'inner' => [['tag'   => 'tr',
-   *                                         'attr'  => ['id' => 'first-row'],
-   *                                         'inner' => [['tag'  => 'td',
-   *                                                      'text' => 'hello'],
-   *                                                     ['tag'  => 'td',
-   *                                                      'attr' => ['class' => 'bold'],
-   *                                                      'html' => '<b>world</b>']]],
-   *                                        ['tag'   => 'tr',
-   *                                         'inner' => [['tag'  => 'td',
-   *                                                      'text' => 'foo'],
-   *                                                     ['tag'  => 'td',
-   *                                                      'text' => 'bar']]],
-   *                                        ['tag'   => 'tr',
-   *                                         'attr'  => ['id' => 'last-row'],
-   *                                         'inner' => [['tag'  => 'td',
-   *                                                      'text' => 'foo'],
-   *                                                     ['tag'  => 'td',
-   *                                                      'text' => 'bar']]]]],
-   *                           ['text' => 'The End'],
-   *                           ['html' => '!']]);
-   *
-   * @param array|null $structure The structure of the nested elements.
-   *
-   * @since 3.1.0
-   * @api
-   * @deprecated
-   */
-  public static function echoNested(?array $structure): void
-  {
-    if ($structure!==null)
-    {
-      $key = array_key_first($structure);
-      if (is_int($key))
-      {
-        // Structure is a list of elements.
-        foreach ($structure as $element)
-        {
-          self::echoNested($element);
-        }
-      }
-      elseif ($key!==null)
-      {
-        // Structure is an associative array.
-        if (isset($structure['tag']))
-        {
-          // Element with content.
-          if (array_key_exists('inner', $structure))
-          {
-            self::echoTag($structure['tag'], $structure['attr'] ?? []);
-            self::echoNested($structure['inner']);
-            echo '</', $structure['tag'], '>';
-          }
-          elseif (array_key_exists('text', $structure))
-          {
-            self::echoElement($structure['tag'], $structure['attr'] ?? [], $structure['text']);
-          }
-          elseif (array_key_exists('html', $structure))
-          {
-            self::echoElement($structure['tag'], $structure['attr'] ?? [], $structure['html'], true);
-          }
-          else
-          {
-            self::echoVoidElement($structure['tag'], $structure['attr'] ?? []);
-          }
-        }
-        elseif (array_key_exists('text', $structure))
-        {
-          echo self::txt2Html($structure['text']);
-        }
-        elseif (array_key_exists('html', $structure))
-        {
-          echo $structure['html'];
-        }
-        else
-        {
-          throw new \LogicException("Expected key 'tag', 'text', or 'html'");
-        }
-      }
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns a string with proper conversion of special characters to HTML entities of an attribute of a HTML tag.
-   *
-   * Boolean attributes (e.g. checked, disabled and draggable, autocomplete also) are set when the value is none empty.
-   *
-   * @param string $name  The name of the attribute.
-   * @param mixed  $value The value of the attribute.
-   *
-   * @return string
-   *
-   * @since 1.0.0
-   * @api
-   * @deprecated
-   */
-  public static function generateAttribute(string $name, $value): string
-  {
-    $html = '';
-
-    switch ($name)
-    {
-      // Boolean attributes.
-      case 'autofocus':
-      case 'checked':
-      case 'disabled':
-      case 'hidden':
-      case 'ismap':
-      case 'multiple':
-      case 'novalidate':
-      case 'readonly':
-      case 'required':
-      case 'selected':
-      case 'spellcheck':
-        if (!empty($value))
-        {
-          $html = ' ';
-          $html .= $name;
-          $html .= '="';
-          $html .= $name;
-          $html .= '"';
-        }
-        break;
-
-      // Annoying boolean attribute exceptions.
-      case 'draggable':
-        if ($value!==null)
-        {
-          if ($value==='auto')
-          {
-            $html = ' draggable="auto"';
-          }
-          elseif (empty($value) || $value==='false')
-          {
-            $html = ' draggable="false"';
-          }
-          else
-          {
-            $html = ' draggable="true"';
-          }
-        }
-        break;
-
-      case 'contenteditable':
-        if ($value!==null)
-        {
-          $html = ' ';
-          $html .= $name;
-          $html .= (!empty($value)) ? '="true"' : '="false"';
-        }
-        break;
-
-      case 'autocomplete':
-        if ($value!==null)
-        {
-          $html = ' ';
-          $html .= $name;
-          $html .= (!empty($value)) ? '="on"' : '="off"';
-        }
-        break;
-
-      case 'translate':
-        if ($value!==null)
-        {
-          $html = ' ';
-          $html .= $name;
-          $html .= (!empty($value)) ? '="yes"' : '="no"';
-        }
-        break;
-
-      case 'class' and is_array($value):
-        $classes = implode(' ', self::cleanClasses($value));
-        if ($classes!=='')
-        {
-          $html = ' class="';
-          $html .= htmlspecialchars($classes, ENT_QUOTES, self::$encoding);
-          $html .= '"';
-        }
-        break;
-
-      default:
-        if ($value!==null && $value!=='')
-        {
-          $html = ' ';
-          $html .= htmlspecialchars($name, ENT_QUOTES, self::$encoding);
-          $html .= '="';
-          $html .= self::txt2Html($value);
-          $html .= '"';
-        }
-    }
-
-    return $html;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Generates the HTML code for an element.
-   *
-   * Note: tags for void elements such as '<br/>' are not supported.
-   *
-   * @param string                     $tagName    The name of the tag, e.g. a, form.
-   * @param array                      $attributes The attributes of the tag. Special characters in the attributes will
-   *                                               be replaced with HTML entities.
-   * @param bool|int|float|string|null $innerText  The inner text of the tag.
-   * @param bool                       $isHtml     If set the inner text is a HTML snippet, otherwise special
-   *                                               characters in the inner text will be replaced with HTML entities.
-   *
-   * @return string
-   *
-   * @since 1.0.0
-   * @api
-   * @deprecated
-   */
-  public static function generateElement(string $tagName,
-                                         array  $attributes = [],
-                                                $innerText = '',
-                                         bool   $isHtml = false): string
-  {
-    $html = self::generateTag($tagName, $attributes);
-    $html .= ($isHtml) ? $innerText : self::txt2Html($innerText);
-    $html .= '</';
-    $html .= $tagName;
-    $html .= '>';
-
-    return $html;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the HTML code of nested elements.
-   *
-   * Example:
-   *
-   * $html = Html::generateNested([['tag'   => 'table',
-   *                                'attr'  => ['class' => 'test'],
-   *                                'inner' => [['tag'   => 'tr',
-   *                                             'attr'  => ['id' => 'first-row'],
-   *                                             'inner' => [['tag'  => 'td',
-   *                                                          'text' => 'hello'],
-   *                                                         ['tag'  => 'td',
-   *                                                          'attr' => ['class' => 'bold'],
-   *                                                          'html' => '<b>world</b>']]],
-   *                                            ['tag'   => 'tr',
-   *                                             'inner' => [['tag'  => 'td',
-   *                                                          'text' => 'foo'],
-   *                                                         ['tag'  => 'td',
-   *                                                          'text' => 'bar']]],
-   *                                            ['tag'   => 'tr',
-   *                                             'attr'  => ['id' => 'last-row'],
-   *                                             'inner' => [['tag'  => 'td',
-   *                                                          'text' => 'foo'],
-   *                                                         ['tag'  => 'td',
-   *                                                          'text' => 'bar']]]]],
-   *                               ['text' => 'The End'],
-   *                               ['html' => '!']]);
-   *
-   * @param array|null $structure The structure of the nested elements.
-   *
-   * @return string
-   *
-   * @since 1.4.0
-   * @api
-   * @deprecated
-   */
-  public static function generateNested(?array $structure): string
-  {
-    $html = '';
-    self::htmlNestedHelper($structure, $html);
-
-    return $html;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Generates the HTML code for a start tag of an element.
-   *
-   * @param string $tagName    The name of the tag, e.g. a, form.
-   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                           HTML entities.
-   *
-   * @return string
-   *
-   * @since 1.0.0
-   * @api
-   * @deprecated
-   */
-  public static function generateTag(string $tagName, array $attributes = []): string
-  {
-    $html = '<';
-    $html .= $tagName;
-    foreach ($attributes as $name => $value)
-    {
-      $html .= self::generateAttribute($name, $value);
-    }
-    $html .= '>';
-
-    return $html;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Generates the HTML code for a void element.
-   *
-   * Void elements are: area, base, br, col, embed, hr, img, input, keygen, link, menuitem, meta, param, source, track,
-   * wbr. See <http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements>
-   *
-   * @param string $tagName    The name of the tag, e.g. img, link.
-   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                           HTML entities.
-   *
-   * @return string
-   *
-   * @since 1.0.0
-   * @api
-   * @deprecated
-   */
-  public static function generateVoidElement(string $tagName, array $attributes = []): string
-  {
-    $html = '<';
-    $html .= $tagName;
-    foreach ($attributes as $name => $value)
-    {
-      $html .= self::generateAttribute($name, $value);
-    }
-    $html .= '/>';
-
-    return $html;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Returns a string that can be safely used as an ID for an element. The format of the id is 'abc_<n>' where n is
    * incremented with each call of this method.
    *
@@ -489,17 +151,17 @@ final class Html
    *                               ['text' => 'The End'],
    *                               ['html' => '!']]);
    *
-   * @param array|null $structure The structure of the nested elements.
+   * @param array|null $struct The structure of the nested elements.
    *
    * @return string
    *
    * @since 3.2.0
    * @api
    */
-  public static function htmlNested(?array $structure): string
+  public static function htmlNested(?array $struct): string
   {
     $html = '';
-    self::htmlNestedHelper($structure, $html);
+    self::htmlNestedHelper($struct, $html);
 
     return $html;
   }
@@ -567,30 +229,34 @@ final class Html
    */
   private static function cleanClasses(array $classes): array
   {
-    $ret = [];
+    $clean = [];
 
     foreach ($classes as $class)
     {
-      $tmp = Cast::toManString($class, '');
-      if ($tmp!=='') $ret[] = $tmp;
+      $tmp = Html::txt2Html($class);
+      if ($tmp!=='')
+      {
+        $clean[] = $tmp;
+      }
     }
 
-    $ret = array_unique($ret, SORT_STRING);
-    sort($ret);
+    $clean = array_unique($clean, SORT_STRING);
+    sort($clean);
 
-    return $ret;
+    return $clean;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Echos an attribute of an HTML tag with proper conversion of special characters to HTML entities.
+   * Returns a string with proper conversion of special characters to HTML entities of an attribute of an HTML tag.
    *
    * Boolean attributes (e.g. checked, disabled and draggable, autocomplete also) are set when the value is none empty.
    *
    * @param string $name  The name of the attribute.
    * @param mixed  $value The value of the attribute.
+   * @param string $html  The generated HTML code.
    */
-  private static function echoAttribute(string $name, $value): void
+  private static function htmlAttributeHelper(string $name, $value, string &$html): void
   {
     switch ($name)
     {
@@ -608,7 +274,11 @@ final class Html
       case 'spellcheck':
         if (!empty($value))
         {
-          echo ' ', $name, '="', $name, '"';
+          $html .= ' ';
+          $html .= $name;
+          $html .= '="';
+          $html .= $name;
+          $html .= '"';
         }
         break;
 
@@ -618,15 +288,15 @@ final class Html
         {
           if ($value==='auto')
           {
-            echo ' draggable="auto"';
+            $html .= ' draggable="auto"';
           }
           elseif (empty($value) || $value==='false')
           {
-            echo ' draggable="false"';
+            $html .= ' draggable="false"';
           }
           else
           {
-            echo ' draggable="true"';
+            $html .= ' draggable="true"';
           }
         }
         break;
@@ -634,21 +304,27 @@ final class Html
       case 'contenteditable':
         if ($value!==null)
         {
-          echo ' contenteditable', (!empty($value)) ? '="true"' : '="false"';
+          $html .= ' ';
+          $html .= $name;
+          $html .= (!empty($value)) ? '="true"' : '="false"';
         }
         break;
 
       case 'autocomplete':
         if ($value!==null)
         {
-          echo ' autocomplete', (!empty($value)) ? '="on"' : '="off"';
+          $html .= ' ';
+          $html .= $name;
+          $html .= (!empty($value)) ? '="on"' : '="off"';
         }
         break;
 
       case 'translate':
         if ($value!==null)
         {
-          echo ' translate', (!empty($value)) ? '="yes"' : '="no"';
+          $html .= ' ';
+          $html .= $name;
+          $html .= (!empty($value)) ? '="yes"' : '="no"';
         }
         break;
 
@@ -656,96 +332,40 @@ final class Html
         $classes = implode(' ', self::cleanClasses($value));
         if ($classes!=='')
         {
-          echo ' class="', htmlspecialchars($classes, ENT_QUOTES, self::$encoding), '"';
+          $html .= ' class="';
+          $html .= htmlspecialchars($classes, ENT_QUOTES, self::$encoding);
+          $html .= '"';
         }
         break;
 
       default:
         if ($value!==null && $value!=='')
         {
-          echo ' ', htmlspecialchars($name, ENT_QUOTES, self::$encoding), '="', self::txt2Html($value), '"';
+          $html .= ' ';
+          $html .= htmlspecialchars($name, ENT_QUOTES, self::$encoding);
+          $html .= '="';
+          $html .= self::txt2Html($value);
+          $html .= '"';
         }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Echos the HTML code for an element.
-   *
-   * Note: tags for void elements such as '<br/>' are not supported.
-   *
-   * @param string                     $tagName    The name of the tag, e.g. a, form.
-   * @param array                      $attributes The attributes of the tag. Special characters in the attributes will
-   *                                               be replaced with HTML entities.
-   * @param bool|int|float|string|null $innerText  The inner text of the tag.
-   * @param bool                       $isHtml     If set the inner text is a HTML snippet, otherwise special
-   *                                               characters in the inner text will be replaced with HTML entities.
-   */
-  private static function echoElement(string $tagName,
-                                      array  $attributes = [],
-                                             $innerText = '',
-                                      bool   $isHtml = false): void
-  {
-    self::echoTag($tagName, $attributes);
-    echo ($isHtml) ? $innerText : self::txt2Html($innerText);
-    echo '</', $tagName, '>';
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Echos the HTML code for a start tag of an element.
-   *
-   * @param string $tagName    The name of the tag, e.g. a, form.
-   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                           HTML entities.
-   */
-  private static function echoTag(string $tagName, array $attributes): void
-  {
-    echo '<', $tagName;
-    foreach ($attributes as $name => $value)
-    {
-      self::echoAttribute($name, $value);
-    }
-    echo '>';
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Echo the HTML code for a void element.
-   *
-   * Void elements are: area, base, br, col, embed, hr, img, input, keygen, link, menuitem, meta, param, source, track,
-   * wbr. See <http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements>
-   *
-   * @param string $tagName    The name of the tag, e.g. img, link.
-   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
-   *                           HTML entities.
-   */
-  private static function echoVoidElement(string $tagName, array $attributes): void
-  {
-    echo '<', $tagName;
-    foreach ($attributes as $name => $value)
-    {
-      self::echoAttribute($name, $value);
-    }
-    echo '/>';
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Helper method for method generateNested().
    *
-   * @param array|null $structure The (nested) structure of the HTML code.
-   * @param string     $html      The generated HTML code.
+   * @param array|null $struct The (nested) structure of the HTML code.
+   * @param string     $html   The generated HTML code.
    */
-  private static function htmlNestedHelper(?array $structure, string &$html): void
+  private static function htmlNestedHelper(?array $struct, string &$html): void
   {
-    if ($structure!==null)
+    if ($struct!==null)
     {
-      $key = array_key_first($structure);
+      $key = array_key_first($struct);
       if (is_int($key))
       {
         // Structure is a list of elements.
-        foreach ($structure as $element)
+        foreach ($struct as $element)
         {
           self::htmlNestedHelper($element, $html);
         }
@@ -753,37 +373,45 @@ final class Html
       elseif ($key!==null)
       {
         // Structure is an associative array.
-        if (isset($structure['tag']))
+        if (isset($struct['tag']))
         {
           // Element with content.
-          if (array_key_exists('inner', $structure))
+          if (array_key_exists('inner', $struct))
           {
-            $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
-            self::htmlNestedHelper($structure['inner'], $html);
+            self::htmlTagHelper($struct['tag'], $struct['attr'] ?? [], $html);
+            self::htmlNestedHelper($struct['inner'], $html);
             $html .= '</';
-            $html .= $structure['tag'];
+            $html .= $struct['tag'];
             $html .= '>';
           }
-          elseif (array_key_exists('text', $structure))
+          elseif (array_key_exists('text', $struct))
           {
-            $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['text']);
+            self::htmlTagHelper($struct['tag'], $struct['attr'] ?? [], $html);
+            $html .= self::txt2Html($struct['text']);
+            $html .= '</';
+            $html .= $struct['tag'];
+            $html .= '>';
           }
-          elseif (array_key_exists('html', $structure))
+          elseif (array_key_exists('html', $struct))
           {
-            $html .= self::generateElement($structure['tag'], $structure['attr'] ?? [], $structure['html'], true);
+            self::htmlTagHelper($struct['tag'], $struct['attr'] ?? [], $html);
+            $html .= $struct['html'];
+            $html .= '</';
+            $html .= $struct['tag'];
+            $html .= '>';
           }
           else
           {
-            $html .= self::generateVoidElement($structure['tag'], $structure['attr'] ?? []);
+            self::htmlVoidElementHelper($struct['tag'], $struct['attr'] ?? [], $html);
           }
         }
-        elseif (array_key_exists('text', $structure))
+        elseif (array_key_exists('text', $struct))
         {
-          $html .= self::txt2Html(Cast::toOptString($structure['text']));
+          $html .= self::txt2Html($struct['text']);
         }
-        elseif (array_key_exists('html', $structure))
+        elseif (array_key_exists('html', $struct))
         {
-          $html .= $structure['html'];
+          $html .= $struct['html'];
         }
         else
         {
@@ -791,6 +419,49 @@ final class Html
         }
       }
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Generates the HTML code for a start tag of an element.
+   *
+   * @param string $tagName    The name of the tag, e.g. a, form.
+   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
+   *                           HTML entities.
+   * @param string $html       The generated HTML code.
+   */
+  private static function htmlTagHelper(string $tagName, array $attributes, string &$html): void
+  {
+    $html .= '<';
+    $html .= $tagName;
+    foreach ($attributes as $name => $value)
+    {
+      self::htmlAttributeHelper($name, $value, $html);
+    }
+    $html .= '>';
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Generates the HTML code for a void element.
+   *
+   * Void elements are: area, base, br, col, embed, hr, img, input, keygen, link, menuitem, meta, param, source, track,
+   * wbr. See <http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements>
+   *
+   * @param string $tagName    The name of the tag, e.g. img, link.
+   * @param array  $attributes The attributes of the tag. Special characters in the attributes will be replaced with
+   *                           HTML entities.
+   * @param string $html       The generated HTML code.
+   */
+  private static function htmlVoidElementHelper(string $tagName, array $attributes, string &$html): void
+  {
+    $html .= '<';
+    $html .= $tagName;
+    foreach ($attributes as $name => $value)
+    {
+      self::htmlAttributeHelper($name, $value, $html);
+    }
+    $html .= '/>';
   }
 
   //--------------------------------------------------------------------------------------------------------------------

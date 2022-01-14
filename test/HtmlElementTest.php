@@ -19,7 +19,7 @@ class HtmlElementTest extends TestCase
     $uuid    = uniqid();
     $element = new TestElement();
     $html    = $element->setAttrData('test', $uuid)
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -41,7 +41,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     $html    = $element->setAttribute('class', 'string')
                        ->addClass('my-class')
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -60,7 +60,7 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
     $html    = $element->addClasses(['first', 'last'])
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -80,7 +80,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     $html    = $element->addClasses(['one' => 'first', 'two' => 'last'])
                        ->addClasses(['one' => 'one', 'two' => 'two'])
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -100,7 +100,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     $html    = $element->addClasses(['z', 'a'])
                        ->addClass('k')
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -120,7 +120,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     $html    = $element->setAttribute('class', 'string')
                        ->addClasses(['my-class'])
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -152,7 +152,7 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
     $element->setAttrAria('rowspan', '5');
-    $html = $element->generateElement();
+    $html = $element->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -171,7 +171,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
 
     $html = $element->addClass('hello')
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -181,7 +181,7 @@ class HtmlElementTest extends TestCase
 
     // Calling addClass adds another class.
     $html = $element->addClass('world')
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -191,7 +191,7 @@ class HtmlElementTest extends TestCase
 
     // Remove a class.
     $html = $element->removeClass('hello')
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -201,15 +201,15 @@ class HtmlElementTest extends TestCase
 
     // Call unsetClass resets class.
     $html = $element->unsetClass()
-                    ->generateElement();
+                    ->html();
     self::assertStringNotContainsString('class', $html, "assert 4");
 
     // setClass must override previous set classes.
     $html = $element->addClass('class1')
                     ->setAttrClass('class2')
-                    ->generateElement();
+                    ->html();
     self::assertStringNotContainsString('class1', $html, "assert 5");
-    $html = $element->generateElement();
+    $html = $element->html();
     self::assertStringContainsString('class2', $html, "assert 6");
   }
 
@@ -221,7 +221,7 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
     $html    = $element->setAttrClass('my-class')
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -241,7 +241,7 @@ class HtmlElementTest extends TestCase
     $element = new TestElement();
     $html    = $element->setAttrClass('old-class')
                        ->setAttrClass('new-class')
-                       ->generateElement();
+                       ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -283,7 +283,7 @@ class HtmlElementTest extends TestCase
 
     // Add the class.
     $html = $element->addClass(null)
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -293,7 +293,7 @@ class HtmlElementTest extends TestCase
 
     // Remove the class.
     $html = $element->removeClass(null)
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -316,7 +316,7 @@ class HtmlElementTest extends TestCase
 
     // Add the class.
     $html = $element->addClass($class)
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -326,7 +326,7 @@ class HtmlElementTest extends TestCase
 
     // Remove the class.
     $html = $element->removeClass($class)
-                    ->generateElement();
+                    ->html();
 
     $doc = new \DOMDocument();
     $doc->loadXML($html);
@@ -343,13 +343,13 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrContentEditable(false)->generateElement();
+    $html = $element->setAttrContentEditable(false)->html();
     self::assertEquals('<test contenteditable="false"></test>', $html);
 
-    $html = $element->setAttrContentEditable(true)->generateElement();
+    $html = $element->setAttrContentEditable(true)->html();
     self::assertEquals('<test contenteditable="true"></test>', $html);
 
-    $html = $element->setAttrContentEditable(null)->generateElement();
+    $html = $element->setAttrContentEditable(null)->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -361,14 +361,32 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrDraggable('true')->generateElement();
+    $html = $element->setAttrDraggable('true')->html();
     self::assertEquals('<test draggable="true"></test>', $html);
 
-    $html = $element->setAttrDraggable('false')->generateElement();
+    $html = $element->setAttrDraggable('false')->html();
     self::assertEquals('<test draggable="false"></test>', $html);
 
-    $html = $element->setAttrDraggable('auto')->generateElement();
+    $html = $element->setAttrDraggable('auto')->html();
     self::assertEquals('<test draggable="auto"></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrData().
+   */
+  public function testSetAttrData(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrData('data', 'value')->html();
+    self::assertEquals('<test data-data="value"></test>', $html);
+
+    $html = $element->setAttrData('data', '')->html();
+    self::assertEquals('<test></test>', $html);
+
+    $html = $element->setAttrData('data', null)->html();
+    self::assertEquals('<test></test>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -379,13 +397,13 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrHidden(false)->generateElement();
+    $html = $element->setAttrHidden(false)->html();
     self::assertEquals('<test></test>', $html);
 
-    $html = $element->setAttrHidden(true)->generateElement();
+    $html = $element->setAttrHidden(true)->html();
     self::assertEquals('<test hidden="hidden"></test>', $html);
 
-    $html = $element->setAttrHidden(null)->generateElement();
+    $html = $element->setAttrHidden(null)->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -397,13 +415,13 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrSpellCheck(false)->generateElement();
+    $html = $element->setAttrSpellCheck(false)->html();
     self::assertEquals('<test></test>', $html);
 
-    $html = $element->setAttrSpellCheck(true)->generateElement();
+    $html = $element->setAttrSpellCheck(true)->html();
     self::assertEquals('<test spellcheck="spellcheck"></test>', $html);
 
-    $html = $element->setAttrSpellCheck(null)->generateElement();
+    $html = $element->setAttrSpellCheck(null)->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -415,13 +433,13 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrTranslate(false)->generateElement();
+    $html = $element->setAttrTranslate(false)->html();
     self::assertEquals('<test translate="no"></test>', $html);
 
-    $html = $element->setAttrTranslate(true)->generateElement();
+    $html = $element->setAttrTranslate(true)->html();
     self::assertEquals('<test translate="yes"></test>', $html);
 
-    $html = $element->setAttrTranslate(null)->generateElement();
+    $html = $element->setAttrTranslate(null)->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -446,7 +464,7 @@ class HtmlElementTest extends TestCase
     foreach ($methods as $method => $attribute)
     {
       $uuid = ($attribute!=='tabindex') ? uniqid() : rand(1, 123);
-      $html = $element->$method($uuid)->generateElement();
+      $html = $element->$method($uuid)->html();
 
       $doc = new \DOMDocument();
       $doc->loadXML($html);

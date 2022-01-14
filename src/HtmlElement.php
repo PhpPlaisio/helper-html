@@ -123,7 +123,7 @@ trait HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns the mandatory attribute [id](http://www.w3schools.com/tags/att_global_id.asp) of this element. If the id
-   * attribute was not set prior calling this method the id attribute will set with a automatically generate value.
+   * attribute was not set prior calling this method the id attribute will set with an automatically generate value.
    *
    * @return string
    *

@@ -24,25 +24,25 @@ class HtmlTest extends TestCase
 
     // Empty class.
     $cases[] = ['value'    => '',
-                'expected' => ''];
+                'expected' => '<div></div>'];
 
     $cases[] = ['value'    => null,
-                'expected' => ''];
+                'expected' => '<div></div>'];
 
     // False must be cast to '0'.
     $cases[] = ['value'    => false,
-                'expected' => ' class="0"'];
+                'expected' => '<div class="0"></div>'];
 
     // Classes as array.
     $cases[] = ['value'    => [],
-                'expected' => ''];
+                'expected' => '<div></div>'];
 
     $cases[] = ['value'    => ['hello', 'world'],
-                'expected' => ' class="hello world"'];
+                'expected' => '<div class="hello world"></div>'];
 
     // Classes as array with duplicate and empty values.
     $cases[] = ['value'    => ['hello', 'hello', '', null, 'world', false],
-                'expected' => ' class="0 hello world"'];
+                'expected' => '<div class="0 hello world"></div>'];
 
     return $cases;
   }
@@ -106,41 +106,10 @@ class HtmlTest extends TestCase
    */
   public function testAttributeClass($value, string $expected)
   {
-    $html = Html::generateAttribute('class', $value);
+    $html = Html::htmlNested(['tag'  => 'div',
+                              'attr' => ['class' => $value],
+                              'html' => null]);
     $this->assertSame($expected, $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test normal attributes set.
-   */
-  public function testAttributes1(): void
-  {
-    $values = ['0', 0, false];
-
-    foreach ($values as $true)
-    {
-      $html = Html::generateAttribute('data-test', $true);
-      $this->assertSame(' data-test="0"', $html);
-    }
-
-    $html = Html::generateAttribute('qwerty&?<', "<a>&");
-    $this->assertSame(' qwerty&amp;?&lt;="&lt;a&gt;&amp;"', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test attributes not set.
-   */
-  public function testAttributes2(): void
-  {
-    $values = [null, ''];
-
-    foreach ($values as $value)
-    {
-      $html = Html::generateAttribute('data-test', $value);
-      $this->assertSame('', $html);
-    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -157,7 +126,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes set.
+   * Test Html::htmlNested() with boolean attributes set.
    */
   public function testBooleanAttributes1(): void
   {
@@ -180,15 +149,17 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"$attribute\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"$attribute\"></div>", $html);
       }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes not set.
+   * Test Html::htmlNested() with boolean attributes not set.
    */
   public function testBooleanAttributes2(): void
   {
@@ -208,17 +179,19 @@ class HtmlTest extends TestCase
 
     foreach ($attributes as $attribute)
     {
-      foreach ($values as $true)
+      foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $true);
-        $this->assertSame('', $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame('<div></div>', $html);
       }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes set.
+   * Test Html::htmlNested() with boolean attributes set.
    */
   public function testBooleanAttributes3(): void
   {
@@ -232,15 +205,17 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"true\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"true\"></div>", $html);
       }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes not set.
+   * Test Html::htmlNested() with boolean attributes not set.
    */
   public function testBooleanAttributes4(): void
   {
@@ -253,18 +228,22 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"false\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"false\"></div>", $html);
       }
 
-      $html = Html::generateAttribute($attribute, null);
-      $this->assertSame('', $html);
+      $html = Html::htmlNested(['tag'  => 'div',
+                                'attr' => [$attribute => null],
+                                'html' => null]);
+      $this->assertSame('<div></div>', $html);
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes set.
+   * Test Html::htmlNested() with boolean attributes set.
    */
   public function testBooleanAttributes5(): void
   {
@@ -277,15 +256,17 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"on\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"on\"></div>", $html);
       }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes not set.
+   * Test Html::htmlNested() with boolean attributes not set.
    */
   public function testBooleanAttributes6(): void
   {
@@ -297,18 +278,22 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"off\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"off\"></div>", $html);
       }
 
-      $html = Html::generateAttribute($attribute, null);
-      $this->assertSame('', $html);
+      $html = Html::htmlNested(['tag'  => 'div',
+                                'attr' => [$attribute => null],
+                                'html' => null]);
+      $this->assertSame('<div></div>', $html);
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes set.
+   * Test Html::htmlNested() with boolean attributes set.
    */
   public function testBooleanAttributes7(): void
   {
@@ -321,15 +306,17 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"yes\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"yes\"></div>", $html);
       }
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes not set.
+   * Test Html::htmlNested() with boolean attributes not set.
    */
   public function testBooleanAttributes8(): void
   {
@@ -341,68 +328,195 @@ class HtmlTest extends TestCase
     {
       foreach ($values as $value)
       {
-        $html = Html::generateAttribute($attribute, $value);
-        $this->assertSame(" $attribute=\"no\"", $html);
+        $html = Html::htmlNested(['tag'  => 'div',
+                                  'attr' => [$attribute => $value],
+                                  'html' => null]);
+        $this->assertSame("<div $attribute=\"no\"></div>", $html);
       }
 
-      $html = Html::generateAttribute($attribute, null);
-      $this->assertSame('', $html);
+      $html = Html::htmlNested(['tag'  => 'div',
+                                'attr' => [$attribute => null],
+                                'html' => null]);
+      $this->assertSame('<div></div>', $html);
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Tests for generation attribute class.
-   *
-   * @param mixed  $value    The value for the class attribute.
-   * @param string $expected The expected generated HTML code.
-   *
-   * @dataProvider casesClassAttribute
+   * Test htmlNested() with void element.
    */
-  public function testEchoAttributeClass($value, string $expected)
+  public function testHtmlNested01(): void
   {
-    $struct = ['tag'  => 'div',
-               'attr' => ['class' => $value],
-               'html' => null];
-    ob_start();
-    Html::echoNested($struct);
-    $html = ob_get_clean();
-    $this->assertSame("<div$expected></div>", $html);
+    $html = Html::htmlNested(['tag' => 'br']);
+    self::assertSame('<br/>', $html);
+
+    $html = Html::htmlNested(['tag'  => 'img',
+                              'attr' => ['src' => '/images/logo.png', 'alt' => 'logo']]);
+    $this->assertEquals('<img src="/images/logo.png" alt="logo"/>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test normal attributes set.
+   * Test htmlNested() with element.
    */
-  public function testEchoAttributes1(): void
+  public function testHtmlNested02(): void
   {
-    $values = ['0', 0, false];
-
-    foreach ($values as $value)
-    {
-      $struct = ['tag'  => 'div',
-                 'attr' => ['data-test' => $value],
-                 'html' => null];
-      ob_start();
-      Html::echoNested($struct);
-      $html = ob_get_clean();
-      $this->assertSame('<div data-test="0"></div>', $html);
-    }
-
-    $struct = ['tag'  => 'div',
-               'attr' => ['qwerty&?<' => "<a>&"],
-               'html' => null];
-    ob_start();
-    Html::echoNested($struct);
-    $html = ob_get_clean();
-    $this->assertSame('<div qwerty&amp;?&lt;="&lt;a&gt;&amp;"></div>', $html);
+    $html = Html::htmlNested(['tag'  => 'a',
+                              'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                              'text' => 'helper & html']);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test attributes not set.
+   * Test htmlNested() with element with integer value.
    */
-  public function testEchoAttributes2(): void
+  public function testHtmlNested03(): void
+  {
+    $html = Html::htmlNested(['tag'  => 'a',
+                              'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                              'text' => 123]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with element with HTML value.
+   */
+  public function testHtmlNested04(): void
+  {
+    $html = Html::htmlNested(['tag'  => 'a',
+                              'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                              'html' => '<b>helper-html</b>']);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with nested elements.
+   */
+  public function testHtmlNested05(): void
+  {
+    $html = Html::htmlNested(['tag'   => 'a',
+                              'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                              'inner' => ['tag'  => 'b',
+                                          'text' => 'helper-html']]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with list of elements.
+   */
+  public function testHtmlNested06(): void
+  {
+    $html = Html::htmlNested([['tag'   => 'a',
+                               'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
+                               'inner' => ['tag'  => 'b',
+                                           'text' => 'helper-html']],
+                              ['tag' => 'br']]);
+    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with list of elements.
+   */
+  public function testHtmlNested07(): void
+  {
+    $this->expectException(\LogicException::class);
+    Html::htmlNested(['xhtml' => 'xml-html']);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with null.
+   */
+  public function testHtmlNested08(): void
+  {
+    $html = Html::htmlNested(null);
+
+    self::assertSame('', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with null element.
+   */
+  public function testHtmlNested09(): void
+  {
+    $html = Html::htmlNested([null]);
+
+    self::assertSame('', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with list of elements with null inner.
+   */
+  public function testHtmlNested10(): void
+  {
+    $html = Html::htmlNested(['tag'   => 'span',
+                              'attr'  => ['class' => 'test'],
+                              'inner' => null]);
+
+    self::assertSame('<span class="test"></span>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with list of elements.
+   */
+  public function testHtmlNested11(): void
+  {
+    $html = Html::htmlNested([['tag'   => 'table',
+                               'attr'  => ['class' => 'test'],
+                               'inner' => [['tag'   => 'tr',
+                                            'attr'  => ['id' => 'first-row'],
+                                            'inner' => [['tag'  => 'td',
+                                                         'text' => 'hello'],
+                                                        ['tag'  => 'td',
+                                                         'attr' => ['class' => 'bold'],
+                                                         'html' => '<b>world</b>']]],
+                                           ['tag'   => 'tr',
+                                            'inner' => [['tag'  => 'td',
+                                                         'text' => 'foo'],
+                                                        ['tag'  => 'td',
+                                                         'text' => 'bar']]],
+                                           ['tag'   => 'tr',
+                                            'attr'  => ['id' => 'last-row'],
+                                            'inner' => [['tag'  => 'td',
+                                                         'text' => 'foo'],
+                                                        ['tag'  => 'td',
+                                                         'text' => 'bar']]]]],
+                              ['text' => 'The End'],
+                              ['html' => '!']]);
+
+    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with empty inner HTML code.
+   */
+  public function testHtmlNestedEmpty(): void
+  {
+    $html = Html::htmlNested(['tag'  => 'span',
+                              'attr' => ['class' => 'null'],
+                              'text' => '']);
+    $this->assertEquals('<span class="null"></span>', $html);
+
+    $html = Html::htmlNested(['tag'  => 'span',
+                              'attr' => ['class' => 'null'],
+                              'text' => null]);
+    $this->assertEquals('<span class="null"></span>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test htmlNested() with empty attributes.
+   */
+  public function testHtmlNestedEmptyAttributes(): void
   {
     $values = [null, ''];
 
@@ -411,625 +525,38 @@ class HtmlTest extends TestCase
       $struct = ['tag'  => 'div',
                  'attr' => ['data-test' => $value],
                  'html' => null];
-      ob_start();
-      Html::echoNested($struct);
-      $html = ob_get_clean();
+      $html   = Html::htmlNested($struct);
       $this->assertSame('<div></div>', $html);
     }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes set.
+   * Test htmlNested() with normal attributes set.
    */
-  public function testEchoBooleanAttributes1(): void
+  public function testHtmlNestedNormalAttributes(): void
   {
-    $attributes = ['autofocus',
-                   'checked',
-                   'disabled',
-                   'hidden',
-                   'ismap',
-                   'multiple',
-                   'novalidate',
-                   'readonly',
-                   'required',
-                   'selected',
-                   'spellcheck'];
+    $values = ['0', 0, false];
 
-    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
-    $values[] = $values;
-
-    foreach ($attributes as $attribute)
+    foreach ($values as $value)
     {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"$attribute\"></div>", $html);
-      }
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes not set.
-   */
-  public function testEchoBooleanAttributes2(): void
-  {
-    $attributes = ['autofocus',
-                   'checked',
-                   'disabled',
-                   'hidden',
-                   'ismap',
-                   'multiple',
-                   'novalidate',
-                   'readonly',
-                   'required',
-                   'selected',
-                   'spellcheck'];
-
-    $values = ['0', 0, false, [], null, ''];
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div></div>", $html);
-      }
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes set.
-   */
-  public function testEchoBooleanAttributes3(): void
-  {
-    $attributes = ['draggable', 'contenteditable'];
-
-    $values   = ['1', 1, true, $this];
-    $values[] = $values;
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"true\"></div>", $html);
-      }
+      $struct = ['tag'  => 'div',
+                 'attr' => ['data-test' => $value],
+                 'html' => null];
+      $html   = Html::htmlNested($struct);;
+      $this->assertSame('<div data-test="0"></div>', $html);
     }
 
     $struct = ['tag'  => 'div',
-               'attr' => ['draggable' => 'auto'],
+               'attr' => ['qwerty&?<' => "<a>&"],
                'html' => null];
-    ob_start();
-    Html::echoNested($struct);
-    $html = ob_get_clean();
-    $this->assertSame("<div draggable=\"auto\"></div>", $html);
+    $html   = Html::htmlNested($struct);;
+    $this->assertSame('<div qwerty&amp;?&lt;="&lt;a&gt;&amp;"></div>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test boolean attributes not set.
-   */
-  public function testEchoBooleanAttributes4(): void
-  {
-    $attributes = ['draggable', 'contenteditable'];
-
-    $values = ['0', 0, false, [], ''];
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"false\"></div>", $html);
-      }
-
-      $struct = ['tag'  => 'div',
-                 'attr' => [$attribute => null],
-                 'html' => null];
-      ob_start();
-      Html::echoNested($struct);
-      $html = ob_get_clean();
-      $this->assertSame('<div></div>', $html);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes set.
-   */
-  public function testEchoBooleanAttributes5(): void
-  {
-    $attributes = ['autocomplete'];
-
-    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
-    $values[] = $values;
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"on\"></div>", $html);
-      }
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes not set.
-   */
-  public function testEchoBooleanAttributes6(): void
-  {
-    $attributes = ['autocomplete'];
-
-    $values = ['0', 0, false, [], ''];
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"off\"></div>", $html);
-      }
-
-      $struct = ['tag'  => 'div',
-                 'attr' => [$attribute => null],
-                 'html' => null];
-      ob_start();
-      Html::echoNested($struct);
-      $html = ob_get_clean();
-      $this->assertSame('<div></div>', $html);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes set.
-   */
-  public function testEchoBooleanAttributes7(): void
-  {
-    $attributes = ['translate'];
-
-    $values   = ['1', 1, true, $this, 'hello, world', ['hello, world']];
-    $values[] = $values;
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"yes\"></div>", $html);
-      }
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test boolean attributes not set.
-   */
-  public function testEchoBooleanAttributes8(): void
-  {
-    $attributes = ['translate'];
-
-    $values = ['0', 0, false, [], ''];
-
-    foreach ($attributes as $attribute)
-    {
-      foreach ($values as $value)
-      {
-        $struct = ['tag'  => 'div',
-                   'attr' => [$attribute => $value],
-                   'html' => null];
-        ob_start();
-        Html::echoNested($struct);
-        $html = ob_get_clean();
-        $this->assertSame("<div $attribute=\"no\"></div>", $html);
-      }
-
-      $struct = ['tag'  => 'div',
-                 'attr' => [$attribute => null],
-                 'html' => null];
-      ob_start();
-      Html::echoNested($struct);
-      $html = ob_get_clean();
-      $this->assertSame('<div></div>', $html);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with void element.
-   */
-  public function testEchoNested01(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag' => 'br']);
-    self::assertSame('<br/>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with element.
-   */
-  public function testEchoNested02(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag'  => 'a',
-                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                      'text' => 'helper & html']);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with element with integer value.
-   */
-  public function testEchoNested03(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag'  => 'a',
-                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                      'text' => 123]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with element with HTML value.
-   */
-  public function testEchoNested04(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag'  => 'a',
-                      'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                      'html' => '<b>helper-html</b>']);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with nested elements.
-   */
-  public function testEchoNested05(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag'   => 'a',
-                      'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                      'inner' => ['tag'  => 'b',
-                                  'text' => 'helper-html']]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with list of elements.
-   */
-  public function testEchoNested06(): void
-  {
-    ob_start();
-
-    Html::echoNested([['tag'   => 'a',
-                       'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                       'inner' => ['tag'  => 'b',
-                                   'text' => 'helper-html']],
-                      ['tag' => 'br']]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with list of elements.
-   */
-  public function testEchoNested07(): void
-  {
-    $this->expectException(\LogicException::class);
-    Html::echoNested(['xhtml' => 'xml-html']);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with null.
-   */
-  public function testEchoNested08(): void
-  {
-    ob_start();
-
-    Html::echoNested(null);
-
-    self::assertSame('', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with null element.
-   */
-  public function testEchoNested09(): void
-  {
-    ob_start();
-
-    Html::echoNested([null]);
-
-    self::assertSame('', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with list of elements with null inner.
-   */
-  public function testEchoNested10(): void
-  {
-    ob_start();
-
-    Html::echoNested(['tag'   => 'span',
-                      'attr'  => ['class' => 'test'],
-                      'inner' => null]);
-
-    self::assertSame('<span class="test"></span>', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test echoNested with list of elements.
-   */
-  public function testEchoNested11(): void
-  {
-    ob_start();
-
-    Html::echoNested([['tag'   => 'table',
-                       'attr'  => ['class' => 'test'],
-                       'inner' => [['tag'   => 'tr',
-                                    'attr'  => ['id' => 'first-row'],
-                                    'inner' => [['tag'  => 'td',
-                                                 'text' => 'hello'],
-                                                ['tag'  => 'td',
-                                                 'attr' => ['class' => 'bold'],
-                                                 'html' => '<b>world</b>']]],
-                                   ['tag'   => 'tr',
-                                    'inner' => [['tag'  => 'td',
-                                                 'text' => 'foo'],
-                                                ['tag'  => 'td',
-                                                 'text' => 'bar']]],
-                                   ['tag'   => 'tr',
-                                    'attr'  => ['id' => 'last-row'],
-                                    'inner' => [['tag'  => 'td',
-                                                 'text' => 'foo'],
-                                                ['tag'  => 'td',
-                                                 'text' => 'bar']]]]],
-                      ['text' => 'The End'],
-                      ['html' => '!']]);
-
-    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', ob_get_clean());
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateElement.
-   */
-  public function testGenerateElement1(): void
-  {
-    $tag = Html::generateElement('a', ['href' => 'https://www.setbased.nl'], 'SetBased');
-    $this->assertEquals('<a href="https://www.setbased.nl">SetBased</a>', $tag);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test attributes with empty innerText.
-   */
-  public function testGenerateElement3(): void
-  {
-    $tag = Html::generateElement('span', ['class' => 'null'], '');
-    $this->assertEquals('<span class="null"></span>', $tag);
-
-    $tag = Html::generateElement('span', ['class' => 'null'], null);
-    $this->assertEquals('<span class="null"></span>', $tag);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with void element.
-   */
-  public function testGenerateNested01(): void
-  {
-    $html = Html::generateNested(['tag' => 'br']);
-    self::assertSame('<br/>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with element.
-   */
-  public function testGenerateNested02(): void
-  {
-    $html = Html::generateNested(['tag'  => 'a',
-                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'text' => 'helper & html']);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">helper &amp; html</a>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with element with integer value.
-   */
-  public function testGenerateNested03(): void
-  {
-    $html = Html::generateNested(['tag'  => 'a',
-                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'text' => 123]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html">123</a>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with element with HTML value.
-   */
-  public function testGenerateNested04(): void
-  {
-    $html = Html::generateNested(['tag'  => 'a',
-                                  'attr' => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'html' => '<b>helper-html</b>']);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with nested elements.
-   */
-  public function testGenerateNested05(): void
-  {
-    $html = Html::generateNested(['tag'   => 'a',
-                                  'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                  'inner' => ['tag'  => 'b',
-                                              'text' => 'helper-html']]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with list of elements.
-   */
-  public function testGenerateNested06(): void
-  {
-    $html = Html::generateNested([['tag'   => 'a',
-                                   'attr'  => ['href' => 'https://github.com/PhpPlaisio/helper-html'],
-                                   'inner' => ['tag'  => 'b',
-                                               'text' => 'helper-html']],
-                                  ['tag' => 'br']]);
-    self::assertSame('<a href="https://github.com/PhpPlaisio/helper-html"><b>helper-html</b></a><br/>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with list of elements.
-   */
-  public function testGenerateNested07(): void
-  {
-    $this->expectException(\LogicException::class);
-    Html::generateNested(['xhtml' => 'xml-html']);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with null.
-   */
-  public function testGenerateNested08(): void
-  {
-    $html = Html::generateNested(null);
-
-    self::assertSame('', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with null element.
-   */
-  public function testGenerateNested09(): void
-  {
-    $html = Html::generateNested([null]);
-
-    self::assertSame('', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with list of elements with null inner.
-   */
-  public function testGenerateNested10(): void
-  {
-    $html = Html::generateNested(['tag'   => 'span',
-                                  'attr'  => ['class' => 'test'],
-                                  'inner' => null]);
-
-    self::assertSame('<span class="test"></span>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateNested with list of elements.
-   */
-  public function testGenerateNested11(): void
-  {
-    $html = Html::generateNested([['tag'   => 'table',
-                                   'attr'  => ['class' => 'test'],
-                                   'inner' => [['tag'   => 'tr',
-                                                'attr'  => ['id' => 'first-row'],
-                                                'inner' => [['tag'  => 'td',
-                                                             'text' => 'hello'],
-                                                            ['tag'  => 'td',
-                                                             'attr' => ['class' => 'bold'],
-                                                             'html' => '<b>world</b>']]],
-                                               ['tag'   => 'tr',
-                                                'inner' => [['tag'  => 'td',
-                                                             'text' => 'foo'],
-                                                            ['tag'  => 'td',
-                                                             'text' => 'bar']]],
-                                               ['tag'   => 'tr',
-                                                'attr'  => ['id' => 'last-row'],
-                                                'inner' => [['tag'  => 'td',
-                                                             'text' => 'foo'],
-                                                            ['tag'  => 'td',
-                                                             'text' => 'bar']]]]],
-                                  ['text' => 'The End'],
-                                  ['html' => '!']]);
-
-    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test generateVoidElement.
-   */
-  public function testGenerateVoidElement1(): void
-  {
-    $tag = Html::generateVoidElement('img', ['src' => '/images/logo.png', 'alt' => 'logo']);
-    $this->assertEquals('<img src="/images/logo.png" alt="logo"/>', $tag);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Invalid tests for method txt2html.
+   * Invalid tests for method txt2html().
    *
    * @param mixed $value The value.
    *
@@ -1043,7 +570,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test cases for txt2Slug.
+   * Test cases for txt2Slug().
    *
    * Test cases copied from [Matteo Spinelli's Cubiq.org](http://cubiq.org/the-perfect-php-clean-url-generator) and
    * from <http://stackoverflow.com>.
@@ -1091,7 +618,7 @@ class HtmlTest extends TestCase
   }
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Valid tests for method txt2html.
+   * Valid tests for method txt2html().
    *
    * @param mixed  $value    The value.
    * @param string $expected The expected generated HTML code.
