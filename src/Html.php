@@ -139,6 +139,7 @@ final class Html
    *
    * @since 3.1.0
    * @api
+   * @deprecated
    */
   public static function echoNested(?array $structure): void
   {
@@ -207,6 +208,7 @@ final class Html
    *
    * @since 1.0.0
    * @api
+   * @deprecated
    */
   public static function generateAttribute(string $name, $value): string
   {
@@ -323,6 +325,7 @@ final class Html
    *
    * @since 1.0.0
    * @api
+   * @deprecated
    */
   public static function generateElement(string $tagName,
                                          array  $attributes = [],
@@ -373,11 +376,12 @@ final class Html
    *
    * @since 1.4.0
    * @api
+   * @deprecated
    */
   public static function generateNested(?array $structure): string
   {
     $html = '';
-    self::generateNestedHelper($structure, $html);
+    self::htmlNestedHelper($structure, $html);
 
     return $html;
   }
@@ -394,6 +398,7 @@ final class Html
    *
    * @since 1.0.0
    * @api
+   * @deprecated
    */
   public static function generateTag(string $tagName, array $attributes = []): string
   {
@@ -423,6 +428,7 @@ final class Html
    *
    * @since 1.0.0
    * @api
+   * @deprecated
    */
   public static function generateVoidElement(string $tagName, array $attributes = []): string
   {
@@ -452,6 +458,50 @@ final class Html
     self::$autoId++;
 
     return 'plaisio-id-'.self::$autoId;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the HTML code of nested elements.
+   *
+   * Example:
+   *
+   * $html = Html::generateNested([['tag'   => 'table',
+   *                                'attr'  => ['class' => 'test'],
+   *                                'inner' => [['tag'   => 'tr',
+   *                                             'attr'  => ['id' => 'first-row'],
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'hello'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'attr' => ['class' => 'bold'],
+   *                                                          'html' => '<b>world</b>']]],
+   *                                            ['tag'   => 'tr',
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'foo'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'text' => 'bar']]],
+   *                                            ['tag'   => 'tr',
+   *                                             'attr'  => ['id' => 'last-row'],
+   *                                             'inner' => [['tag'  => 'td',
+   *                                                          'text' => 'foo'],
+   *                                                         ['tag'  => 'td',
+   *                                                          'text' => 'bar']]]]],
+   *                               ['text' => 'The End'],
+   *                               ['html' => '!']]);
+   *
+   * @param array|null $structure The structure of the nested elements.
+   *
+   * @return string
+   *
+   * @since 3.2.0
+   * @api
+   */
+  public static function htmlNested(?array $structure): string
+  {
+    $html = '';
+    self::htmlNestedHelper($structure, $html);
+
+    return $html;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -491,7 +541,7 @@ final class Html
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns the slug of a string that can be safely used in an URL.
+   * Returns the slug of a string that can be safely used in a URL.
    *
    * @param string|null $string The string.
    *
@@ -687,7 +737,7 @@ final class Html
    * @param array|null $structure The (nested) structure of the HTML code.
    * @param string     $html      The generated HTML code.
    */
-  private static function generateNestedHelper(?array $structure, string &$html): void
+  private static function htmlNestedHelper(?array $structure, string &$html): void
   {
     if ($structure!==null)
     {
@@ -697,7 +747,7 @@ final class Html
         // Structure is a list of elements.
         foreach ($structure as $element)
         {
-          self::generateNestedHelper($element, $html);
+          self::htmlNestedHelper($element, $html);
         }
       }
       elseif ($key!==null)
@@ -709,7 +759,7 @@ final class Html
           if (array_key_exists('inner', $structure))
           {
             $html .= self::generateTag($structure['tag'], $structure['attr'] ?? []);
-            self::generateNestedHelper($structure['inner'], $html);
+            self::htmlNestedHelper($structure['inner'], $html);
             $html .= '</';
             $html .= $structure['tag'];
             $html .= '>';
