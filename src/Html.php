@@ -178,7 +178,7 @@ final class Html
    * @since 1.0.0
    * @api
    */
-  public static function txt2Html($value): string
+  public static function txt2Html(mixed $value): string
   {
     switch (true)
     {
@@ -240,7 +240,7 @@ final class Html
       }
     }
 
-    $clean = array_unique($clean, SORT_STRING);
+    $clean = array_unique($clean);
     sort($clean);
 
     return $clean;
@@ -256,7 +256,7 @@ final class Html
    * @param mixed  $value The value of the attribute.
    * @param string $html  The generated HTML code.
    */
-  private static function htmlAttributeHelper(string $name, $value, string &$html): void
+  private static function htmlAttributeHelper(string $name, mixed $value, string &$html): void
   {
     switch ($name)
     {

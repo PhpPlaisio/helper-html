@@ -24,7 +24,7 @@ class RenderWalker
   private string $moduleClass;
 
   /**
-   * The CSS sub-module class.
+   * The CSS submodule class.
    *
    * @var string|null
    */
@@ -35,7 +35,7 @@ class RenderWalker
    * Object constructor.
    *
    * @param string      $moduleClass    The CSS module class.
-   * @param string|null $subModuleClass The CSS sub-module class.
+   * @param string|null $subModuleClass The CSS submodule class.
    */
   public function __construct(string $moduleClass, ?string $subModuleClass = null)
   {
@@ -47,12 +47,12 @@ class RenderWalker
   /**
    * Returns all applicable classes for an HTML element.
    *
-   * @param string[]|string|null $subClasses      The CSS sub-classes with the CSS module class.
+   * @param string[]|string|null $subClasses      The CSS subclasses with the CSS module class.
    * @param string[]|string|null $additionClasses Additional CSS classes.
    *
    * @return string[]
    */
-  public function getClasses($subClasses = null, $additionClasses = null): array
+  public function getClasses(mixed $subClasses = null, mixed $additionClasses = null): array
   {
     if ($this->includeModuleClass)
     {
@@ -124,7 +124,7 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns the CSS sub-module class.
+   * Returns the CSS submodule class.
    *
    * @return string|null
    */
@@ -135,7 +135,7 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Set whether to always include the module and sub-module class individually in the list of classes for an HTMl
+   * Set whether to always include the module and submodule class individually in the list of classes for an HTMl
    * element.
    *
    * @param bool $includeModuleClass Whether to always include the module class individually in the list of  classes
@@ -167,9 +167,9 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Sets CSS sub-module class.
+   * Sets CSS submodule class.
    *
-   * @param string|null $subModuleClass The CSS sub-module class.
+   * @param string|null $subModuleClass The CSS submodule class.
    *
    * @return $this
    */

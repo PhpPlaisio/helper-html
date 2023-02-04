@@ -104,7 +104,7 @@ trait HtmlElement
    * @since 1.0.0
    * @api
    */
-  public function getAttribute(string $attributeName)
+  public function getAttribute(string $attributeName): mixed
   {
     return $this->attributes[$attributeName] ?? null;
   }

@@ -7,13 +7,15 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.1",
     "ext-mbstring": "*",
     "setbased/exception": "^2.1.2"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require-dev": {
     "ext-dom": "*",
-    "phing/phing": "^2.16.3",
+    "phing/phing": "^3.0.0-RC4",
     "phpunit/phpunit": "^9.1.4"
   },
   "autoload": {
@@ -28,6 +30,9 @@
   },
   "config": {
     "bin-dir": "bin/",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "phing/phing-composer-configurator": true
+    }
   }
 }

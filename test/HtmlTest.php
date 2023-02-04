@@ -562,7 +562,7 @@ class HtmlTest extends TestCase
    *
    * @dataProvider casesInvalidTxt2Html
    */
-  public function testInvalidTxt2Html($value)
+  public function testInvalidTxt2Html(mixed $value)
   {
     $this->expectException(FallenException::class);
     Html::txt2Html($value);

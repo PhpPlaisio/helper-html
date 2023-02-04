@@ -38,7 +38,7 @@ class TestElement
    *
    * @return $this
    */
-  public function setAttribute($key, $value): self
+  public function setAttribute(mixed $key, mixed $value): self
   {
     $this->attributes[$key] = $value;
 

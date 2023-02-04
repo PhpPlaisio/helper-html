@@ -13,7 +13,7 @@ class RenderWalkerTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses without sub-module class and without prevailing module classes.
+   * Test getClasses without submodule class and without prevailing module classes.
    */
   public function testGetClasses1(): void
   {
@@ -30,7 +30,7 @@ class RenderWalkerTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses without sub-module class and with prevailing module classes.
+   * Test getClasses without submodule class and with prevailing module classes.
    */
   public function testGetClasses2(): void
   {
@@ -48,7 +48,7 @@ class RenderWalkerTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses with sub-module class and without prevailing module classes.
+   * Test getClasses with submodule class and without prevailing module classes.
    */
   public function testGetClasses3(): void
   {
@@ -66,7 +66,7 @@ class RenderWalkerTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test getClasses with sub-module class and with prevailing module classes.
+   * Test getClasses with submodule class and with prevailing module classes.
    */
   public function testGetClasses4(): void
   {
