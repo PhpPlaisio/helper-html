@@ -9,14 +9,14 @@
   "require": {
     "php": ">=8.1",
     "ext-mbstring": "*",
-    "setbased/exception": "^2.1.2"
+    "setbased/exception": "^2.3.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require-dev": {
     "ext-dom": "*",
     "phing/phing": "^3.0.0-RC4",
-    "phpunit/phpunit": "^9.1.4"
+    "phpunit/phpunit": "^9.6.2"
   },
   "autoload": {
     "psr-4": {
