@@ -481,7 +481,7 @@ class HtmlElementTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns non-empty string the are equal to empty string.
+   * Returns non-empty string that are equal to empty string.
    *
    * @return array
    */
