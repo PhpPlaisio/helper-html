@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Plaisio\Helper\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -10,6 +11,18 @@ use PHPUnit\Framework\TestCase;
  */
 class HtmlElementTest extends TestCase
 {
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns non-empty string that are equal to empty string.
+   *
+   * @return array
+   */
+  public static function zeros(): array
+  {
+    return [['class' => '0'],
+            ['class' => '0.0']];
+  }
+
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test method setAttrContentEditable().
@@ -274,8 +287,6 @@ class HtmlElementTest extends TestCase
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Tests methods addClass and removeClass with null.
-   *
-   * @dataProvider zeros
    */
   public function testSetAttrClassWithNull(): void
   {
@@ -307,9 +318,8 @@ class HtmlElementTest extends TestCase
    * Tests methods addClass and removeClass with zeros.
    *
    * @param string $class The class.
-   *
-   * @dataProvider zeros
    */
+  #[DataProvider('zeros')]
   public function testSetAttrClassWithZeros(string $class): void
   {
     $element = new TestElement();
@@ -343,13 +353,37 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrContentEditable(false)->html();
+    $html = $element->setAttrContentEditable(false)
+                    ->html();
     self::assertEquals('<test contenteditable="false"></test>', $html);
 
-    $html = $element->setAttrContentEditable(true)->html();
+    $html = $element->setAttrContentEditable(true)
+                    ->html();
     self::assertEquals('<test contenteditable="true"></test>', $html);
 
-    $html = $element->setAttrContentEditable(null)->html();
+    $html = $element->setAttrContentEditable(null)
+                    ->html();
+    self::assertEquals('<test></test>', $html);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method setAttrData().
+   */
+  public function testSetAttrData(): void
+  {
+    $element = new TestElement();
+
+    $html = $element->setAttrData('data', 'value')
+                    ->html();
+    self::assertEquals('<test data-data="value"></test>', $html);
+
+    $html = $element->setAttrData('data', '')
+                    ->html();
+    self::assertEquals('<test></test>', $html);
+
+    $html = $element->setAttrData('data', null)
+                    ->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -361,32 +395,17 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrDraggable('true')->html();
+    $html = $element->setAttrDraggable('true')
+                    ->html();
     self::assertEquals('<test draggable="true"></test>', $html);
 
-    $html = $element->setAttrDraggable('false')->html();
+    $html = $element->setAttrDraggable('false')
+                    ->html();
     self::assertEquals('<test draggable="false"></test>', $html);
 
-    $html = $element->setAttrDraggable('auto')->html();
+    $html = $element->setAttrDraggable('auto')
+                    ->html();
     self::assertEquals('<test draggable="auto"></test>', $html);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test method setAttrData().
-   */
-  public function testSetAttrData(): void
-  {
-    $element = new TestElement();
-
-    $html = $element->setAttrData('data', 'value')->html();
-    self::assertEquals('<test data-data="value"></test>', $html);
-
-    $html = $element->setAttrData('data', '')->html();
-    self::assertEquals('<test></test>', $html);
-
-    $html = $element->setAttrData('data', null)->html();
-    self::assertEquals('<test></test>', $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -397,13 +416,16 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrHidden(false)->html();
+    $html = $element->setAttrHidden(false)
+                    ->html();
     self::assertEquals('<test></test>', $html);
 
-    $html = $element->setAttrHidden(true)->html();
+    $html = $element->setAttrHidden(true)
+                    ->html();
     self::assertEquals('<test hidden="hidden"></test>', $html);
 
-    $html = $element->setAttrHidden(null)->html();
+    $html = $element->setAttrHidden(null)
+                    ->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -415,13 +437,16 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrSpellCheck(false)->html();
+    $html = $element->setAttrSpellCheck(false)
+                    ->html();
     self::assertEquals('<test></test>', $html);
 
-    $html = $element->setAttrSpellCheck(true)->html();
+    $html = $element->setAttrSpellCheck(true)
+                    ->html();
     self::assertEquals('<test spellcheck="spellcheck"></test>', $html);
 
-    $html = $element->setAttrSpellCheck(null)->html();
+    $html = $element->setAttrSpellCheck(null)
+                    ->html();
     self::assertEquals('<test></test>', $html);
   }
 
@@ -433,15 +458,19 @@ class HtmlElementTest extends TestCase
   {
     $element = new TestElement();
 
-    $html = $element->setAttrTranslate(false)->html();
+    $html = $element->setAttrTranslate(false)
+                    ->html();
     self::assertEquals('<test translate="no"></test>', $html);
 
-    $html = $element->setAttrTranslate(true)->html();
+    $html = $element->setAttrTranslate(true)
+                    ->html();
     self::assertEquals('<test translate="yes"></test>', $html);
 
-    $html = $element->setAttrTranslate(null)->html();
+    $html = $element->setAttrTranslate(null)
+                    ->html();
     self::assertEquals('<test></test>', $html);
   }
+
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -464,7 +493,8 @@ class HtmlElementTest extends TestCase
     foreach ($methods as $method => $attribute)
     {
       $uuid = ($attribute!=='tabindex') ? uniqid() : rand(1, 123);
-      $html = $element->$method($uuid)->html();
+      $html = $element->$method($uuid)
+                      ->html();
 
       $doc = new \DOMDocument();
       $doc->loadXML($html);
@@ -476,19 +506,6 @@ class HtmlElementTest extends TestCase
 
       self::assertEquals($uuid, $element->getAttribute($attribute), "Attribute: $attribute");
     }
-  }
-
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns non-empty string that are equal to empty string.
-   *
-   * @return array
-   */
-  public function zeros(): array
-  {
-    return [['class' => '0'],
-            ['class' => '0.0']];
   }
 
   //--------------------------------------------------------------------------------------------------------------------

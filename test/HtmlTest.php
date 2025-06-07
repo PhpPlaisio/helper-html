@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Plaisio\Helper\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Plaisio\Helper\Html;
 use SetBased\Exception\FallenException;
 
 /**
- * Test cases for class Html.
+ * Test cases for class HTML.
  */
 class HtmlTest extends TestCase
 {
@@ -18,7 +19,7 @@ class HtmlTest extends TestCase
    *
    * @return array
    */
-  public function casesClassAttribute(): array
+  public static function casesClassAttribute(): array
   {
     $cases = [];
 
@@ -33,14 +34,14 @@ class HtmlTest extends TestCase
     $cases[] = ['value'    => false,
                 'expected' => '<div class="0"></div>'];
 
-    // Classes as array.
+    // Classes as an array.
     $cases[] = ['value'    => [],
                 'expected' => '<div></div>'];
 
     $cases[] = ['value'    => ['hello', 'world'],
                 'expected' => '<div class="hello world"></div>'];
 
-    // Classes as array with duplicate and empty values.
+    // Classes as an array with duplicate and empty values.
     $cases[] = ['value'    => ['hello', 'hello', '', null, 'world', false],
                 'expected' => '<div class="0 hello world"></div>'];
 
@@ -53,13 +54,13 @@ class HtmlTest extends TestCase
    *
    * @return array
    */
-  public function casesInvalidTxt2Html(): array
+  public static function casesInvalidTxt2Html(): array
   {
     $cases = [];
 
     $cases[] = ['value' => []];
 
-    $cases[] = ['value' => $this];
+    $cases[] = ['value' => new \stdClass()];
 
     return $cases;
   }
@@ -70,7 +71,7 @@ class HtmlTest extends TestCase
    *
    * @return array
    */
-  public function casesValidTxt2Html(): array
+  public static function casesValidTxt2Html(): array
   {
     $cases = [];
 
@@ -102,9 +103,9 @@ class HtmlTest extends TestCase
    * @param mixed  $value    The value for the class attribute.
    * @param string $expected The expected generated HTML code.
    *
-   * @dataProvider casesClassAttribute
    */
-  public function testAttributeClass($value, string $expected)
+  #[DataProvider('casesClassAttribute')]
+  public function testAttributeClass(mixed $value, string $expected)
   {
     $html = Html::htmlNested(['tag'  => 'div',
                               'attr' => ['class' => $value],
@@ -357,7 +358,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test htmlNested() with element.
+   * Test htmlNested() with an element.
    */
   public function testHtmlNested02(): void
   {
@@ -369,7 +370,7 @@ class HtmlTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test htmlNested() with element with integer value.
+   * Test htmlNested() with an element with integer value.
    */
   public function testHtmlNested03(): void
   {
@@ -492,7 +493,8 @@ class HtmlTest extends TestCase
                               ['text' => 'The End'],
                               ['html' => '!']]);
 
-    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!', $html);
+    self::assertSame('<table class="test"><tr id="first-row"><td>hello</td><td class="bold"><b>world</b></td></tr><tr><td>foo</td><td>bar</td></tr><tr id="last-row"><td>foo</td><td>bar</td></tr></table>The End!',
+                     $html);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -543,14 +545,14 @@ class HtmlTest extends TestCase
       $struct = ['tag'  => 'div',
                  'attr' => ['data-test' => $value],
                  'html' => null];
-      $html   = Html::htmlNested($struct);;
+      $html   = Html::htmlNested($struct);
       $this->assertSame('<div data-test="0"></div>', $html);
     }
 
     $struct = ['tag'  => 'div',
                'attr' => ['qwerty&?<' => "<a>&"],
                'html' => null];
-    $html   = Html::htmlNested($struct);;
+    $html   = Html::htmlNested($struct);
     $this->assertSame('<div qwerty&amp;?&lt;="&lt;a&gt;&amp;"></div>', $html);
   }
 
@@ -559,9 +561,8 @@ class HtmlTest extends TestCase
    * Invalid tests for method txt2html().
    *
    * @param mixed $value The value.
-   *
-   * @dataProvider casesInvalidTxt2Html
    */
+  #[DataProvider('casesInvalidTxt2Html')]
   public function testInvalidTxt2Html(mixed $value)
   {
     $this->expectException(FallenException::class);
@@ -622,10 +623,9 @@ class HtmlTest extends TestCase
    *
    * @param mixed  $value    The value.
    * @param string $expected The expected generated HTML code.
-   *
-   * @dataProvider casesValidTxt2Html
    */
-  public function testValidTxt2Html($value, string $expected)
+  #[DataProvider('casesValidTxt2Html')]
+  public function testValidTxt2Html(mixed $value, string $expected)
   {
     $html = Html::txt2Html($value);
     $this->assertSame($expected, $html);

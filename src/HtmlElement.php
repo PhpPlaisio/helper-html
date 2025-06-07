@@ -7,13 +7,13 @@ namespace Plaisio\Helper;
  * Trait for HTML elements.
  *
  * This class should be used for generation "heavy" HTML elements only. For lightweight elements use methods of
- * {@link \Plaisio\Helper\Html}.
+ * {@link Html}.
  *
  * #### Global Attributes
  * This class defines methods for getting attributes and setting
  * [global attributes](http://www.w3schools.com/tags/ref_standardattributes.asp) only.
  *
- * Unless stated otherwise setting an attribute to null, false, or '' will unset the attribute.
+ * Unless stated otherwise, setting an attribute to null, false, or '' will unset the attribute.
  *
  * #### Event Attributes
  * This class does not define methods for setting event attributes. Events handlers must be set with JavaScript.
@@ -32,6 +32,7 @@ trait HtmlElement
   protected array $attributes = [];
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Adds a class to the list of classes.
    *
@@ -123,7 +124,7 @@ trait HtmlElement
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns the mandatory attribute [id](http://www.w3schools.com/tags/att_global_id.asp) of this element. If the id
-   * attribute was not set prior calling this method the id attribute will set with an automatically generate value.
+   * attribute was not set before calling this method, the id attribute will set with an automatically generate value.
    *
    * @return string
    *
@@ -151,7 +152,10 @@ trait HtmlElement
   public function removeClass(?string $class): self
   {
     // If class is empty or no classes are set return immediately.
-    if ($class===null || $class==='' || !isset($this->attributes['class'])) return $this;
+    if ($class===null || $class==='' || !isset($this->attributes['class']))
+    {
+      return $this;
+    }
 
     $this->attributes['class'] = array_unique($this->attributes['class']);
     $key                       = array_search($class, $this->attributes['class']);

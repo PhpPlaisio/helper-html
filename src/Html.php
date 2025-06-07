@@ -106,6 +106,7 @@ final class Html
                                  'ё' => 'e'];
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Returns a string that can be safely used as an ID for an element. The format of the id is 'abc_<n>' where n is
    * incremented with each call of this method.
@@ -214,7 +215,10 @@ final class Html
    */
   public static function txt2Slug(?string $string): string
   {
-    if ($string===null) return '';
+    if ($string===null)
+    {
+      return '';
+    }
 
     return trim(preg_replace('/[^0-9a-z]+/', '-', strtr(mb_strtolower($string), self::$trans)), '-');
   }

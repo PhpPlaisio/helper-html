@@ -31,6 +31,7 @@ class RenderWalker
   private ?string $subModuleClass;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Object constructor.
    *
@@ -135,11 +136,11 @@ class RenderWalker
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Set whether to always include the module and submodule class individually in the list of classes for an HTMl
+   * Set whether to always include the module and submodule class individually in the list of classes for an HTML
    * element.
    *
-   * @param bool $includeModuleClass Whether to always include the module class individually in the list of  classes
-   *                                 for an HTMl element.
+   * @param bool $includeModuleClass Whether to always include the module class individually in the list of classes
+   *                                 for an HTML element.
    *
    * @return $this
    */
