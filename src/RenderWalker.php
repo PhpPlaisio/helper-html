@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Plaisio\Helper;
 
 /**
- * Class for generating CSS class names when walking your representation of your HTMl elements.
+ * Class for generating CSS class names when walking your representation of your HTML elements.
  */
 class RenderWalker
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Whether to always include the module class individually in the list of classes for an HTMl element.
+   * Whether to always include the module class individually in the list of classes for an HTML element.
    *
    * @var bool
    */

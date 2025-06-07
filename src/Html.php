@@ -29,7 +29,7 @@ final class Html
   private static int $autoId = 0;
 
   /**
-   * Map from (some) unicode characters to ASCII characters.
+   * Map from (some) Unicode characters to ASCII characters.
    *
    * @var array
    */
